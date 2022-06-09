@@ -1,0 +1,2 @@
+inherited StockWasteToolbarFrame: TStockWasteToolbarFrame
+end

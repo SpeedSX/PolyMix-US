@@ -1,0 +1,10 @@
+ORDERSTATE_DONE BITMAP
+..\Images\OrderState_Done.bmp
+ORDERSTATE_EXEC BITMAP
+..\Images\OrderState_Exec.bmp
+ORDERSTATE_PRINTED BITMAP
+..\Images\OrderState_Printed.bmp
+ORDERSTATE_WAIT BITMAP
+..\Images\OrderState_Wait.bmp
+ORDERSTATE_TECHCARD BITMAP
+..\Images\OrderState_TechCard.bmp

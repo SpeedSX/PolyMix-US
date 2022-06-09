@@ -1,0 +1,30 @@
+WORKCUSTBMP BITMAP
+..\Images\PolyCalc_WorkUser1.bmp
+CALCCUSTBMP BITMAP
+..\Images\PolyCalc_CalcUser1.bmp
+CALCWORKCUSTBMP BITMAP
+..\Images\PolyCalc_CalcWorkUser.bmp
+WORKCUSTSBMP BITMAP
+..\Images\PolyCalc_WorkUser.bmp
+CALCCUSTSBMP BITMAP
+..\Images\PolyCalc_CalcUser.bmp
+SYNCSTATE_OK BITMAP
+..\Images\Sync1C.bmp
+SYNCSTATE_FAILED BITMAP
+..\Images\Sync1CFailed.bmp
+SYNCSTATE_NEW BITMAP
+..\Images\Sync1CNew.bmp
+NO_INVOICE BITMAP
+..\Images\NoInvoice.bmp
+NO_INVOICE_DISABLED BITMAP
+..\Images\NoInvoice_Dis.bmp
+NO_INVOICE_FOR_INCOME BITMAP
+..\Images\Exclamation.bmp
+NOSHIPMENT BITMAP
+..\Images\boxGray.bmp
+PARTIALSHIPMENT BITMAP
+..\Images\boxYellow.bmp
+COMPLETESHIPMENT BITMAP
+..\Images\boxGreen.bmp
+SHIPMENT_APPROVED BITMAP
+..\Images\boxGrayArrow.bmp

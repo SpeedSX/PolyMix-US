@@ -1,0 +1,32 @@
+BOX_CHECKED BITMAP
+..\Images\check_olive.bmp
+BOX_UNCHECKED BITMAP
+..\Images\uncheck_olive.bmp
+BOX_NOCHECK BITMAP
+..\Images\check_no_olive.bmp
+BTN_INSERT BITMAP
+..\Images\plus.bmp
+BTN_DELETE BITMAP
+..\Images\minus.bmp
+BTN_CLEAR BITMAP
+..\Images\dbn_cancel.bmp
+BMP_EMPTY BITMAP
+..\Images\empty.bmp
+COSTPROTECTED BITMAP
+..\Images\CostProtected2.bmp
+CONTENTPROTECTED BITMAP
+..\Images\ContentProtected2.bmp
+COSTPROTECTED16 BITMAP
+..\Images\CostProtected16.bmp
+CONTENTPROTECTED16 BITMAP
+..\Images\ContentProtected16.bmp
+RED_CHECK BITMAP
+..\Images\RedCheck1.bmp
+BMP_HASCOMMENT BITMAP
+..\Images\Info.bmp
+BMP_HASALERT BITMAP
+..\Images\alert.bmp
+BMP_HASJOBCOMMENT BITMAP
+..\Images\HasJobComment.bmp
+MULTI_INVOICE BITMAP
+..\Images\cards_stack.bmp

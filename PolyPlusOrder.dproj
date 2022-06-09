@@ -1,0 +1,759 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <ProjectGuid>{c07f3109-c9ba-462f-880e-df8db9a6c669}</ProjectGuid>
+    <MainSource>PolyPlusOrder.dpr</MainSource>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <DCC_DCCCompiler>DCC32</DCC_DCCCompiler>
+    <DCC_DependencyCheckOutputName>PolyPlusOrder.exe</DCC_DependencyCheckOutputName>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <Version>7.0</Version>
+    <DCC_DebugInformation>False</DCC_DebugInformation>
+    <DCC_LocalDebugSymbols>False</DCC_LocalDebugSymbols>
+    <DCC_SymbolReferenceInfo>0</DCC_SymbolReferenceInfo>
+    <DCC_Define>RELEASE</DCC_Define>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <Version>7.0</Version>
+    <DCC_Define>DEBUG;NoExpenses;NoDocs</DCC_Define>
+    <DCC_WriteableConstants>True</DCC_WriteableConstants>
+    <DCC_Optimize>False</DCC_Optimize>
+    <DCC_MapFile>3</DCC_MapFile>
+    <DCC_GenerateStackFrames>True</DCC_GenerateStackFrames>
+    <DCC_UnitSearchPath>C:\Projects2007\Common</DCC_UnitSearchPath>
+    <DCC_ResourcePath>C:\Projects2007\Common</DCC_ResourcePath>
+    <DCC_ObjPath>C:\Projects2007\Common</DCC_ObjPath>
+    <DCC_IncludePath>C:\Projects2007\Common</DCC_IncludePath>
+    <DCC_IntegerOverflowCheck>True</DCC_IntegerOverflowCheck>
+    <DCC_RangeChecking>True</DCC_RangeChecking>
+  </PropertyGroup>
+  <ProjectExtensions>
+    <Borland.Personality>Delphi.Personality</Borland.Personality>
+    <Borland.ProjectType>VCLApplication</Borland.ProjectType>
+    <BorlandProject>
+<BorlandProject><Delphi.Personality><Parameters><Parameters Name="UseLauncher">False</Parameters><Parameters Name="LoadAllSymbols">True</Parameters><Parameters Name="LoadUnspecifiedSymbols">False</Parameters><Parameters Name="DebugSourceDirs">D:\DPacks\NewLog\src\delphi\</Parameters></Parameters><VersionInfo><VersionInfo Name="IncludeVerInfo">True</VersionInfo><VersionInfo Name="AutoIncBuild">False</VersionInfo><VersionInfo Name="MajorVer">3</VersionInfo><VersionInfo Name="MinorVer">0</VersionInfo><VersionInfo Name="Release">2</VersionInfo><VersionInfo Name="Build">0</VersionInfo><VersionInfo Name="Debug">False</VersionInfo><VersionInfo Name="PreRelease">False</VersionInfo><VersionInfo Name="Special">True</VersionInfo><VersionInfo Name="Private">False</VersionInfo><VersionInfo Name="DLL">False</VersionInfo><VersionInfo Name="Locale">1058</VersionInfo><VersionInfo Name="CodePage">1251</VersionInfo></VersionInfo><VersionInfoKeys><VersionInfoKeys Name="CompanyName">PolyMix Development Group</VersionInfoKeys><VersionInfoKeys Name="FileDescription"></VersionInfoKeys><VersionInfoKeys Name="FileVersion">3.0.2.0</VersionInfoKeys><VersionInfoKeys Name="InternalName"></VersionInfoKeys><VersionInfoKeys Name="LegalCopyright">(c) 1997-2022 PolyMix Development Group</VersionInfoKeys><VersionInfoKeys Name="LegalTrademarks"></VersionInfoKeys><VersionInfoKeys Name="OriginalFilename"></VersionInfoKeys><VersionInfoKeys Name="ProductName"></VersionInfoKeys><VersionInfoKeys Name="ProductVersion">3.0.2.0</VersionInfoKeys><VersionInfoKeys Name="Comments"></VersionInfoKeys><VersionInfoKeys Name="SpecialBuild"></VersionInfoKeys></VersionInfoKeys><Excluded_Packages></Excluded_Packages><Source><Source Name="MainSource">PolyPlusOrder.dpr</Source></Source></Delphi.Personality><ModelSupport>False</ModelSupport></BorlandProject></BorlandProject>
+  </ProjectExtensions>
+  <Import Project="$(MSBuildBinPath)\Borland.Delphi.Targets" />
+  <ItemGroup>
+    <DelphiCompile Include="PolyPlusOrder.dpr">
+      <MainSource>MainSource</MainSource>
+    </DelphiCompile>
+    <DCCReference Include="..\Common\anycolor.pas" />
+    <DCCReference Include="..\Common\BaseExceptionHandler.pas" />
+    <DCCReference Include="..\Common\ColorLst.pas" />
+    <DCCReference Include="..\Common\CostUkr.pas" />
+    <DCCReference Include="..\Common\DBIDList.pas" />
+    <DCCReference Include="..\Common\DBSettings.pas" />
+    <DCCReference Include="..\Common\ExHandler.pas" />
+    <DCCReference Include="..\Common\MMYYList.pas" />
+    <DCCReference Include="..\Common\NotifyEvent.pas" />
+    <DCCReference Include="..\Common\PmChangeLock.pas" />
+    <DCCReference Include="..\Common\PmConnect.pas" />
+    <DCCReference Include="..\Common\PmDatabase.pas" />
+    <DCCReference Include="..\Common\PmQueryPager.pas" />
+    <DCCReference Include="..\Common\PmSplash.pas" />
+    <DCCReference Include="..\Common\PmUpdate.pas" />
+    <DCCReference Include="..\Common\RAI2_JvxCheckListBox.pas" />
+    <DCCReference Include="..\Common\RAI2_Mouse.pas" />
+    <DCCReference Include="..\Common\RAI2_MyDBGridEh.pas" />
+    <DCCReference Include="..\Common\RDBUtils.pas" />
+    <DCCReference Include="..\Common\RVCLUtils.pas" />
+    <DCCReference Include="..\Common\VistaHint.pas" />
+    <DCCReference Include="C:\DPacks2007\OfficeReport\BaseRpt.pas" />
+    <DCCReference Include="C:\DPacks2007\OfficeReport\ExcelRpt.pas" />
+    <DCCReference Include="C:\DPacks2007\OfficeReport\OpenOfficeRpt.pas" />
+    <DCCReference Include="CalcSettings.pas" />
+    <DCCReference Include="CalcUtils.pas" />
+    <DCCReference Include="Config\DicObj.pas" />
+    <DCCReference Include="Config\DicUtils.pas" />
+    <DCCReference Include="Config\DispInfo.pas" />
+    <DCCReference Include="Config\PmConfigManager.pas" />
+    <DCCReference Include="Config\PmConfigObjects.pas" />
+    <DCCReference Include="Config\PmConfigTree.pas" />
+    <DCCReference Include="Config\PmConfigTreeEntity.pas" />
+    <DCCReference Include="Config\PmStates.pas" />
+    <DCCReference Include="Config\StdDic.pas" />
+    <DCCReference Include="DataAccess\AccessDM.pas">
+      <Form>adm</Form>
+    </DCCReference>
+    <DCCReference Include="DataAccess\DicData.pas">
+      <Form>DicDm</Form>
+      <DesignClass>TDataModule</DesignClass>
+    </DCCReference>
+    <DCCReference Include="DataAccess\MainData.pas">
+      <Form>dm</Form>
+      <DesignClass>TDataModule</DesignClass>
+    </DCCReference>
+    <DCCReference Include="DataAccess\PlanData.pas">
+      <Form>PlanDM</Form>
+      <DesignClass>TDataModule</DesignClass>
+    </DCCReference>
+    <DCCReference Include="DataAccess\ProdData.pas">
+      <Form>ProductionDM</Form>
+      <DesignClass>TDataModule</DesignClass>
+    </DCCReference>
+    <DCCReference Include="DataAccess\RepData.pas">
+      <Form>rdm</Form>
+      <DesignClass>TDataModule</DesignClass>
+    </DCCReference>
+    <DCCReference Include="DataAccess\ServData.pas">
+      <Form>sdm</Form>
+      <DesignClass>TDataModule</DesignClass>
+    </DCCReference>
+    <DCCReference Include="DataHelpers\PmCachedScheduleAdapter.pas" />
+    <DCCReference Include="DataHelpers\PmContragentMerge.pas" />
+    <DCCReference Include="DataHelpers\PmLockManager.pas" />
+    <DCCReference Include="DataHelpers\PmScheduleAdapter.pas" />
+    <DCCReference Include="DataHelpers\PmSQLScheduleAdapter.pas" />
+    <DCCReference Include="DataHlp.pas" />
+    <DCCReference Include="DataObjects\PmChangeObjectIds.pas" />
+    <DCCReference Include="DataObjects\PmContragent.pas" />
+    <DCCReference Include="DataObjects\PmCustomerOrders.pas" />
+    <DCCReference Include="DataObjects\PmCustomerPayments.pas" />
+    <DCCReference Include="DataObjects\PmCustomersWithIncome.pas" />
+    <DCCReference Include="DataObjects\PmCustomReport.pas" />
+    <DCCReference Include="DataObjects\PmDictionaryList.pas" />
+    <DCCReference Include="DataObjects\PmDocument.pas" />
+    <DCCReference Include="DataObjects\PmEntity.pas" />
+    <DCCReference Include="DataObjects\PmEntSettings.pas" />
+    <DCCReference Include="DataObjects\PmHistory.pas" />
+    <DCCReference Include="DataObjects\PmIncomingInvoice.pas" />
+    <DCCReference Include="DataObjects\PmInvoice.pas" />
+    <DCCReference Include="DataObjects\PmInvoiceItems.pas" />
+    <DCCReference Include="DataObjects\PmJobParams.pas" />
+    <DCCReference Include="DataObjects\PmMaterials.pas" />
+    <DCCReference Include="DataObjects\PmMatRequest.pas" />
+    <DCCReference Include="DataObjects\PmOperations.pas" />
+    <DCCReference Include="DataObjects\PmOrder.pas" />
+    <DCCReference Include="DataObjects\PmOrderAttachedFiles.pas" />
+    <DCCReference Include="DataObjects\PmOrderInvoiceItems.pas" />
+    <DCCReference Include="DataObjects\PmOrderItemDetails.pas" />
+    <DCCReference Include="DataObjects\PmOrderNotes.pas" />
+    <DCCReference Include="DataObjects\PmOrderParts.pas" />
+    <DCCReference Include="DataObjects\PmOrderPayments.pas" />
+    <DCCReference Include="DataObjects\PmOrderProcessItems.pas" />
+    <DCCReference Include="DataObjects\PmPlan.pas" />
+    <DCCReference Include="DataObjects\PmProcessCfgData.pas" />
+    <DCCReference Include="DataObjects\PmProcessEntity.pas" />
+    <DCCReference Include="DataObjects\PmProduction.pas" />
+    <DCCReference Include="DataObjects\PmRecycleBin.pas" />
+    <DCCReference Include="DataObjects\PmReportData.pas" />
+    <DCCReference Include="DataObjects\PmSaleDocs.pas" />
+    <DCCReference Include="DataObjects\PmSaleItems.pas" />
+    <DCCReference Include="DataObjects\PmScriptList.pas" />
+    <DCCReference Include="DataObjects\PmShiftEmployees.pas" />
+    <DCCReference Include="DataObjects\PmShipment.pas" />
+    <DCCReference Include="DataObjects\PmShipmentDoc.pas" />
+    <DCCReference Include="DataObjects\PmStock.pas" />
+    <DCCReference Include="DataObjects\PmStockDocument.pas" />
+    <DCCReference Include="DataObjects\PmStockDocumentItems.pas" />
+    <DCCReference Include="DataObjects\PmStockIncome.pas" />
+    <DCCReference Include="DataObjects\PmStockIncomeItems.pas" />
+    <DCCReference Include="DataObjects\PmStockMove.pas" />
+    <DCCReference Include="DataObjects\PmStockWaste.pas" />
+    <DCCReference Include="DataObjects\PmStockWasteItems.pas" />
+    <DCCReference Include="dunit\ConfigEditorTest.pas" />
+    <DCCReference Include="dunit\DataTest.pas" />
+    <DCCReference Include="dunit\MainFormTest.pas" />
+    <DCCReference Include="FullOrdRep.pas" />
+    <DCCReference Include="fViewImport.pas">
+      <Form>ViewImportForm</Form>
+    </DCCReference>
+    <DCCReference Include="GUI\Config\CodeEdit.pas">
+      <Form>CodeEditForm</Form>
+    </DCCReference>
+    <DCCReference Include="GUI\Config\ConfigEditors\PmDictionaryEditorFrame.pas">
+      <Form>DictionaryEditorFrame</Form>
+      <DesignClass>TFrame</DesignClass>
+    </DCCReference>
+    <DCCReference Include="GUI\Config\ConfigEditors\PmDictionaryFolderEditorFrame.pas">
+      <Form>DictionaryFolderEditorFrame</Form>
+      <DesignClass>TFrame</DesignClass>
+    </DCCReference>
+    <DCCReference Include="GUI\Config\ConfigEditors\PmDictionaryRootEditorFrame.pas">
+      <Form>DictionaryRootEditorFrame</Form>
+      <DesignClass>TFrame</DesignClass>
+    </DCCReference>
+    <DCCReference Include="GUI\Config\ConfigEditors\PmProcessEditorFrame.pas">
+      <Form>ProcessEditorFrame</Form>
+      <DesignClass>TFrame</DesignClass>
+    </DCCReference>
+    <DCCReference Include="GUI\Config\ConfigEditors\PmProcessGridEditorFrame.pas">
+      <Form>ProcessGridEditorFrame</Form>
+      <DesignClass>TFrame</DesignClass>
+    </DCCReference>
+    <DCCReference Include="GUI\Config\ConfigEditors\PmProcessRootFrame.pas">
+      <Form>ProcessRootEditorFrame</Form>
+      <DesignClass>TFrame</DesignClass>
+    </DCCReference>
+    <DCCReference Include="GUI\Config\DicFrm.pas">
+      <Form>DicEditForm</Form>
+    </DCCReference>
+    <DCCReference Include="GUI\Config\DicStFrm.pas">
+      <Form>StructForm</Form>
+    </DCCReference>
+    <DCCReference Include="GUI\Config\DiffControl.pas" />
+    <DCCReference Include="GUI\Config\DiffUnit.pas" />
+    <DCCReference Include="GUI\Config\EGridFrm.pas">
+      <Form>EditProcessGridForm</Form>
+    </DCCReference>
+    <DCCReference Include="GUI\Config\EScrFrm.pas">
+      <Form>EditScriptForm</Form>
+    </DCCReference>
+    <DCCReference Include="GUI\Config\fCfgDiff.pas">
+      <Form>CfgDiffForm</Form>
+    </DCCReference>
+    <DCCReference Include="GUI\Config\fConfigToolbar.pas">
+      <Form>ConfigToolbarFrame</Form>
+      <DesignClass>TFrame</DesignClass>
+    </DCCReference>
+    <DCCReference Include="GUI\Config\fCustomReportDetails.pas">
+      <Form>CustomReportDetailsForm</Form>
+    </DCCReference>
+    <DCCReference Include="GUI\Config\fCustomReports.pas">
+      <Form>EditCustomReportsForm</Form>
+    </DCCReference>
+    <DCCReference Include="GUI\Config\fDiff.pas" />
+    <DCCReference Include="GUI\Config\fDiffBase.pas">
+      <Form>DiffBaseForm</Form>
+    </DCCReference>
+    <DCCReference Include="GUI\Config\fDisplayInfo.pas">
+      <Form>EditCommonInfoForm</Form>
+    </DCCReference>
+    <DCCReference Include="GUI\Config\fmDimDic.pas">
+      <Form>frDimDic</Form>
+      <DesignClass>TFrame</DesignClass>
+    </DCCReference>
+    <DCCReference Include="GUI\Config\fmEmptyTabDic.pas">
+      <Form>frEmptyTabDic</Form>
+      <DesignClass>TFrame</DesignClass>
+    </DCCReference>
+    <DCCReference Include="GUI\Config\fmTabDic.pas">
+      <Form>frTabDic</Form>
+      <DesignClass>TFrame</DesignClass>
+    </DCCReference>
+    <DCCReference Include="GUI\Config\GridProp.pas">
+      <Form>GridPropForm</Form>
+    </DCCReference>
+    <DCCReference Include="GUI\Config\MDimFrm.pas">
+      <Form>MultiDimForm</Form>
+    </DCCReference>
+    <DCCReference Include="GUI\Config\NDicFrm.pas">
+      <Form>NewDicForm</Form>
+    </DCCReference>
+    <DCCReference Include="GUI\Config\NSrvFrm.pas">
+      <Form>SrvPropForm</Form>
+    </DCCReference>
+    <DCCReference Include="GUI\Config\PmBaseConfigEditorFrame.pas">
+      <Form>BaseConfigEditorFrame</Form>
+      <DesignClass>TFrame</DesignClass>
+    </DCCReference>
+    <DCCReference Include="GUI\Config\PmConfigEditors.pas" />
+    <DCCReference Include="GUI\Config\PmConfigFrame.pas">
+      <Form>ConfigFrame</Form>
+      <DesignClass>TFrame</DesignClass>
+    </DCCReference>
+    <DCCReference Include="GUI\Config\PmConfigTreeView.pas" />
+    <DCCReference Include="GUI\Config\PmConfigView.pas" />
+    <DCCReference Include="GUI\Config\RepsFrm.pas">
+      <Form>ReportsForm</Form>
+    </DCCReference>
+    <DCCReference Include="GUI\Config\SrcDFrm.pas">
+      <Form>SrcDimForm</Form>
+    </DCCReference>
+    <DCCReference Include="GUI\Contragents\fAddress.pas">
+      <Form>AddressForm</Form>
+    </DCCReference>
+    <DCCReference Include="GUI\Contragents\fPerson.pas">
+      <Form>PersonForm</Form>
+    </DCCReference>
+    <DCCReference Include="GUI\Contragents\PmContragentForm.pas">
+      <Form>ContragentForm</Form>
+    </DCCReference>
+    <DCCReference Include="GUI\Contragents\PmContragentListForm.pas">
+      <Form>ContragentListForm</Form>
+    </DCCReference>
+    <DCCReference Include="GUI\Contragents\PmContragentMergeForm.pas">
+      <Form>ContragentMergeForm</Form>
+    </DCCReference>
+    <DCCReference Include="GUI\Contragents\PmContragentPainter.pas" />
+    <DCCReference Include="GUI\Contragents\PmContragentPainterManager.pas" />
+    <DCCReference Include="GUI\Contragents\PmRelatedContragentForm.pas">
+      <Form>RelatedContragentForm</Form>
+    </DCCReference>
+    <DCCReference Include="GUI\coursfrm.pas">
+      <Form>CourseForm</Form>
+    </DCCReference>
+    <DCCReference Include="GUI\CustomReports\fReportFrame.pas">
+      <Form>ReportFrame</Form>
+      <DesignClass>TFrame</DesignClass>
+    </DCCReference>
+    <DCCReference Include="GUI\CustomReports\fReportToolbar.pas">
+      <Form>ReportToolbarFrame</Form>
+      <DesignClass>TFrame</DesignClass>
+    </DCCReference>
+    <DCCReference Include="GUI\CustomReports\PmReportController.pas" />
+    <DCCReference Include="GUI\EnPaint.pas" />
+    <DCCReference Include="GUI\f">
+      <Form>$R *.RES</Form>
+    </DCCReference>
+    <DCCReference Include="GUI\fBaseEditForm.pas">
+      <Form>BaseEditForm</Form>
+    </DCCReference>
+    <DCCReference Include="GUI\fBaseFilter.pas">
+      <Form>BaseFilterFrame</Form>
+      <DesignClass>TFrame</DesignClass>
+    </DCCReference>
+    <DCCReference Include="GUI\fBaseFrame.pas">
+      <Form>BaseFrame</Form>
+      <DesignClass>TFrame</DesignClass>
+    </DCCReference>
+    <DCCReference Include="GUI\fBaseToolbar.pas">
+      <Form>BaseToolbarFrame</Form>
+      <DesignClass>TFrame</DesignClass>
+    </DCCReference>
+    <DCCReference Include="GUI\fCanRep.pas">
+      <Form>CancelRepForm</Form>
+    </DCCReference>
+    <DCCReference Include="GUI\fCommonToolbar.pas">
+      <Form>CommonToolbarFrame</Form>
+      <DesignClass>TFrame</DesignClass>
+    </DCCReference>
+    <DCCReference Include="GUI\fDocFrame.pas">
+      <Form>DocumentsFrame</Form>
+      <DesignClass>TFrame</DesignClass>
+    </DCCReference>
+    <DCCReference Include="GUI\fDocumentToolbar.pas">
+      <Form>DocumentToolbar</Form>
+      <DesignClass>TFrame</DesignClass>
+    </DCCReference>
+    <DCCReference Include="GUI\fEditJobComment.pas">
+      <Form>EditJobCommentForm</Form>
+    </DCCReference>
+    <DCCReference Include="GUI\fEditText.pas">
+      <Form>EditTextForm</Form>
+    </DCCReference>
+    <DCCReference Include="GUI\fEntSettings.pas">
+      <Form>EntSettingsForm</Form>
+    </DCCReference>
+    <DCCReference Include="GUI\fMoneyRequestForm.pas">
+      <Form>MoneyRequestForm</Form>
+    </DCCReference>
+    <DCCReference Include="GUI\fProgress.pas">
+      <Form>ProgressFrame</Form>
+      <DesignClass>TFrame</DesignClass>
+    </DCCReference>
+    <DCCReference Include="GUI\History\ContragentHistoryFrm.pas">
+      <Form>ContragentHistoryForm</Form>
+    </DCCReference>
+    <DCCReference Include="GUI\History\GlobalHistoryFrm.pas">
+      <Form>GlobalHistoryForm</Form>
+    </DCCReference>
+    <DCCReference Include="GUI\History\HistFrm.pas">
+      <Form>HistoryForm</Form>
+    </DCCReference>
+    <DCCReference Include="GUI\History\OrderHistoryFrm.pas">
+      <Form>OrderHistoryForm</Form>
+    </DCCReference>
+    <DCCReference Include="GUI\IncomingInvoices\PmIncomingInvoiceView.pas" />
+    <DCCReference Include="GUI\Invoices\fInvoiceFilterFrame.pas">
+      <Form>InvoicesFilterFrame</Form>
+      <DesignClass>TFrame</DesignClass>
+    </DCCReference>
+    <DCCReference Include="GUI\Invoices\fInvoiceFrame.pas">
+      <Form>InvoicesFrame</Form>
+      <DesignClass>TFrame</DesignClass>
+    </DCCReference>
+    <DCCReference Include="GUI\Invoices\fInvoicesToolbar.pas">
+      <Form>InvoicesToolbar</Form>
+      <DesignClass>TFrame</DesignClass>
+    </DCCReference>
+    <DCCReference Include="GUI\Invoices\PmInvoiceController.pas" />
+    <DCCReference Include="GUI\Invoices\PmInvoiceDocController.pas" />
+    <DCCReference Include="GUI\Invoices\PmInvoiceExistForm.pas">
+      <Form>InvoiceExistForm</Form>
+    </DCCReference>
+    <DCCReference Include="GUI\Invoices\PmInvoiceForm.pas">
+      <Form>InvoiceForm</Form>
+    </DCCReference>
+    <DCCReference Include="GUI\Invoices\PmInvoiceItemForm.pas">
+      <Form>InvoiceItemForm</Form>
+    </DCCReference>
+    <DCCReference Include="GUI\MainForm.pas">
+      <Form>MForm</Form>
+    </DCCReference>
+    <DCCReference Include="GUI\Materials\fMatRequestFilterFrame.pas">
+      <Form>MatRequestFilterFrame</Form>
+      <DesignClass>TFrame</DesignClass>
+    </DCCReference>
+    <DCCReference Include="GUI\Materials\fMatRequestFrame.pas">
+      <Form>MatRequestFrame</Form>
+      <DesignClass>TFrame</DesignClass>
+    </DCCReference>
+    <DCCReference Include="GUI\Materials\fMatRequestToolbar.pas">
+      <Form>MatRequestToolbar</Form>
+      <DesignClass>TFrame</DesignClass>
+    </DCCReference>
+    <DCCReference Include="GUI\Materials\PmMaterialRequestController.pas" />
+    <DCCReference Include="GUI\Orders\ChkOrd.pas">
+      <Form>ChkOrdForm</Form>
+    </DCCReference>
+    <DCCReference Include="GUI\Orders\fComInfo.pas">
+      <Form>frCommonInfo</Form>
+      <DesignClass>TFrame</DesignClass>
+    </DCCReference>
+    <DCCReference Include="GUI\Orders\fCopyOrder.pas">
+      <Form>CopyOrderForm</Form>
+    </DCCReference>
+    <DCCReference Include="GUI\Orders\fDraftListToolbar.pas">
+      <Form>DraftOrderListToolbar</Form>
+      <DesignClass>TFrame</DesignClass>
+    </DCCReference>
+    <DCCReference Include="GUI\Orders\fDraftOrdersFrame.pas">
+      <Form>DraftOrdersFrame</Form>
+      <DesignClass>TFrame</DesignClass>
+    </DCCReference>
+    <DCCReference Include="GUI\Orders\fMainFilter.pas">
+      <Form>TFilterFrame</Form>
+      <DesignClass>TFrame</DesignClass>
+    </DCCReference>
+    <DCCReference Include="GUI\Orders\fOrderInvPay.pas">
+      <Form>OrderInvPayFrame</Form>
+    </DCCReference>
+    <DCCReference Include="GUI\Orders\fOrderItems.pas">
+      <Form>
+  DicObj in 'Config\DicObj.pas',
+  fPageCost in 'GUI\Orders\fPageCost.pas' {frPageCost</Form>
+    </DCCReference>
+    <DCCReference Include="GUI\Orders\fOrderListToolbar.pas">
+      <Form>OrderListToolbar</Form>
+      <DesignClass>TFrame</DesignClass>
+    </DCCReference>
+    <DCCReference Include="GUI\Orders\fOrderNotesFrame.pas">
+      <Form>OrderNotesFrame</Form>
+      <DesignClass>TFrame</DesignClass>
+    </DCCReference>
+    <DCCReference Include="GUI\Orders\fOrderProductStorageFrom.pas">
+      <Form>OrderProductStorageFrom</Form>
+    </DCCReference>
+    <DCCReference Include="GUI\Orders\fOrdersFrame.pas">
+      <Form>OrdersFrame</Form>
+      <DesignClass>TFrame</DesignClass>
+    </DCCReference>
+    <DCCReference Include="GUI\Orders\fPageCost.pas">
+      <Form>frPageCost</Form>
+      <DesignClass>TFrame</DesignClass>
+    </DCCReference>
+    <DCCReference Include="GUI\Orders\fSrvTmpl.pas">
+      <Form>frSrvTemplate</Form>
+      <DesignClass>TFrame</DesignClass>
+    </DCCReference>
+    <DCCReference Include="GUI\Orders\fTabSrv.pas">
+      <Form>frTabSrv</Form>
+      <DesignClass>TFrame</DesignClass>
+    </DCCReference>
+    <DCCReference Include="GUI\Orders\fTabSrv2.pas">
+      <Form>frTabSrsv2H</Form>
+      <DesignClass>TFrame</DesignClass>
+    </DCCReference>
+    <DCCReference Include="GUI\Orders\fTabSrv3L1.pas">
+      <Form>frTabSrv3L1</Form>
+      <DesignClass>TFrame</DesignClass>
+    </DCCReference>
+    <DCCReference Include="GUI\Orders\fWorkListToolbar.pas">
+      <Form>WorkOrderListToolbar</Form>
+      <DesignClass>TFrame</DesignClass>
+    </DCCReference>
+    <DCCReference Include="GUI\Orders\fWorkOrdersFrame.pas">
+      <Form>WorkOrdersFrame</Form>
+      <DesignClass>TFrame</DesignClass>
+    </DCCReference>
+    <DCCReference Include="GUI\Orders\MkCalc.pas">
+      <Form>MakeCalcForm</Form>
+    </DCCReference>
+    <DCCReference Include="GUI\Orders\MkOrder.pas">
+      <Form>MakeOrderForm</Form>
+    </DCCReference>
+    <DCCReference Include="GUI\Orders\OrdProp.pas">
+      <Form>OrderProp</Form>
+    </DCCReference>
+    <DCCReference Include="GUI\Orders\PmDelayedOrdersForm.pas">
+      <Form>DelayedOrdersForm</Form>
+    </DCCReference>
+    <DCCReference Include="GUI\Orders\PmDraftController.pas" />
+    <DCCReference Include="GUI\Orders\PmMatRequestForm.pas">
+      <Form>MaterialRequestEditForm</Form>
+    </DCCReference>
+    <DCCReference Include="GUI\Orders\PmNotesPopupForm.pas">
+      <Form>NotesPopupForm</Form>
+    </DCCReference>
+    <DCCReference Include="GUI\Orders\PmOrderController.pas" />
+    <DCCReference Include="GUI\Orders\PmOrderNoteForm.pas">
+      <Form>OrderNoteForm</Form>
+    </DCCReference>
+    <DCCReference Include="GUI\Orders\pmProductToStorage.pas" />
+    <DCCReference Include="GUI\Orders\PmSelectExtMatForm.pas">
+      <Form>SelectExternalDicForm</Form>
+    </DCCReference>
+    <DCCReference Include="GUI\Orders\PmSelectTemplate.pas">
+      <Form>SelectTemplateForm</Form>
+    </DCCReference>
+    <DCCReference Include="GUI\Orders\PmWorkController.pas" />
+    <DCCReference Include="GUI\Payments\fAddIncomesForm.pas" />
+    <DCCReference Include="GUI\Payments\fCustomerIncome.pas">
+      <Form>CustomerIncomeForm</Form>
+    </DCCReference>
+    <DCCReference Include="GUI\Payments\fCustomerPayments.pas">
+      <Form>CustomerPaymentsFrame</Form>
+      <DesignClass>TFrame</DesignClass>
+    </DCCReference>
+    <DCCReference Include="GUI\Payments\fOrderPayments.pas">
+      <Form>OrderPaymentsForm</Form>
+    </DCCReference>
+    <DCCReference Include="GUI\Payments\fPaymentsFilter.pas">
+      <Form>PaymentsFilterFrame</Form>
+      <DesignClass>TFrame</DesignClass>
+    </DCCReference>
+    <DCCReference Include="GUI\Payments\fPaymentsToolbar.pas">
+      <Form>PaymentsToolbar</Form>
+      <DesignClass>TFrame</DesignClass>
+    </DCCReference>
+    <DCCReference Include="GUI\Payments\PmCustomerPaymentsView.pas" />
+    <DCCReference Include="GUI\Payments\PmSelectInvoiceForm.pas">
+      <Form>SelectInvoiceForm</Form>
+    </DCCReference>
+    <DCCReference Include="GUI\PmActions.pas" />
+    <DCCReference Include="GUI\PmDocController.pas" />
+    <DCCReference Include="GUI\PmDocEditForm.pas">
+      <Form>DocEditForm</Form>
+    </DCCReference>
+    <DCCReference Include="GUI\PmDocItemEditForm.pas">
+      <Form>DocItemEditForm</Form>
+    </DCCReference>
+    <DCCReference Include="GUI\PmDocumentController.pas" />
+    <DCCReference Include="GUI\PmDocumentView.pas" />
+    <DCCReference Include="GUI\PmEntityController.pas" />
+    <DCCReference Include="GUI\PmMessageDialog.pas">
+      <Form>MessageDialog</Form>
+    </DCCReference>
+    <DCCReference Include="GUI\RecycleBin\fBaseRecycleBin.pas">
+      <Form>BaseRecycleBinFrame</Form>
+      <DesignClass>TFrame</DesignClass>
+    </DCCReference>
+    <DCCReference Include="GUI\RecycleBin\fBaseRecycleBinToolbar.pas">
+      <Form>BaseRecycleBinToolbar</Form>
+      <DesignClass>TFrame</DesignClass>
+    </DCCReference>
+    <DCCReference Include="GUI\RecycleBin\fContragentRecycleBin.pas">
+      <Form>ContragentRecycleBinFrame</Form>
+      <DesignClass>TFrame</DesignClass>
+    </DCCReference>
+    <DCCReference Include="GUI\RecycleBin\fOrderRecycleBin.pas">
+      <Form>OrderRecycleBinFrame</Form>
+      <DesignClass>TFrame</DesignClass>
+    </DCCReference>
+    <DCCReference Include="GUI\RecycleBin\PmBaseRecycleBinView.pas" />
+    <DCCReference Include="GUI\RecycleBin\PmContragentRecycleBinView.pas" />
+    <DCCReference Include="GUI\RecycleBin\PmOrderRecycleBinView.pas" />
+    <DCCReference Include="GUI\Scheduler\fAddToPlan.pas">
+      <Form>AddToPlanForm</Form>
+    </DCCReference>
+    <DCCReference Include="GUI\Scheduler\fEditOrderState.pas">
+      <Form>EditOrderStateForm</Form>
+    </DCCReference>
+    <DCCReference Include="GUI\Scheduler\fJobList.pas">
+      <Form>JobListForm</Form>
+    </DCCReference>
+    <DCCReference Include="GUI\Scheduler\fJobOverlap.pas">
+      <Form>JobOverlapForm</Form>
+    </DCCReference>
+    <DCCReference Include="GUI\Scheduler\fJobSplit.pas">
+      <Form>JobSplitForm</Form>
+    </DCCReference>
+    <DCCReference Include="GUI\Scheduler\fJobSplitShift.pas">
+      <Form>JobSplitShiftForm</Form>
+    </DCCReference>
+    <DCCReference Include="GUI\Scheduler\fmRelated.pas">
+      <Form>RelatedProcessGridFrame</Form>
+      <DesignClass>TFrame</DesignClass>
+    </DCCReference>
+    <DCCReference Include="GUI\Scheduler\fOrderFiles.pas">
+      <Form>OrderFilesForm</Form>
+    </DCCReference>
+    <DCCReference Include="GUI\Scheduler\fOrderNum.pas">
+      <Form>OrderNumForm</Form>
+    </DCCReference>
+    <DCCReference Include="GUI\Scheduler\fPlanFrame.pas">
+      <Form>PlanFrame</Form>
+      <DesignClass>TFrame</DesignClass>
+    </DCCReference>
+    <DCCReference Include="GUI\Scheduler\fPlanRange.pas">
+      <Form>PlanRangeForm</Form>
+    </DCCReference>
+    <DCCReference Include="GUI\Scheduler\fProdBase.pas">
+      <Form>ProductionBaseFrame</Form>
+      <DesignClass>TFrame</DesignClass>
+    </DCCReference>
+    <DCCReference Include="GUI\Scheduler\fProdFilter.pas">
+      <Form>ProdFilterFrame</Form>
+    </DCCReference>
+    <DCCReference Include="GUI\Scheduler\fProductionFrame.pas">
+      <Form>ProductionFrame</Form>
+      <DesignClass>TFrame</DesignClass>
+    </DCCReference>
+    <DCCReference Include="GUI\Scheduler\fProductionToolbar.pas">
+      <Form>ProductionToolbar</Form>
+      <DesignClass>TFrame</DesignClass>
+    </DCCReference>
+    <DCCReference Include="GUI\Scheduler\fScheduleToolbar.pas">
+      <Form>ScheduleToolbar</Form>
+      <DesignClass>TFrame</DesignClass>
+    </DCCReference>
+    <DCCReference Include="GUI\Scheduler\PlanUtils.pas" />
+    <DCCReference Include="GUI\Scheduler\PmAdvancedEdit.pas">
+      <Form>JobAdvancedEditForm</Form>
+    </DCCReference>
+    <DCCReference Include="GUI\Scheduler\PmGantt.pas">
+      <Form>GanttFrame</Form>
+      <DesignClass>TFrame</DesignClass>
+    </DCCReference>
+    <DCCReference Include="GUI\Scheduler\PmPlanController.pas" />
+    <DCCReference Include="GUI\Scheduler\PmProductionController.pas" />
+    <DCCReference Include="GUI\Scheduler\PmScheduleGrid.pas" />
+    <DCCReference Include="GUI\Scheduler\PmTimeLine.pas" />
+    <DCCReference Include="GUI\ShipmentInvoice\fSaleFrame.pas">
+      <Form>SaleFrame</Form>
+    </DCCReference>
+    <DCCReference Include="GUI\ShipmentInvoice\fSaleToolbar.pas">
+      <Form>SaleToolbar</Form>
+      <DesignClass>TFrame</DesignClass>
+    </DCCReference>
+    <DCCReference Include="GUI\ShipmentInvoice\PmSaleDocController.pas" />
+    <DCCReference Include="GUI\ShipmentInvoice\PmSaleDocForm.pas">
+      <Form>SaleDocForm</Form>
+    </DCCReference>
+    <DCCReference Include="GUI\ShipmentInvoice\PmSaleItemForm.pas" />
+    <DCCReference Include="GUI\ShipmentInvoice\PmSaleView.pas" />
+    <DCCReference Include="GUI\Shipping\fShipmentFilterFrame.pas">
+      <Form>ShipmentFilterFrame</Form>
+      <DesignClass>TFrame</DesignClass>
+    </DCCReference>
+    <DCCReference Include="GUI\Shipping\fShipmentFrame.pas" />
+    <DCCReference Include="GUI\Shipping\fShipmentToolbar.pas">
+      <Form>ShipmentToolbar</Form>
+      <DesignClass>TFrame</DesignClass>
+    </DCCReference>
+    <DCCReference Include="GUI\Shipping\PmShipmentController.pas" />
+    <DCCReference Include="GUI\Shipping\PmShipmentDocController.pas" />
+    <DCCReference Include="GUI\Shipping\PmShipmentDocForm.pas">
+      <Form>ShipmentDocForm</Form>
+    </DCCReference>
+    <DCCReference Include="GUI\Shipping\PmShipmentForm.pas">
+      <Form>ShipmentForm</Form>
+    </DCCReference>
+    <DCCReference Include="GUI\SplForm.pas">
+      <Form>Splash</Form>
+    </DCCReference>
+    <DCCReference Include="GUI\Stock\fStockFrame.pas" />
+    <DCCReference Include="GUI\Stock\fStockIncomeFilterFrame.pas">
+      <Form>StockIncomeFilterFrame</Form>
+      <DesignClass>TFrame</DesignClass>
+    </DCCReference>
+    <DCCReference Include="GUI\Stock\fStockIncomeFrame.pas">
+      <Form>StockIncomeFrame</Form>
+      <DesignClass>TFrame</DesignClass>
+    </DCCReference>
+    <DCCReference Include="GUI\Stock\fStockIncomeToolbar.pas">
+      <Form>StockIncomeToolbarFrame</Form>
+      <DesignClass>TFrame</DesignClass>
+    </DCCReference>
+    <DCCReference Include="GUI\Stock\fStockMoveFilterFrame.pas">
+      <Form>StockMoveFilterFrame</Form>
+      <DesignClass>TFrame</DesignClass>
+    </DCCReference>
+    <DCCReference Include="GUI\Stock\fStockMoveFrame.pas">
+      <Form>StockMoveFrame</Form>
+      <DesignClass>TFrame</DesignClass>
+    </DCCReference>
+    <DCCReference Include="GUI\Stock\fStockMoveToolbar.pas">
+      <Form>StockMoveToolbarFrame</Form>
+      <DesignClass>TFrame</DesignClass>
+    </DCCReference>
+    <DCCReference Include="GUI\Stock\fStockToolbar.pas">
+      <Form>StockToolbarFrame</Form>
+      <DesignClass>TFrame</DesignClass>
+    </DCCReference>
+    <DCCReference Include="GUI\Stock\fStockWasteFilterFrame.pas">
+      <Form>StockWasteFilterFrame</Form>
+      <DesignClass>TFrame</DesignClass>
+    </DCCReference>
+    <DCCReference Include="GUI\Stock\fStockWasteFrame.pas">
+      <Form>StockWasteFrame</Form>
+      <DesignClass>TFrame</DesignClass>
+    </DCCReference>
+    <DCCReference Include="GUI\Stock\fStockWasteToolbar.pas">
+      <Form>StockWasteToolbarFrame</Form>
+      <DesignClass>TFrame</DesignClass>
+    </DCCReference>
+    <DCCReference Include="GUI\Stock\PmStockIncomeDocController.pas" />
+    <DCCReference Include="GUI\Stock\PmStockIncomeDocEditForm.pas">
+      <Form>StockIncomeDocEditForm</Form>
+    </DCCReference>
+    <DCCReference Include="GUI\Stock\PmStockIncomeDocItemEditForm.pas">
+      <Form>StockIncomeDocItemEditForm</Form>
+    </DCCReference>
+    <DCCReference Include="GUI\Stock\PmStockIncomeView.pas" />
+    <DCCReference Include="GUI\Stock\PmStockMoveView.pas" />
+    <DCCReference Include="GUI\Stock\PmStockView.pas" />
+    <DCCReference Include="GUI\Stock\PmStockWasteDocController.pas" />
+    <DCCReference Include="GUI\Stock\PmStockWasteDocEditForm.pas">
+      <Form>StockWasteDocEditForm</Form>
+    </DCCReference>
+    <DCCReference Include="GUI\Stock\PmStockWasteDocItemEditForm.pas">
+      <Form>StockWasteDocItemEditForm</Form>
+    </DCCReference>
+    <DCCReference Include="GUI\Stock\PmStockWasteView.pas" />
+    <DCCReference Include="GUI\UEFrm.pas">
+      <Form>UEForm</Form>
+    </DCCReference>
+    <DCCReference Include="Interpreter\JvInterpreterInit.pas" />
+    <DCCReference Include="Interpreter\JvInterpreter_CustomQuery.pas" />
+    <DCCReference Include="Interpreter\JvInterpreter_Reports.pas" />
+    <DCCReference Include="Interpreter\JvInterpreter_Schedule.pas" />
+    <DCCReference Include="Interpreter\JvInterpreter_Settings.pas" />
+    <DCCReference Include="Interpreter\JvInterpreter_UserRights.pas" />
+    <DCCReference Include="Interpreter\RAI2_CalcSrv.pas" />
+    <DCCReference Include="Interpreter\RAI2_SrvPage.pas" />
+    <DCCReference Include="MainFilter.pas" />
+    <DCCReference Include="OptInt.pas">
+      <Form>OptIntForm</Form>
+    </DCCReference>
+    <DCCReference Include="PmAccessManager.pas" />
+    <DCCReference Include="PmAppController.pas" />
+    <DCCReference Include="PmASMainData.pas">
+      <Form>SrvDM</Form>
+      <DesignClass>TDataModule</DesignClass>
+    </DCCReference>
+    <DCCReference Include="PmCfgUpdater.pas" />
+    <DCCReference Include="PmCustomReportBuilder.pas" />
+    <DCCReference Include="PmCustomReportCommon.pas" />
+    <DCCReference Include="PmExecCode.pas" />
+    <DCCReference Include="PmInit.pas" />
+    <DCCReference Include="PmOrderExchange.pas" />
+    <DCCReference Include="PmProcess.pas" />
+    <DCCReference Include="PmProcessCfg.pas" />
+    <DCCReference Include="PmProviders.pas" />
+    <DCCReference Include="PmScriptExchange.pas" />
+    <DCCReference Include="PmScriptManager.pas" />
+    <DCCReference Include="ProgressObj.pas" />
+    <DCCReference Include="ServMod.pas">
+      <Form>sm</Form>
+      <DesignClass>TDataModule</DesignClass>
+    </DCCReference>
+    <DCCReference Include="Utils\PmDataChangeDetect.pas" />
+    <DCCReference Include="Utils\PmMessenger.pas" />
+    <DCCReference Include="Utils\PmScheduleDataChangeDetect.pas" />
+  </ItemGroup>
+</Project>

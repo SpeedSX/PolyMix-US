@@ -1,0 +1,2 @@
+inherited StockIncomeToolbarFrame: TStockIncomeToolbarFrame
+end

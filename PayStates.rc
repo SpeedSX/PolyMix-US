@@ -1,0 +1,10 @@
+PAYSTATE_OK BITMAP
+..\Images\PayState_Ok.bmp
+PAYSTATE_WAIT BITMAP
+..\Images\PayState_Wait.bmp
+PAYSTATE_UNKNOWN BITMAP
+..\Images\PayState_Unknown.bmp
+PAYSTATE_NONE BITMAP
+..\Images\PayState_None.bmp
+PAYSTATE_YELLOW BITMAP
+..\Images\PayState_Yellow.bmp

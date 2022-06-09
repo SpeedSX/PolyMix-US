@@ -1,0 +1,2 @@
+inherited OrderRecycleBinFrame: TOrderRecycleBinFrame
+end
