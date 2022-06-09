@@ -49,7 +49,7 @@ type
     function GetExternalName: string;
     function GetPersons: TPersons;
     function GetRelated: TRelated;
-    function GetAddresses: TAddresses;
+   function GetAddresses: TAddresses;
     function GetActivities: TActivities;
     function GetPersonType: Integer;
     function GetSyncState: integer;
@@ -59,12 +59,14 @@ type
     function GetFirstPersonName: variant;
     function GetBriefNote: variant;
     function GetContragentTypeValue: integer;
+    function GetActivityCodes: string;
     procedure SetContragentType(id: integer);
     procedure SetName(_Name: string);
     procedure SetFullName(_FullName: string);
     procedure SetFirmBirthday(_Birthday: variant);
     procedure SetContragentTypeValue(_Value: integer);
     procedure SetStatusCode(_Value: variant);
+    procedure SetActivityCodes(_Value: string);
   protected
     FContragentType: integer;
     FRequireInfoSource: boolean;
@@ -109,7 +111,10 @@ type
       F_ContragentType = 'ContragentType';
       F_Alert = 'Alert';
       F_IsDead = 'IsDead';
+      F_ActivityCodes = 'ActivityCodes';
       BriefNoteSize = 128;
+      ActivityCodesSize = 300;
+      ActivityDelimiter = '|';
     class var
       NoNameKey: integer;
 
@@ -120,17 +125,20 @@ type
     function Validate(var Msg: string): boolean; virtual;
     function AddNew(Info: TContragentInfo): integer;
     function GetInfo: TContragentInfo; overload;
-    // меняет текущую запись!
+    // РјРµРЅСЏРµС‚ С‚РµРєСѓС‰СѓСЋ Р·Р°РїРёСЃСЊ!
     function GetInfo(KeyVal: integer): TContragentInfo; overload;
     procedure SetInfo(KeyVal: integer; Info: TContragentInfo);
     function NeedReload: boolean; override;
+    function FindActivity(_ActivityID: integer): boolean;
+    procedure AddActivity(_ActivityID: integer);
+    procedure DeleteActivity(_ActivityID: integer);
 
     class procedure CreateContragentFields(FDataSet: TDataSet);
 
     property NamePlural: string read FNamePlural;
     property NameSingular: string read FNameSingular;
 
-    // свойства для полей данных
+    // СЃРІРѕР№СЃС‚РІР° РґР»СЏ РїРѕР»РµР№ РґР°РЅРЅС‹С…
     property Name: string read GetName write SetName;
     property FullName: string read GetFullName write SetFullName;
     property RequireInfoSource: boolean read FRequireInfoSource;
@@ -142,9 +150,9 @@ type
     property PersonType: Integer read GetPersonType;
     property FirmBirthday: variant read GetFirmBirthday write SetFirmBirthday;
     property WorkSeparation: boolean read FWorkSeparation;
-    // Значение типа контрагента для класса, может не соотв. текущему, если типы объединяются
+    // Р—РЅР°С‡РµРЅРёРµ С‚РёРїР° РєРѕРЅС‚СЂР°РіРµРЅС‚Р° РґР»СЏ РєР»Р°СЃСЃР°, РјРѕР¶РµС‚ РЅРµ СЃРѕРѕС‚РІ. С‚РµРєСѓС‰РµРјСѓ, РµСЃР»Рё С‚РёРїС‹ РѕР±СЉРµРґРёРЅСЏСЋС‚СЃСЏ
     property ContragentType: integer read FContragentType write SetContragentType;
-    // Значение типа текущего контрагента
+    // Р—РЅР°С‡РµРЅРёРµ С‚РёРїР° С‚РµРєСѓС‰РµРіРѕ РєРѕРЅС‚СЂР°РіРµРЅС‚Р°
     property ContragentTypeValue: integer read GetContragentTypeValue write SetContragentTypeValue;
     property SyncState: integer read GetSyncState;
     property StatusCode: variant read GetStatusCode write SetStatusCode;
@@ -152,8 +160,9 @@ type
     property ActivityCode: variant read GetActivityCode;
     property FirstPersonName: variant read GetFirstPersonName;
     property BriefNote: variant read GetBriefNote;
-    // имя во внешней системе
+    // РёРјСЏ РІРѕ РІРЅРµС€РЅРµР№ СЃРёСЃС‚РµРјРµ
     property ExternalName: string read GetExternalName;
+    property ActivityCodes: string read GetActivityCodes write SetActivityCodes;
   end;
 
   TCustomers = class(TContragents)
@@ -329,7 +338,7 @@ begin
   CreateDataSet;
   NewRecordProc := 'up_NewContragent';
   DeleteRecordProc := 'up_DeleteContragent';
-  // перед созданием дочерних
+  // РїРµСЂРµРґ СЃРѕР·РґР°РЅРёРµРј РґРѕС‡РµСЂРЅРёС…
   ContragentType := _ContragentType;
   FPersons := TPersons.Create(Self);
   DetailData[0] := FPersons;
@@ -339,7 +348,7 @@ begin
   DetailData[2] := FAddresses;
   FActivities := TActivities.Create(Self);
   DetailData[3] := FActivities;
-  // Контрагенты будут обновляться только если были изменения в таблице
+  // РљРѕРЅС‚СЂР°РіРµРЅС‚С‹ Р±СѓРґСѓС‚ РѕР±РЅРѕРІР»СЏС‚СЊСЃСЏ С‚РѕР»СЊРєРѕ РµСЃР»Рё Р±С‹Р»Рё РёР·РјРµРЅРµРЅРёСЏ РІ С‚Р°Р±Р»РёС†Рµ
   FChangeDetector := TADODataChangeDetect.Create(TChangeObjectID.Contragent);
 end;
 
@@ -377,7 +386,7 @@ procedure TContragents.CreateDataSet;
 var
   FDataSet: TClientDataSet;
 begin
-  // Должен быть в том же модуле, пока на одном уровне работают, т.к. нет connection
+  // Р”РѕР»Р¶РµРЅ Р±С‹С‚СЊ РІ С‚РѕРј Р¶Рµ РјРѕРґСѓР»Рµ, РїРѕРєР° РЅР° РѕРґРЅРѕРј СѓСЂРѕРІРЅРµ СЂР°Р±РѕС‚Р°СЋС‚, С‚.Рє. РЅРµС‚ connection
   FDataSet := TClientDataSet.Create(CustDM);
   SetDataSet(FDataSet);
   DataSetProvider := TDataSetProvider.Create(CustDM);
@@ -526,7 +535,7 @@ begin
   end;
   with TIntegerField.Create(FDataSet.Owner) do begin
     FieldName := F_CustParentID;
-    ProviderFlags := [];   // Не обновляется!
+    ProviderFlags := [];   // РќРµ РѕР±РЅРѕРІР»СЏРµС‚СЃСЏ!
     DataSet := FDataSet;
   end;
   with TMemoField.Create(FDataSet.Owner) do begin
@@ -566,7 +575,7 @@ begin
   end;
   with TIntegerField.Create(FDataSet.Owner) do begin
     FieldName := F_SyncState;
-    ProviderFlags := [];   // Не обновляется!
+    ProviderFlags := [];   // РќРµ РѕР±РЅРѕРІР»СЏРµС‚СЃСЏ!
     DataSet := FDataSet;
   end;
   with TFloatField.Create(FDataSet.Owner) do begin
@@ -653,7 +662,13 @@ begin
     ProviderFlags := [pfInUpdate];
     DataSet := FDataSet;
   end;
-  // вычисляемые
+  with TStringField.Create(FDataSet.Owner) do begin
+    FieldName := F_ActivityCodes;
+    ProviderFlags := [pfInUpdate];
+    Size := ActivityCodesSize;
+    DataSet := FDataSet;
+  end;
+  // РІС‹С‡РёСЃР»СЏРµРјС‹Рµ
   with TStringField.Create(FDataSet.Owner) do begin
     FieldName := 'CreatorName';
     ProviderFlags := [];
@@ -669,8 +684,8 @@ begin
   DataSet[F_UserCode] := AccessManager.CurUser.ID;
   DataSet[F_ContragentType] := FContragentType;
   DataSet['PersonType'] := 0;
-  // Если пользователь работает с определенной группой контрагентов,
-  // то создаем его в этой группе.
+  // Р•СЃР»Рё РїРѕР»СЊР·РѕРІР°С‚РµР»СЊ СЂР°Р±РѕС‚Р°РµС‚ СЃ РѕРїСЂРµРґРµР»РµРЅРЅРѕР№ РіСЂСѓРїРїРѕР№ РєРѕРЅС‚СЂР°РіРµРЅС‚РѕРІ,
+  // С‚Рѕ СЃРѕР·РґР°РµРј РµРіРѕ РІ СЌС‚РѕР№ РіСЂСѓРїРїРµ.
   if not VarIsNull(AccessManager.CurUser.ContragentGroup) then
     DataSet['ContragentGroup'] := AccessManager.CurUser.ContragentGroup;
   DataSet['PrePayPercent'] := 0;
@@ -709,6 +724,11 @@ begin
   Result := DataSet[F_ExternalName];
 end;
 
+function TContragents.GetActivityCodes: string;
+begin
+  Result := NvlString(DataSet[F_ActivityCodes]);
+end;
+
 function TContragents.GetContragentTypeValue: integer;
 begin
   Result := NvlInteger(DataSet[F_ContragentType]);
@@ -740,7 +760,7 @@ var
 begin
   if AccessManager.CurUser.ViewOtherCustomer then
   begin
-    // Ограничение просмотра - группа заказчиков
+    // РћРіСЂР°РЅРёС‡РµРЅРёРµ РїСЂРѕСЃРјРѕС‚СЂР° - РіСЂСѓРїРїР° Р·Р°РєР°Р·С‡РёРєРѕРІ
     if not VarIsNull(AccessManager.CurUser.ContragentGroup) then
       OwnFilter := 'and (ContragentGroup = ' + IntToStr(AccessManager.CurUser.ContragentGroup)
         + ' or ContragentGroup is null)'
@@ -748,7 +768,7 @@ begin
       OwnFilter := ''
   end
   else
-    // Ограничение просмотра - только свои заказчики
+    // РћРіСЂР°РЅРёС‡РµРЅРёРµ РїСЂРѕСЃРјРѕС‚СЂР° - С‚РѕР»СЊРєРѕ СЃРІРѕРё Р·Р°РєР°Р·С‡РёРєРё
     OwnFilter := ' and UserCode = ' + IntToStr(AccessManager.CurUser.ID);
 
   Result := 'select [N], [Name], [FullName], [Fax], [Phone], [Phone2], [Address], [Email], [Bank], [IndCode], '
@@ -756,7 +776,7 @@ begin
        + ' [FirmBirthday], [PersonType], [FirmType], ContragentGroup, [ParentID], [Notes], '
        + ' [ContragentType], [CreationDate], [SyncState], [LegalAddress],' + #13#10
        + ' [ExternalName], PrePayPercent, PreShipPercent, PayDelay, IsPayDelayInBankDays, StatusCode,' + #13#10
-       + ' ActivityCode, CheckPayConditions, BriefNote, Alert, SyncWeb, IsDead,' + #13#10
+       + ' ActivityCode, CheckPayConditions, BriefNote, Alert, SyncWeb, IsDead, ActivityCodes,' + #13#10
        + ' (select top 1 Name from Persons p where p.CustomerID = c.N) as FirstPersonName,' + #13#10
        + ' (case when exists(select * from AliveWorkOrders with (noexpand) where Customer = c.N /*and IsDeleted = 0 and IsDraft = 0*/) then cast(1 as bit) else cast(0 as bit) end) as IsWork' + #13#10
        + 'from Customer c' + #13#10
@@ -818,41 +838,110 @@ begin
   DataSet[F_StatusCode] := _Value;
 end;
 
+procedure TContragents.SetActivityCodes(_Value: string);
+begin
+  if not (DataSet.State in [dsInsert, dsEdit]) then DataSet.Edit;
+  DataSet[F_ActivityCodes] := _Value;
+end;
+
+procedure TContragents.AddActivity(_ActivityID: integer);
+begin
+  if not FindActivity(_ActivityID) then
+  begin
+    if ActivityCodes = '' then
+      ActivityCodes := ActivityDelimiter;
+
+    ActivityCodes := ActivityCodes + IntToStr(_ActivityID) + ActivityDelimiter;
+  end;
+end;
+
+procedure Split(Delimiter: Char; Str: string; ListOfStrings: TStrings);
+begin
+   ListOfStrings.Clear;
+   ListOfStrings.Delimiter := Delimiter;
+   ListOfStrings.StrictDelimiter := True;
+   ListOfStrings.DelimitedText := Str;
+end;
+
+function Join(Delimiter: Char; ListOfStrings: TStrings): string;
+var
+  S: string;
+  I: integer;
+begin
+  if ListOfStrings.Count = 0 then
+    S := ''
+  else
+  begin
+    S := ListOfStrings[0];
+    if ListOfStrings.Count > 0 then
+      for I := 1 to ListOfStrings.Count - 1 do
+        S := S + '|' + ListOfStrings[I];
+  end;
+  Result := S;
+end;
+
+procedure TContragents.DeleteActivity(_ActivityID: integer);
+var
+  Codes: TStringList;
+  i: integer;
+begin
+  if FindActivity(_ActivityID) then
+  begin
+    Codes := TStringList.Create;
+    try
+      Split(ActivityDelimiter, ActivityCodes, Codes);
+      i := Codes.IndexOf(IntToStr(_ActivityID));
+      Codes.Delete(i);
+      ActivityCodes := Join(ActivityDelimiter, Codes);
+      if ActivityCodes = ActivityDelimiter then
+        ActivityCodes := '';
+      // StringReplace(ActivityCodes, ActivityDelimiter + IntToStr(_ActivityID) + ActivityDelimiter, '', []);
+    finally
+      Codes.Free;
+    end;
+  end;
+end;
+
+function TContragents.FindActivity(_ActivityID: integer): boolean;
+begin
+  Result := Pos(ActivityDelimiter + IntToStr(_ActivityID) + ActivityDelimiter, ActivityCodes) > 0
+end;
+
 function TContragents.Validate(var Msg: string): boolean;
 begin
   Result := not (VarIsNull(DataSet[F_CustName]) or
     VarIsEmpty(DataSet[F_CustName]) or
     (Trim(DataSet[F_CustName]) = ''));
   if not Result then
-    Msg := 'Не указано наименование'
+    Msg := 'РќРµ СѓРєР°Р·Р°РЅРѕ РЅР°РёРјРµРЅРѕРІР°РЅРёРµ'
   else
   begin
     Result := not (EntSettings.RequireInfoSource and FRequireInfoSource
         and (VarIsNull(DataSet['SourceCode'])
           or VarIsEmpty(DataSet['SourceCode'])));
     if not Result then
-      Msg := 'Не указан источник информации'
+      Msg := 'РќРµ СѓРєР°Р·Р°РЅ РёСЃС‚РѕС‡РЅРёРє РёРЅС„РѕСЂРјР°С†РёРё'
     else
     begin
-      // Форма собственности больше не нужна, т.к. есть полное наименование, поэтому
-      // настройка используется для указания категории клиента
+      // Р¤РѕСЂРјР° СЃРѕР±СЃС‚РІРµРЅРЅРѕСЃС‚Рё Р±РѕР»СЊС€Рµ РЅРµ РЅСѓР¶РЅР°, С‚.Рє. РµСЃС‚СЊ РїРѕР»РЅРѕРµ РЅР°РёРјРµРЅРѕРІР°РЅРёРµ, РїРѕСЌС‚РѕРјСѓ
+      // РЅР°СЃС‚СЂРѕР№РєР° РёСЃРїРѕР»СЊР·СѓРµС‚СЃСЏ РґР»СЏ СѓРєР°Р·Р°РЅРёСЏ РєР°С‚РµРіРѕСЂРёРё РєР»РёРµРЅС‚Р°
       Result := not EntSettings.RequireFirmType or (NvlInteger(StatusCode) <> 0);
       if not Result then
-        Msg := 'Не указана категория заказчика'
-      {// указание формы собственности может требоваться только для
-      // юридических лиц
+        Msg := 'РќРµ СѓРєР°Р·Р°РЅР° РєР°С‚РµРіРѕСЂРёСЏ Р·Р°РєР°Р·С‡РёРєР°'
+      {// СѓРєР°Р·Р°РЅРёРµ С„РѕСЂРјС‹ СЃРѕР±СЃС‚РІРµРЅРЅРѕСЃС‚Рё РјРѕР¶РµС‚ С‚СЂРµР±РѕРІР°С‚СЊСЃСЏ С‚РѕР»СЊРєРѕ РґР»СЏ
+      // СЋСЂРёРґРёС‡РµСЃРєРёС… Р»РёС†
       Result := not (EntSettings.RequireFirmType and FRequireFirmType
           and (VarIsNull(DataSet['FirmType']) or VarIsEmpty(DataSet['FirmType']))
           and (PersonType = PersonType_Juri));
       if not Result then
-        Msg := 'Не указана форма собственности'}
+        Msg := 'РќРµ СѓРєР°Р·Р°РЅР° С„РѕСЂРјР° СЃРѕР±СЃС‚РІРµРЅРЅРѕСЃС‚Рё'}
       else
       begin
         Result := not (EntSettings.RequireFullName
           and (Trim(NvlString(DataSet['FullName'])) = '')
           and (PersonType = PersonType_Juri));
         if not Result then
-          Msg := 'Не указано полное наименование'
+          Msg := 'РќРµ СѓРєР°Р·Р°РЅРѕ РїРѕР»РЅРѕРµ РЅР°РёРјРµРЅРѕРІР°РЅРёРµ'
         else
         begin
           Result := (DataSet['PrePayPercent'] >= 0) and (DataSet['PrePayPercent'] <= 100)
@@ -860,18 +949,18 @@ begin
             and (DataSet['PrePayPercent'] + DataSet['PreShipPercent'] <= 100)
             and (DataSet['PayDelay'] >= 0);
           if not Result then
-            Msg := 'Некорректные условия оплаты'
+            Msg := 'РќРµРєРѕСЂСЂРµРєС‚РЅС‹Рµ СѓСЃР»РѕРІРёСЏ РѕРїР»Р°С‚С‹'
           else
           begin
             Result := not EntSettings.RequireActivity or (NvlInteger(ActivityCode) <> 0);
             if not Result then
-              Msg := 'Не указан вид деятельности контрагента'
+              Msg := 'РќРµ СѓРєР°Р·Р°РЅ РІРёРґ РґРµСЏС‚РµР»СЊРЅРѕСЃС‚Рё РєРѕРЅС‚СЂР°РіРµРЅС‚Р°'
             else
             begin
               Result := not (EntSettings.AllContractors and (ContragentType <> caCustomer))
                 or (NvlInteger(StatusCode) <> 0);
               if not Result then
-                Msg := 'Не указан вид контрагента'
+                Msg := 'РќРµ СѓРєР°Р·Р°РЅ РІРёРґ РєРѕРЅС‚СЂР°РіРµРЅС‚Р°'
               else
                 Msg := ''
             end
@@ -1067,13 +1156,13 @@ end;
 
 {$ENDREGION}
 
-{$REGION 'Классы-наследники TContragents' }
+{$REGION 'РљР»Р°СЃСЃС‹-РЅР°СЃР»РµРґРЅРёРєРё TContragents' }
 
 constructor TCustomers.Create;
 begin
   inherited Create(caCustomer);
-  FNameSingular := 'заказчик';//LoadStr(S_CustomersTitle);
-  FNamePlural := 'Заказчики';//LoadStr(S_CustomersTitle);
+  FNameSingular := 'Р·Р°РєР°Р·С‡РёРє';//LoadStr(S_CustomersTitle);
+  FNamePlural := 'Р—Р°РєР°Р·С‡РёРєРё';//LoadStr(S_CustomersTitle);
   FWorkSeparation := true;
   FRequireInfoSource := true;
   FRequireFirmType := true;
@@ -1082,8 +1171,8 @@ end;
 constructor TContractors.Create;
 begin
   inherited Create(caContractor);
-  FNameSingular := 'Подрядчик';//LoadStr(S_ContractorsTitle);
-  FNamePlural := 'Подрядчики';//LoadStr(S_ContractorsTitle);
+  FNameSingular := 'РџРѕРґСЂСЏРґС‡РёРє';//LoadStr(S_ContractorsTitle);
+  FNamePlural := 'РџРѕРґСЂСЏРґС‡РёРєРё';//LoadStr(S_ContractorsTitle);
   FRequireFirmType := true;
 end;
 
@@ -1106,8 +1195,8 @@ end;
 constructor TSuppliers.Create;
 begin
   inherited Create(caSupplier);
-  FNameSingular := 'поставщик';//LoadStr(S_SuppliersTitle);
-  FNamePlural := 'Поставщики';//LoadStr(S_SuppliersTitle);
+  FNameSingular := 'РїРѕСЃС‚Р°РІС‰РёРє';//LoadStr(S_SuppliersTitle);
+  FNamePlural := 'РџРѕСЃС‚Р°РІС‰РёРєРё';//LoadStr(S_SuppliersTitle);
   FRequireFirmType := true;
 end;
 
@@ -1142,8 +1231,8 @@ begin
   FKeyField := Source.KeyField;
   SetDataSet(Source.CopyData(false));
   //ContragentType := Source.ContragentType;
-  FForeignKeyField := Source.FForeignKeyField; // надо? есть же в конструкторе
-  FAssignKeyValue := true;                     // надо? есть же в конструкторе
+  FForeignKeyField := Source.FForeignKeyField; // РЅР°РґРѕ? РµСЃС‚СЊ Р¶Рµ РІ РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂРµ
+  FAssignKeyValue := true;                     // РЅР°РґРѕ? РµСЃС‚СЊ Р¶Рµ РІ РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂРµ
   FMasterData := Source.FMasterData;
   FMaxKeyValue := Source.FMaxKeyValue;
 end;
@@ -1385,9 +1474,9 @@ begin
   Result := false;
   Msg := '';
   if Trim(NvlString(DataSet['Name'])) = '' then
-    Msg := 'Пожалуйста, укажите имя контактного лица'
+    Msg := 'РџРѕР¶Р°Р»СѓР№СЃС‚Р°, СѓРєР°Р¶РёС‚Рµ РёРјСЏ РєРѕРЅС‚Р°РєС‚РЅРѕРіРѕ Р»РёС†Р°'
   else if VarIsNull(DataSet['PersonType']) then
-    Msg := 'Пожалуйста, укажите имя вид контакта'
+    Msg := 'РџРѕР¶Р°Р»СѓР№СЃС‚Р°, СѓРєР°Р¶РёС‚Рµ РёРјСЏ РІРёРґ РєРѕРЅС‚Р°РєС‚Р°'
   else
     Result := true;
 end;
@@ -1630,7 +1719,7 @@ end;
 
 initialization
 
-  // Модуль для серверных данных
+  // РњРѕРґСѓР»СЊ РґР»СЏ СЃРµСЂРІРµСЂРЅС‹С… РґР°РЅРЅС‹С…
   CustDM := TDataModule.Create(nil);
 
   FCustomers := TCustomers.Create;

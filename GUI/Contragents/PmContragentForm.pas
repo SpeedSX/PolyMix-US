@@ -162,10 +162,10 @@ type
     property Contragents: TContragents read FContragents write SetContragents;
     property DataSource: TDataSource read FDataSource write SetDataSource;
 
-    // Набор данных с источниками информации
+    // РќР°Р±РѕСЂ РґР°РЅРЅС‹С… СЃ РёСЃС‚РѕС‡РЅРёРєР°РјРё РёРЅС„РѕСЂРјР°С†РёРё
     property InfoData: TDataSet read FcdInfo write SetInfoData;
 
-    // Набор данных со списком пользователей
+    // РќР°Р±РѕСЂ РґР°РЅРЅС‹С… СЃРѕ СЃРїРёСЃРєРѕРј РїРѕР»СЊР·РѕРІР°С‚РµР»РµР№
     property UserData: TDataSet read FcdUser write SetUserData;
 
     property ReadOnly: boolean read FReadOnly write FReadOnly;
@@ -224,7 +224,7 @@ begin
   cbSyncWeb.DataSource := ds;
 end;
 
-// Установка набора данных об источнике информации
+// РЈСЃС‚Р°РЅРѕРІРєР° РЅР°Р±РѕСЂР° РґР°РЅРЅС‹С… РѕР± РёСЃС‚РѕС‡РЅРёРєРµ РёРЅС„РѕСЂРјР°С†РёРё
 procedure TContragentForm.SetInfoData(cd: TDataSet);
 begin
   FcdInfo := cd;
@@ -243,7 +243,7 @@ begin
   end;
 end;
 
-// Установка набора данных со списком пользователей
+// РЈСЃС‚Р°РЅРѕРІРєР° РЅР°Р±РѕСЂР° РґР°РЅРЅС‹С… СЃРѕ СЃРїРёСЃРєРѕРј РїРѕР»СЊР·РѕРІР°С‚РµР»РµР№
 procedure TContragentForm.SetUserData(cd: TDataSet);
 begin
   FcdUser := cd;
@@ -276,25 +276,25 @@ begin
     if not EntSettings.AllContractors or (Contragents.ContragentType = caCustomer) then
       s := TConfigManager.Instance.StandardDics.deContragentType.ItemName[Contragents.ContragentType]
     else
-      s := 'Контрагент';
+      s := 'РљРѕРЅС‚СЂР°РіРµРЅС‚';
     Caption := AnsiProperCase(s, [' ']);
-    // Попробуем отображать в этом поле доп информацию для всех видов контрагентов
+    // РџРѕРїСЂРѕР±СѓРµРј РѕС‚РѕР±СЂР°Р¶Р°С‚СЊ РІ СЌС‚РѕРј РїРѕР»Рµ РґРѕРї РёРЅС„РѕСЂРјР°С†РёСЋ РґР»СЏ РІСЃРµС… РІРёРґРѕРІ РєРѕРЅС‚СЂР°РіРµРЅС‚РѕРІ
     //if Contragents.ContragentType <> caCustomer then
     //begin
       edFullName.DataField := TContragents.F_BriefNote;
-      lbFullName.Caption := 'Дополнительная информация';
+      lbFullName.Caption := 'Р”РѕРїРѕР»РЅРёС‚РµР»СЊРЅР°СЏ РёРЅС„РѕСЂРјР°С†РёСЏ';
     //end;
     pcProps.ActivePage := tsCommon;
     if FReadOnly then
     begin
       btOk.Visible := false;
-      btCancel.Caption := 'Закрыть';
+      btCancel.Caption := 'Р—Р°РєСЂС‹С‚СЊ';
       ActiveControl := btCancel;
     end
     else
     begin
-      // проверяем состояние синхронизации и запрещено ли редактирование некоторых данных в этом состоянии
-      // только при редактировании. при создании нового можно редактировать все данные.
+      // РїСЂРѕРІРµСЂСЏРµРј СЃРѕСЃС‚РѕСЏРЅРёРµ СЃРёРЅС…СЂРѕРЅРёР·Р°С†РёРё Рё Р·Р°РїСЂРµС‰РµРЅРѕ Р»Рё СЂРµРґР°РєС‚РёСЂРѕРІР°РЅРёРµ РЅРµРєРѕС‚РѕСЂС‹С… РґР°РЅРЅС‹С… РІ СЌС‚РѕРј СЃРѕСЃС‚РѕСЏРЅРёРё
+      // С‚РѕР»СЊРєРѕ РїСЂРё СЂРµРґР°РєС‚РёСЂРѕРІР°РЅРёРё. РїСЂРё СЃРѕР·РґР°РЅРёРё РЅРѕРІРѕРіРѕ РјРѕР¶РЅРѕ СЂРµРґР°РєС‚РёСЂРѕРІР°С‚СЊ РІСЃРµ РґР°РЅРЅС‹Рµ.
       LockSync := not VarIsNull(Contragents.KeyValue)
         and EntSettings.LockSyncData
         and (Contragents.SyncState = SyncState_Syncronized);
@@ -308,20 +308,20 @@ begin
       edExternalName.ReadOnly := LockSync;
 
       btOk.Visible := true;
-      btCancel.Caption := 'Отмена';
+      btCancel.Caption := 'РћС‚РјРµРЅР°';
       lkUser.ReadOnly := not AllowUserChange;
       ActiveControl := edName;
     end;
     if EntSettings.AllContractors and (Contragents.ContragentType <> caCustomer) then
     begin
-      // В режиме объединения вместо категории отображаем вид контрагента
+      // Р’ СЂРµР¶РёРјРµ РѕР±СЉРµРґРёРЅРµРЅРёСЏ РІРјРµСЃС‚Рѕ РєР°С‚РµРіРѕСЂРёРё РѕС‚РѕР±СЂР°Р¶Р°РµРј РІРёРґ РєРѕРЅС‚СЂР°РіРµРЅС‚Р°
       StatusData := TConfigManager.Instance.StandardDics.deContragentType.DicItems;
       StatusData.Filter := '(Code<>' + IntToStr(Customers.ContragentType) + ') and Visible';
       //cbStatus.DataField := TContragents.F_ContragentType;
     end
     else
     begin
-      // Категория контрагента - включаем фильтр по виду контрагента
+      // РљР°С‚РµРіРѕСЂРёСЏ РєРѕРЅС‚СЂР°РіРµРЅС‚Р° - РІРєР»СЋС‡Р°РµРј С„РёР»СЊС‚СЂ РїРѕ РІРёРґСѓ РєРѕРЅС‚СЂР°РіРµРЅС‚Р°
       StatusData := TConfigManager.Instance.StandardDics.deContragentStatus.DicItems;
       StatusData.Filter := '(A1=' + IntToStr(Contragents.ContragentType) + ') and Visible';
       //cbStatus.DataField := TContragents.F_StatusCode;
@@ -329,12 +329,12 @@ begin
     StatusData.Filtered := true;
     dsStatus.DataSet := StatusData;
 
-    // Вид деятельности контрагента - включаем фильтр по виду контрагента
+    // Р’РёРґ РґРµСЏС‚РµР»СЊРЅРѕСЃС‚Рё РєРѕРЅС‚СЂР°РіРµРЅС‚Р° - РІРєР»СЋС‡Р°РµРј С„РёР»СЊС‚СЂ РїРѕ РІРёРґСѓ РєРѕРЅС‚СЂР°РіРµРЅС‚Р°
     UpdateActivityFilter;
     FillActivities;
     SetActivities;
 
-    // обновляем вид
+    // РѕР±РЅРѕРІР»СЏРµРј РІРёРґ
     cbPersonTypeChange(Sender);
     cbAlertChange(FContragents.DataSet.FieldByName(TContragents.F_Alert));
 
@@ -355,7 +355,7 @@ var
   ActivityData: TDataSet;
   s: string;
 begin
-  // Вид деятельности контрагента - обновляем фильтр по виду контрагента
+  // Р’РёРґ РґРµСЏС‚РµР»СЊРЅРѕСЃС‚Рё РєРѕРЅС‚СЂР°РіРµРЅС‚Р° - РѕР±РЅРѕРІР»СЏРµРј С„РёР»СЊС‚СЂ РїРѕ РІРёРґСѓ РєРѕРЅС‚СЂР°РіРµРЅС‚Р°
   ActivityData := TConfigManager.Instance.StandardDics.deContragentActivity.DicItems;
   if EntSettings.AllContractors and (Contragents.ContragentType <> caCustomer) then
   begin
@@ -367,8 +367,8 @@ begin
   end
   else
   begin
-    // Если указана категория, то показываем виды для этой категории и те,
-    // для которых категория не указана. И только для выбранного вида контрагента.
+    // Р•СЃР»Рё СѓРєР°Р·Р°РЅР° РєР°С‚РµРіРѕСЂРёСЏ, С‚Рѕ РїРѕРєР°Р·С‹РІР°РµРј РІРёРґС‹ РґР»СЏ СЌС‚РѕР№ РєР°С‚РµРіРѕСЂРёРё Рё С‚Рµ,
+    // РґР»СЏ РєРѕС‚РѕСЂС‹С… РєР°С‚РµРіРѕСЂРёСЏ РЅРµ СѓРєР°Р·Р°РЅР°. Р С‚РѕР»СЊРєРѕ РґР»СЏ РІС‹Р±СЂР°РЅРЅРѕРіРѕ РІРёРґР° РєРѕРЅС‚СЂР°РіРµРЅС‚Р°.
     ct := cbStatus.KeyValue;
     s := '(A1=' + IntToStr(Contragents.ContragentType) + ') and Visible';
     if not VarIsNull(ct) then
@@ -382,9 +382,9 @@ end;
 procedure TContragentForm.FormCreate(Sender: TObject);
 begin
   cbPersonType.KeyItems.Add('0');
-  cbPersonType.Items.Add('Юридическое лицо');
+  cbPersonType.Items.Add('Р®СЂРёРґРёС‡РµСЃРєРѕРµ Р»РёС†Рѕ');
   cbPersonType.KeyItems.Add('1');
-  cbPersonType.Items.Add('Физическое лицо');
+  cbPersonType.Items.Add('Р¤РёР·РёС‡РµСЃРєРѕРµ Р»РёС†Рѕ');
 
   tsContact.TabVisible := false;
   tsFinance.TabVisible := false;
@@ -482,11 +482,10 @@ begin
   for I := 0 to cbMultiActivity.Items.Count - 1 do
   begin
     ActivityID := Integer(cbMultiActivity.Items.Objects[I]);
-    cbMultiActivity.Checked[I] := FActivities.FindActivity(ActivityID);
+    cbMultiActivity.Checked[I] := FContragents.FindActivity(ActivityID);
   end;
   FSetActivities := false;
 end;
-
 
 procedure TContragentForm.btAddAddressClick(Sender: TObject);
 begin
@@ -520,8 +519,8 @@ begin
   DeleteRelated;
 end;
 
-// Пришлось сделать такой обработчик, иначе не получается одновременно вводить
-// дату вручную и выбирать из календаря.
+// РџСЂРёС€Р»РѕСЃСЊ СЃРґРµР»Р°С‚СЊ С‚Р°РєРѕР№ РѕР±СЂР°Р±РѕС‚С‡РёРє, РёРЅР°С‡Рµ РЅРµ РїРѕР»СѓС‡Р°РµС‚СЃСЏ РѕРґРЅРѕРІСЂРµРјРµРЅРЅРѕ РІРІРѕРґРёС‚СЊ
+// РґР°С‚Сѓ РІСЂСѓС‡РЅСѓСЋ Рё РІС‹Р±РёСЂР°С‚СЊ РёР· РєР°Р»РµРЅРґР°СЂСЏ.
 procedure TContragentForm.dgPersonsColumnsBirthdayUpdateData(Sender: TObject;
   var Text: String; var Value: Variant; var UseText, Handled: Boolean);
 begin
@@ -536,7 +535,7 @@ begin
   if FContragents <> nil then
     FContragents.DataSet.FieldByName(TContragents.F_Alert).OnChange := nil;
 
-  // отключаем фильтр по виду контрагента
+  // РѕС‚РєР»СЋС‡Р°РµРј С„РёР»СЊС‚СЂ РїРѕ РІРёРґСѓ РєРѕРЅС‚СЂР°РіРµРЅС‚Р°
   TConfigManager.Instance.StandardDics.deContragentStatus.DicItems.Filtered := false;
   TConfigManager.Instance.StandardDics.deContragentType.DicItems.Filtered := false;
   TConfigManager.Instance.StandardDics.deContragentActivity.DicItems.Filtered := false;
@@ -566,7 +565,7 @@ begin
     begin
       Contragents.FirmBirthday := dtFirmBirthday.Date;
       Contragents.DataSet.Post;
-      // Применяем изменения в дочерних таблицах контрагента
+      // РџСЂРёРјРµРЅСЏРµРј РёР·РјРµРЅРµРЅРёСЏ РІ РґРѕС‡РµСЂРЅРёС… С‚Р°Р±Р»РёС†Р°С… РєРѕРЅС‚СЂР°РіРµРЅС‚Р°
       FContragents.Persons.MergeData(FPersons.DataSet as TClientDataSet);
       if FRelated <> nil then
         FContragents.Related.MergeData(FRelated.DataSet as TClientDataSet);
@@ -646,7 +645,7 @@ begin
   // if FContragents.PersonType = PersonType_Juri then
   if cbPersonType.ItemIndex = PersonType_Juri then
   begin
-    lbName.Caption := 'Краткое наименование';
+    lbName.Caption := 'РљСЂР°С‚РєРѕРµ РЅР°РёРјРµРЅРѕРІР°РЅРёРµ';
     lbFullName.Visible := true;
     edFullName.Visible := true;
     cbAlert.Visible := true;
@@ -655,7 +654,7 @@ begin
   end
   else
   begin
-    lbName.Caption := 'Ф.И.О.';
+    lbName.Caption := 'Р¤.Р.Рћ.';
     lbFullName.Visible := false;
     edFullName.Visible := false;
     cbAlert.Visible := false;
@@ -688,21 +687,9 @@ begin
   begin
     ActivityID := Integer(cbMultiActivity.Items.Objects[I]);
     if cbMultiActivity.Checked[I] then
-    begin
-      if not FActivities.FindActivity(ActivityID) then
-      begin
-        FActivities.Append;
-        FActivities.ActivityID := ActivityID;
-        FActivities.DataSet.Post;
-      end;
-    end
+      FContragents.AddActivity(ActivityID)
     else
-    begin
-      if FActivities.FindActivity(ActivityID) then
-      begin
-        FActivities.Delete;
-      end;
-    end;
+      FContragents.DeleteActivity(ActivityID);
   end;
 end;
 

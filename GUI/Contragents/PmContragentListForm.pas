@@ -99,7 +99,7 @@ type
     procedure FillCategories;
     function AllContractors: boolean;
   public
-    property CurCustomer: integer read FCurCustomer write SetCurCustomer; // Текущий заказчик
+    property CurCustomer: integer read FCurCustomer write SetCurCustomer; // РўРµРєСѓС‰РёР№ Р·Р°РєР°Р·С‡РёРє
     property Contragents: TContragents read FContragents write SetContragents;
     property SelectMode: Boolean read FSelectMode write SetSelectMode;
   end;
@@ -114,8 +114,8 @@ const
   custNoName = 2000000002;
   custError =  2000000003;
 
-// SelectMode = true если режим выбора, false если режим просмотра.
-// Если выбор, то по двойному нажатию окно закрывается, иначе свойства заказчика.
+// SelectMode = true РµСЃР»Рё СЂРµР¶РёРј РІС‹Р±РѕСЂР°, false РµСЃР»Рё СЂРµР¶РёРј РїСЂРѕСЃРјРѕС‚СЂР°.
+// Р•СЃР»Рё РІС‹Р±РѕСЂ, С‚Рѕ РїРѕ РґРІРѕР№РЅРѕРјСѓ РЅР°Р¶Р°С‚РёСЋ РѕРєРЅРѕ Р·Р°РєСЂС‹РІР°РµС‚СЃСЏ, РёРЅР°С‡Рµ СЃРІРѕР№СЃС‚РІР° Р·Р°РєР°Р·С‡РёРєР°.
 function ExecContragentSelect(Contragents: TContragents; CurCustomer: integer;
   SelectMode: boolean): integer;
 
@@ -183,7 +183,7 @@ end;
 procedure TContragentListForm.RestoreFilterControls;
 begin
   if Options.CustFilterMode < 0 then Options.CustFilterMode := iAll;
-  // TODO: Пока отключено, надо хранить отдельно настройки для заказчиков и контрагентов 
+  // TODO: РџРѕРєР° РѕС‚РєР»СЋС‡РµРЅРѕ, РЅР°РґРѕ С…СЂР°РЅРёС‚СЊ РѕС‚РґРµР»СЊРЅРѕ РЅР°СЃС‚СЂРѕР№РєРё РґР»СЏ Р·Р°РєР°Р·С‡РёРєРѕРІ Рё РєРѕРЅС‚СЂР°РіРµРЅС‚РѕРІ 
   {cbbFilter.ItemIndex := Options.CustFilterMode;
   if Options.CustFilterType < cbbActivity.Items.Count then
     cbbActivity.ItemIndex := Options.CustFilterType;
@@ -209,21 +209,21 @@ var
   ds, dsType: TDictionary;
   dsf: string;
 begin
-  // список видов деятельности заказчиков
+  // СЃРїРёСЃРѕРє РІРёРґРѕРІ РґРµСЏС‚РµР»СЊРЅРѕСЃС‚Рё Р·Р°РєР°Р·С‡РёРєРѕРІ
   cbbActivity.Items.Clear;
-  cbbActivity.Items.Add('<Все>');
+  cbbActivity.Items.Add('<Р’СЃРµ>');
   ds := TConfigManager.Instance.StandardDics.deContragentActivity;
-  // В режиме объединения подрядчиков и поставщиков фильтр устанавливается по текущей выбранной категории
+  // Р’ СЂРµР¶РёРјРµ РѕР±СЉРµРґРёРЅРµРЅРёСЏ РїРѕРґСЂСЏРґС‡РёРєРѕРІ Рё РїРѕСЃС‚Р°РІС‰РёРєРѕРІ С„РёР»СЊС‚СЂ СѓСЃС‚Р°РЅР°РІР»РёРІР°РµС‚СЃСЏ РїРѕ С‚РµРєСѓС‰РµР№ РІС‹Р±СЂР°РЅРЅРѕР№ РєР°С‚РµРіРѕСЂРёРё
   if AllContractors then
   begin
     if cbbCat.ItemIndex > 0 then
       ds.DicItems.Filter := 'A1=' + IntToStr(TCodeObject(cbbCat.Items.Objects[cbbCat.ItemIndex]).Code)
     else
-    begin   // Если категория не выбрана, то берем все категории
+    begin   // Р•СЃР»Рё РєР°С‚РµРіРѕСЂРёСЏ РЅРµ РІС‹Р±СЂР°РЅР°, С‚Рѕ Р±РµСЂРµРј РІСЃРµ РєР°С‚РµРіРѕСЂРёРё
       dsf := '';
       dsType := TConfigManager.Instance.StandardDics.deContragentType;
       dsType.DicItems.First;
-      dsType.DicItems.Next; // Первый пропускаем, это заказчики
+      dsType.DicItems.Next; // РџРµСЂРІС‹Р№ РїСЂРѕРїСѓСЃРєР°РµРј, СЌС‚Рѕ Р·Р°РєР°Р·С‡РёРєРё
       while not dsType.DicItems.eof do
       begin
         if dsf <> '' then
@@ -237,8 +237,8 @@ begin
   end
   else
   begin
-    // Если указана категория, то показываем виды для этой категории и те,
-    // для которых категория не указана. И только для выбранного вида контрагента.
+    // Р•СЃР»Рё СѓРєР°Р·Р°РЅР° РєР°С‚РµРіРѕСЂРёСЏ, С‚Рѕ РїРѕРєР°Р·С‹РІР°РµРј РІРёРґС‹ РґР»СЏ СЌС‚РѕР№ РєР°С‚РµРіРѕСЂРёРё Рё С‚Рµ,
+    // РґР»СЏ РєРѕС‚РѕСЂС‹С… РєР°С‚РµРіРѕСЂРёСЏ РЅРµ СѓРєР°Р·Р°РЅР°. Р С‚РѕР»СЊРєРѕ РґР»СЏ РІС‹Р±СЂР°РЅРЅРѕРіРѕ РІРёРґР° РєРѕРЅС‚СЂР°РіРµРЅС‚Р°.
     dsf := 'A1=' + IntToStr(FContragents.ContragentType) + ' and Visible';
     if cbbCat.ItemIndex > 0 then
       dsf := dsf + ' and (A2 is null or A2='
@@ -267,9 +267,9 @@ var
   ds: TDictionary;
 begin
   cbbCat.Items.Clear;
-  cbbCat.Items.Add('<Все>');
+  cbbCat.Items.Add('<Р’СЃРµ>');
 
-  // В режиме объединения подрядчиков и поставщиков отображаем список видов контрагентов
+  // Р’ СЂРµР¶РёРјРµ РѕР±СЉРµРґРёРЅРµРЅРёСЏ РїРѕРґСЂСЏРґС‡РёРєРѕРІ Рё РїРѕСЃС‚Р°РІС‰РёРєРѕРІ РѕС‚РѕР±СЂР°Р¶Р°РµРј СЃРїРёСЃРѕРє РІРёРґРѕРІ РєРѕРЅС‚СЂР°РіРµРЅС‚РѕРІ
   if AllContractors then
   begin
     ds := TConfigManager.Instance.StandardDics.deContragentType;
@@ -278,7 +278,7 @@ begin
   end
   else
   begin
-    // список категорий контрагентов для вида контрагента
+    // СЃРїРёСЃРѕРє РєР°С‚РµРіРѕСЂРёР№ РєРѕРЅС‚СЂР°РіРµРЅС‚РѕРІ РґР»СЏ РІРёРґР° РєРѕРЅС‚СЂР°РіРµРЅС‚Р°
     ds := TConfigManager.Instance.StandardDics.deContragentStatus;
     ds.DicItems.Filter := '(A1=' + IntToStr(FContragents.ContragentType) + ') and Visible';
   end;
@@ -300,31 +300,31 @@ end;
 
 procedure TContragentListForm.FormActivate(Sender: TObject);
 begin
-  // проверка корректности формы - чтобы избежать глюка с пропаданием списка в комбобоксе
+  // РїСЂРѕРІРµСЂРєР° РєРѕСЂСЂРµРєС‚РЅРѕСЃС‚Рё С„РѕСЂРјС‹ - С‡С‚РѕР±С‹ РёР·Р±РµР¶Р°С‚СЊ РіР»СЋРєР° СЃ РїСЂРѕРїР°РґР°РЅРёРµРј СЃРїРёСЃРєР° РІ РєРѕРјР±РѕР±РѕРєСЃРµ
   //if cbbFilter.Items.Count = 0 then
-  //  raise Exception.Create('Программа некорректно собрана! Пустой список фильтра!');
+  //  raise Exception.Create('РџСЂРѕРіСЂР°РјРјР° РЅРµРєРѕСЂСЂРµРєС‚РЅРѕ СЃРѕР±СЂР°РЅР°! РџСѓСЃС‚РѕР№ СЃРїРёСЃРѕРє С„РёР»СЊС‚СЂР°!');
 
   if not WasActive then
   begin
     if AllContractors then
       InsertBtn.PopupMenu := pmContragentType;
 
-    cbbFilter.Items.Add('<Все>');
-    cbbFilter.Items.Add('Подтвержденные');
-    cbbFilter.Items.Add('Неподтвержденные');
+    cbbFilter.Items.Add('<Р’СЃРµ>');
+    cbbFilter.Items.Add('РџРѕРґС‚РІРµСЂР¶РґРµРЅРЅС‹Рµ');
+    cbbFilter.Items.Add('РќРµРїРѕРґС‚РІРµСЂР¶РґРµРЅРЅС‹Рµ');
 
     FillCategories;
 
     FillActivities;
 
-    // Вид заказчика
-    {cbbType.Items.Add('<Все>');
-    cbbType.Items.Add('Юридическое лицо');
-    cbbType.Items.Add('Физическое лицо');}
+    // Р’РёРґ Р·Р°РєР°Р·С‡РёРєР°
+    {cbbType.Items.Add('<Р’СЃРµ>');
+    cbbType.Items.Add('Р®СЂРёРґРёС‡РµСЃРєРѕРµ Р»РёС†Рѕ');
+    cbbType.Items.Add('Р¤РёР·РёС‡РµСЃРєРѕРµ Р»РёС†Рѕ');}
 
     InsertBtn.Enabled := AccessManager.CurUser.AddCustomer;
 
-    ReOpenData; // открываем данные
+    ReOpenData; // РѕС‚РєСЂС‹РІР°РµРј РґР°РЅРЅС‹Рµ
 
     RestoreFilterControls;
 
@@ -361,7 +361,8 @@ begin
   end;
   if cbbActivity.ItemIndex > 0 then
   begin
-    xs := 'ActivityCode=' + IntToStr(TCodeObject(cbbActivity.Items.Objects[cbbActivity.ItemIndex]).Code);
+    //xs := 'ActivityCode=' + IntToStr(TCodeObject(cbbActivity.Items.Objects[cbbActivity.ItemIndex]).Code);
+    xs := 'ActivityCodes like ''%|' + IntToStr(TCodeObject(cbbActivity.Items.Objects[cbbActivity.ItemIndex]).Code) + '|%''';
     add(s, xs);
   end;
   {if cbbType.ItemIndex > 0 then
@@ -390,12 +391,12 @@ begin
     Apply;
   except on e: Exception do
   begin
-    RusMessageDlg('Ошибка при сохранении данных:' + #13 + E.message, mtError, [mbOK], 0);
+    RusMessageDlg('РћС€РёР±РєР° РїСЂРё СЃРѕС…СЂР°РЅРµРЅРёРё РґР°РЅРЅС‹С…:' + #13 + E.message, mtError, [mbOK], 0);
     ModalResult := mrNone;
   end;
   end;
   if CustNum = custError then begin
-    if RusMessageDlg('Закрыть без сохранения?', mtConfirmation, [mbYes, mbNo], 0) = mrYes then begin
+    if RusMessageDlg('Р—Р°РєСЂС‹С‚СЊ Р±РµР· СЃРѕС…СЂР°РЅРµРЅРёСЏ?', mtConfirmation, [mbYes, mbNo], 0) = mrYes then begin
       DataSet.CancelUpdates;
       ModalResult := custNoName;
     end
@@ -476,16 +477,16 @@ begin
   Contragents.DataSet.Append;
   Contragents.Name := FilterName;
   Contragents.ContragentTypeValue := _ContragentType;
-  // В режиме объединения подрядчиков присваиваем категорию как вид
+  // Р’ СЂРµР¶РёРјРµ РѕР±СЉРµРґРёРЅРµРЅРёСЏ РїРѕРґСЂСЏРґС‡РёРєРѕРІ РїСЂРёСЃРІР°РёРІР°РµРј РєР°С‚РµРіРѕСЂРёСЋ РєР°Рє РІРёРґ
   if AllContractors then
     Contragents.StatusCode := _ContragentType;
   ContragentForm.ReadOnly := false;
-  // Проверяем можно ли менять владельца
+  // РџСЂРѕРІРµСЂСЏРµРј РјРѕР¶РЅРѕ Р»Рё РјРµРЅСЏС‚СЊ РІР»Р°РґРµР»СЊС†Р°
   ContragentForm.AllowUserChange := AccessManager.CurUser.ChangeCustomerOwner;
   ContragentForm.Contragents := Contragents;
   if ContragentForm.ShowModal = mrOk then
   begin
-    // В режиме объединения подрядчиков присваиваем категорию как вид
+    // Р’ СЂРµР¶РёРјРµ РѕР±СЉРµРґРёРЅРµРЅРёСЏ РїРѕРґСЂСЏРґС‡РёРєРѕРІ РїСЂРёСЃРІР°РёРІР°РµРј РєР°С‚РµРіРѕСЂРёСЋ РєР°Рє РІРёРґ
     if AllContractors then
       Contragents.ContragentTypeValue := Contragents.StatusCode;
     LastAddName := Contragents.Name;
@@ -514,20 +515,20 @@ procedure TContragentListForm.EditBtnClick(Sender: TObject);
 begin
   if not DataSet.Active or DataSet.IsEmpty then Exit;
   SetCustDS;
-  // В режиме объединения подрядчиков присваиваем категорию как вид
+  // Р’ СЂРµР¶РёРјРµ РѕР±СЉРµРґРёРЅРµРЅРёСЏ РїРѕРґСЂСЏРґС‡РёРєРѕРІ РїСЂРёСЃРІР°РёРІР°РµРј РєР°С‚РµРіРѕСЂРёСЋ РєР°Рє РІРёРґ
   if AllContractors and (Contragents.StatusCode <> Contragents.ContragentTypeValue) then
     Contragents.StatusCode := Contragents.ContragentTypeValue;
-  // Разрешить если свой или разрешено редактирование чужого
+  // Р Р°Р·СЂРµС€РёС‚СЊ РµСЃР»Рё СЃРІРѕР№ РёР»Рё СЂР°Р·СЂРµС€РµРЅРѕ СЂРµРґР°РєС‚РёСЂРѕРІР°РЅРёРµ С‡СѓР¶РѕРіРѕ
   ContragentForm.ReadOnly := not (AccessManager.CurUser.EditOtherCustomer
     or (AccessManager.CurUser.ID = Contragents.UserCode));
-  // Проверяем можно ли менять владельца
+  // РџСЂРѕРІРµСЂСЏРµРј РјРѕР¶РЅРѕ Р»Рё РјРµРЅСЏС‚СЊ РІР»Р°РґРµР»СЊС†Р°
   ContragentForm.AllowUserChange := AccessManager.CurUser.ChangeCustomerOwner;
   ContragentForm.Contragents := Contragents;
   if ContragentForm.ShowModal <> mrOk then
     DataSet.RevertRecord
   else
   begin
-    // В режиме объединения подрядчиков присваиваем категорию как вид
+    // Р’ СЂРµР¶РёРјРµ РѕР±СЉРµРґРёРЅРµРЅРёСЏ РїРѕРґСЂСЏРґС‡РёРєРѕРІ РїСЂРёСЃРІР°РёРІР°РµРј РєР°С‚РµРіРѕСЂРёСЋ РєР°Рє РІРёРґ
     if AllContractors and (Contragents.ContragentTypeValue <> Contragents.StatusCode) then
       Contragents.ContragentTypeValue := Contragents.StatusCode;
     Contragents.DataSet.CheckBrowseMode;
@@ -541,11 +542,11 @@ begin
   if AccessManager.CurUser.EditOtherCustomer or (AccessManager.CurUser.ID = Contragents.UserCode) then
   begin
     if Options.ContragentConfirmDelete and
-      (RusMessageDlg('Удалить запись?', mtConfirmation, mbYesNoCancel, 0) <> mrYes) then Exit;
+      (RusMessageDlg('РЈРґР°Р»РёС‚СЊ Р·Р°РїРёСЃСЊ?', mtConfirmation, mbYesNoCancel, 0) <> mrYes) then Exit;
     try
       DataSet.Delete;
     except on E: Exception do
-      ExceptionHandler.Raise_(E, 'Ошибка при удалении записи');
+      ExceptionHandler.Raise_(E, 'РћС€РёР±РєР° РїСЂРё СѓРґР°Р»РµРЅРёРё Р·Р°РїРёСЃРё');
     end;
   end;
 end;
@@ -655,7 +656,7 @@ var
 begin
   FContragents := c;
   if AllContractors then
-    Caption := 'Поставщики и подрядчики'
+    Caption := 'РџРѕСЃС‚Р°РІС‰РёРєРё Рё РїРѕРґСЂСЏРґС‡РёРєРё'
   else
     Caption := Contragents.NamePlural;
   ContragentPainter := TContragentPainterManager.GetPainter(c);
@@ -672,7 +673,7 @@ end;
 procedure TContragentListForm.SetSelectMode(const Value: Boolean);
 begin
   FSelectMode := Value;
-  if FSelectMode then OkBtn.Caption := 'Выбрать' else OkBtn.Caption := 'OK';
+  if FSelectMode then OkBtn.Caption := 'Р’С‹Р±СЂР°С‚СЊ' else OkBtn.Caption := 'OK';
 end;
 
 procedure TContragentListForm.dgCustDblClick(Sender: TObject);
