@@ -6,94 +6,70 @@ uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, JvComponentBase, JvFormPlacement, StdCtrls,
 
-  fBaseEditForm, PmContragent, DB, ExtCtrls, GridsEh, DBGridEh, MyDBGridEh;
+  fBaseEditForm, PmContragent, DB, ExtCtrls, GridsEh, DBGridEh, MyDBGridEh,
+  DBGridEhGrouping, Mask, DBCtrls;
 
 type
   TRelatedContragentForm = class(TBaseEditForm)
     RelatedDataSource: TDataSource;
-    dgCustomers: TMyDBGridEh;
-    lbFilt: TLabel;
-    Bevel1: TBevel;
     Label1: TLabel;
-    edName: TEdit;
-    procedure edNameChange(Sender: TObject);
-    procedure FormActivate(Sender: TObject);
+    edName: TDBEdit;
+    Label3: TLabel;
+    DBEdit3: TDBEdit;
+    Label4: TLabel;
+    DBEdit4: TDBEdit;
+    Label2: TLabel;
+    DBEdit2: TDBEdit;
+    Label5: TLabel;
+    DBEdit5: TDBEdit;
   private
-    FContragents: TContragents;
-    procedure SetContragents(const Value: TContragents);
-    procedure SetFilter(s: string);
+    FContragents: TRelated;
+    procedure SetContragents(const Value: TRelated);
   protected
     function ValidateForm: boolean; override;
   public
-    property Contragents: TContragents read FContragents write SetContragents;
+    property Contragents: TRelated read FContragents write SetContragents;
   end;
 
 var
   RelatedContragentForm: TRelatedContragentForm;
 
-function ExecRelatedContragentForm(_Contragents: TContragents;
-  var ContragentKey: integer): boolean;
+function ExecRelatedContragentForm(_RelatedContragents: TRelated): boolean;
 
 implementation
 
 {$R *.dfm}
 
-function ExecRelatedContragentForm(_Contragents: TContragents;
-  var ContragentKey: integer): boolean;
+uses RDBUtils, ExHandler;
+
+function ExecRelatedContragentForm(_RelatedContragents: TRelated): boolean;
 var
   RelatedContragentForm: TRelatedContragentForm;
 begin
   Application.CreateForm(TRelatedContragentForm, RelatedContragentForm);
   try
-    RelatedContragentForm.Contragents := _Contragents;
+    RelatedContragentForm.Contragents := _RelatedContragents;
     Result := RelatedContragentForm.ShowModal = mrOk;
-    if Result then
-      ContragentKey := _Contragents.KeyValue;
   finally
     FreeAndNil(RelatedContragentForm);
   end;
 end;
 
-procedure TRelatedContragentForm.edNameChange(Sender: TObject);
-var
-  s: string;
-begin
-  if edName.Text <> '' then
-    s := 'Name=''' + edName.Text + '*'''
-  else
-    s := '';
-  SetFilter(s);
-end;
-
-procedure TRelatedContragentForm.SetFilter(s: string);
-var
-  s1: string;
-begin
-  s1 := 'ParentID is null';
-  if s = '' then
-    FContragents.DataSet.Filter := s1
-  else
-    FContragents.DataSet.Filter := s1 + ' and (' + s + ')';
-  FContragents.DataSet.Filtered := true;
-  FContragents.DataSet.FilterOptions := [foCaseInsensitive];
-end;
-
-procedure TRelatedContragentForm.FormActivate(Sender: TObject);
-begin
-  inherited;
-  ActiveControl := edName;
-end;
-
-procedure TRelatedContragentForm.SetContragents(const Value: TContragents);
+procedure TRelatedContragentForm.SetContragents(const Value: TRelated);
 begin
   FContragents := Value;
   RelatedDataSource.DataSet := FContragents.DataSet;
-  SetFilter('');
 end;
 
 function TRelatedContragentForm.ValidateForm: boolean;
 begin
-  Result := not VarIsNull(FContragents.KeyValue);
+  ActiveControl := btOk;
+  Result := Trim(NvlString(FContragents.ContragentName)) <> '';
+  if not Result then
+  begin
+    ActiveControl := edName;
+    ExceptionHandler.Raise_('Укажите имя');
+  end;
 end;
 
 end.

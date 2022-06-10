@@ -38,7 +38,6 @@ type
   TPersons = class;
   TRelated = class;
   TAddresses = class;
-  TActivities = class;
 
   TContragents = class(TEntity)
   private
@@ -49,8 +48,7 @@ type
     function GetExternalName: string;
     function GetPersons: TPersons;
     function GetRelated: TRelated;
-   function GetAddresses: TAddresses;
-    function GetActivities: TActivities;
+    function GetAddresses: TAddresses;
     function GetPersonType: Integer;
     function GetSyncState: integer;
     function GetStatusCode: variant;
@@ -75,7 +73,6 @@ type
     FPersons: TPersons;
     FRelated: TRelated;
     FAddresses: TAddresses;
-    FActivities: TActivities;
     FChangeDetector: TDataChangeDetect;
     FNamePlural, FNameSingular: string;
     procedure CreateDataSet; virtual;
@@ -146,7 +143,6 @@ type
     property Persons: TPersons read GetPersons;
     property Related: TRelated read GetRelated;
     property Addresses: TAddresses read GetAddresses;
-    property Activities: TActivities read GetActivities;
     property PersonType: Integer read GetPersonType;
     property FirmBirthday: variant read GetFirmBirthday write SetFirmBirthday;
     property WorkSeparation: boolean read FWorkSeparation;
@@ -227,25 +223,33 @@ type
 
   TRelated = class(TContragentDetails)
   private
-    function GetParentID: integer;
-    procedure SetParentID(const Value: integer);
+    const
+      F_RelatedContragentID = 'RelatedContragentID';
+      F_Name = 'Name';
+      NameSize = 200;
+      F_ContactName = 'ContactName';
+      ContactNameSize = 200;
+      F_Code = 'Code';
+      CodeSize = 50;
+      F_Phone1 = 'Phone1';
+      F_Phone2 = 'Phone2';
+      PhoneSize = 100;
     function GetContragentName: string;
     procedure SetContragentName(const Value: string);
-    function GetContragentFullName: string;
+    {function GetContragentFullName: string;
     procedure SetContragentFullName(const Value: string);
     function GetContragentPhone: string;
-    procedure SetContragentPhone(const Value: string);
+    procedure SetContragentPhone(const Value: string); }
   protected
     function GetSQL: string; override;
     procedure CreateFields; override;
-    procedure ProviderBeforeUpdateRecord(Sender: TObject; SourceDS: TDataSet;
-      DeltaDS: TCustomClientDataSet; UpdateKind: TUpdateKind; var Applied: Boolean); override;
+    //procedure ProviderBeforeUpdateRecord(Sender: TObject; SourceDS: TDataSet;
+    //  DeltaDS: TCustomClientDataSet; UpdateKind: TUpdateKind; var Applied: Boolean); override;
   public
     constructor Create(_ParentEntity: TContragents);
-    property ParentID: integer read GetParentID write SetParentID;
     property ContragentName: string read GetContragentName write SetContragentName;
-    property ContragentFullName: string read GetContragentFullName write SetContragentFullName;
-    property ContragentPhone: string read GetContragentPhone write SetContragentPhone;
+    {property ContragentFullName: string read GetContragentFullName write SetContragentFullName;
+    property ContragentPhone: string read GetContragentPhone write SetContragentPhone;}
   end;
 
   TAddresses = class(TContragentDetails)
@@ -258,27 +262,14 @@ type
     procedure CreateFields; override;
     function GetSQL: string; override;
   public
+    const
+      F_AddressName = 'Name';
+      AddressNameFieldSize = 150;
+
     constructor Create(_ParentEntity: TContragents);
 
     property Address: string read GetAddress write SetAddress;
     property Note: variant read GetNote write SetNote;
-  end;
-
-  TActivities = class(TContragentDetails)
-  private
-    function GetActivityID: integer;
-    procedure SetActivityID(const Value: integer);
-  protected
-    procedure CreateFields; override;
-    function GetSQL: string; override;
-  public
-    const
-      F_ContragentActivityID = 'ContragentActivityID';
-      F_ActivityID = 'ActivityID';
-      
-    constructor Create(_ParentEntity: TContragents);
-    function FindActivity(ActivityID: integer): boolean;
-    property ActivityID: integer read GetActivityID write SetActivityID;
   end;
 
 var
@@ -346,8 +337,6 @@ begin
   DetailData[1] := FRelated;
   FAddresses := TAddresses.Create(Self);
   DetailData[2] := FAddresses;
-  FActivities := TActivities.Create(Self);
-  DetailData[3] := FActivities;
   // Контрагенты будут обновляться только если были изменения в таблице
   FChangeDetector := TADODataChangeDetect.Create(TChangeObjectID.Contragent);
 end;
@@ -365,7 +354,6 @@ begin
   FreeAndNil(FPersons);
   FreeAndNil(FRelated);
   FreeAndNil(FAddresses);
-  FreeAndNil(FActivities);
   FreeAndNil(FChangeDetector);
   inherited Destroy;
 end;
@@ -1103,11 +1091,6 @@ begin
   Result := DetailData[2] as TAddresses;
 end;
 
-function TContragents.GetActivities: TActivities;
-begin
-  Result := DetailData[3] as TActivities;
-end;
-
 function TContragents.GetPersonType: Integer;
 begin
   Result := DataSet['PersonType'];
@@ -1487,60 +1470,60 @@ end;
 
 constructor TRelated.Create(_ParentEntity: TContragents);
 begin
-  inherited Create(_ParentEntity, TContragents.F_CustKey, TContragents.F_CustParentID);
+  inherited Create(_ParentEntity, F_RelatedContragentID, F_CustomerID);
 end;
 
 procedure TRelated.CreateFields;
 begin
   with TIntegerField.Create(nil) do begin
-    FieldName := TContragents.F_CustParentID;
+    FieldName := F_CustomerID;
     ProviderFlags := [pfInUpdate];
     DataSet := Self.DataSet;
   end;
   with TStringField.Create(nil) do begin
-    FieldName := TContragents.F_CustName;
+    FieldName := F_Name;
     ProviderFlags := [];
-    Size := TContragents.CustNameSize;
+    Size := NameSize;
     DataSet := Self.DataSet;
   end;
   with TStringField.Create(nil) do begin
-    FieldName := TContragents.F_FullName;
+    FieldName := F_ContactName;
     ProviderFlags := [];
-    Size := 300;
+    Size := ContactNameSize;
     DataSet := Self.DataSet;
   end;
   with TStringField.Create(nil) do begin
-    FieldName := TContragents.F_CustPhone;
+    FieldName := F_Code;
     ProviderFlags := [];
-    Size := 40;
+    Size := CodeSize;
     DataSet := Self.DataSet;
   end;
-end;
-
-function TRelated.GetParentID: integer;
-begin
-  Result := DataSet[TContragents.F_CustParentID];
-end;
-
-procedure TRelated.SetParentID(const Value: integer);
-begin
-  if not (DataSet.State in [dsInsert, dsEdit]) then
-    DataSet.Edit;
-  DataSet[TContragents.F_CustParentID] := Value;
+  with TStringField.Create(nil) do begin
+    FieldName := F_Phone1;
+    ProviderFlags := [];
+    Size := PhoneSize;
+    DataSet := Self.DataSet;
+  end;
+  with TStringField.Create(nil) do begin
+    FieldName := F_Phone2;
+    ProviderFlags := [];
+    Size := PhoneSize;
+    DataSet := Self.DataSet;
+  end;
 end;
 
 function TRelated.GetContragentName: string;
 begin
-  Result := DataSet[TContragents.F_CustName];
+  Result := DataSet[F_Name];
 end;
 
 procedure TRelated.SetContragentName(const Value: string);
 begin
   if not (DataSet.State in [dsInsert, dsEdit]) then
     DataSet.Edit;
-  DataSet[TContragents.F_CustName] := Value;
+  DataSet[F_Name] := Value;
 end;
-
+{
 function TRelated.GetContragentFullName: string;
 begin
   Result := DataSet[TContragents.F_FullName];
@@ -1593,13 +1576,13 @@ begin
   else
     Applied := true;
 end;
-
+ }
 function TRelated.GetSQL: string;
 begin
-  Result := 'select p.N, p.[Name], p.FullName, p.Phone, p.ParentID' + #13#10
-             + ' from Customer p inner join Customer c on p.ParentID = c.N' + #13#10
+  Result := 'select p.RelatedContragentID, p.[Name], p.ContactName, p.Code, p.Phone1, p.Phone2, p.CustomerID' + #13#10
+             + ' from RelatedContragents p inner join Customer c on p.CustomerID = c.N' + #13#10
              + ' where ' + GetParentFilter('c')
-             + ' and c.IsDeleted = 0 and p.IsDeleted = 0' + #13#10
+             + ' and c.IsDeleted = 0' + #13#10
              + ' order by p.[Name]'
 end;
 
@@ -1631,11 +1614,45 @@ begin
     Size := 200;
     DataSet := Self.DataSet;
   end;
+  with TIntegerField.Create(nil) do begin
+    FieldName := 'PersonType';
+    ProviderFlags := [pfInUpdate];
+    DataSet := Self.DataSet;
+  end;
+  with TStringField.Create(nil) do begin
+    FieldName := 'PersonTypeName';
+    FieldKind := fkLookup;
+    LookupResultField := F_DicItemName;
+    LookupCache := true;
+    LookupKeyFields := F_DicItemCode;
+    KeyFields := 'PersonType';
+    Size := DicItemNameSize;
+    ProviderFlags := [];
+    DataSet := Self.DataSet;
+  end;
+  with TStringField.Create(nil) do begin
+    FieldName := F_AddressName;
+    ProviderFlags := [pfInUpdate];
+    Size := AddressNameFieldSize;
+    DataSet := Self.DataSet;
+  end;
+  with TStringField.Create(nil) do begin
+    FieldName := 'Phone1';
+    ProviderFlags := [pfInUpdate];
+    Size := 40;
+    DataSet := Self.DataSet;
+  end;
+  with TStringField.Create(nil) do begin
+    FieldName := 'Phone2';
+    ProviderFlags := [pfInUpdate];
+    Size := 40;
+    DataSet := Self.DataSet;
+  end;
 end;
 
 function TAddresses.GetSQL: string;
 begin
-  Result := 'select a.AddressID, a.Address, a.Note, a.CustomerID' + #13#10
+  Result := 'select a.AddressID, a.Address, a.Note, a.CustomerID, a.PersonType, a.Name, a.Phone1, a.Phone2' + #13#10
              + ' from Addresses a inner join Customer c on a.CustomerID = c.N' + #13#10
              + ' where ' + GetParentFilter('c')
              + ' and c.IsDeleted = 0' + #13#10
@@ -1664,55 +1681,6 @@ begin
   if not (DataSet.State in [dsInsert, dsEdit]) then
     DataSet.Edit;
   DataSet['Note'] := Value;
-end;
-
-{$ENDREGION}
-
-{$REGION '--------------- TActivities ------------------' }
-
-constructor TActivities.Create(_ParentEntity: TContragents);
-begin
-  inherited Create(_ParentEntity, F_ContragentActivityID, F_CustomerID);
-end;
-
-procedure TActivities.CreateFields;
-begin
-  with TIntegerField.Create(nil) do begin
-    FieldName := F_CustomerID;
-    ProviderFlags := [pfInUpdate];
-    DataSet := Self.DataSet;
-  end;
-  with TIntegerField.Create(nil) do begin
-    FieldName := 'ActivityID';
-    ProviderFlags := [pfInUpdate];
-    DataSet := Self.DataSet;
-  end;
-end;
-
-function TActivities.GetSQL: string;
-begin
-  Result := 'select a.ContragentActivityID, a.ActivityID, a.CustomerID' + #13#10
-             + ' from ContragentActivities a inner join Customer c on a.CustomerID = c.N' + #13#10
-             + ' where ' + GetParentFilter('c')
-             + #13#10
-             + ' order by a.ActivityID';
-end;
-
-function TActivities.FindActivity(ActivityID: Integer): boolean;
-begin
-  Result := DataSet.Locate(F_ActivityID, ActivityID, []);
-end;
-
-function TActivities.GetActivityID: integer;
-begin
-  Result := NvlInteger(DataSet[F_ActivityID]);
-end;
-
-procedure TActivities.SetActivityID(const Value: integer);
-begin
-  if not (DataSet.State in [dsInsert, dsEdit]) then
-    DataSet.Edit;
-  DataSet[F_ActivityID] := Value;
 end;
 
 {$ENDREGION}

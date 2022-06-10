@@ -93,7 +93,6 @@ object PersonForm: TPersonForm
     Default = True
     ModalResult = 1
     TabOrder = 7
-    ExplicitTop = 259
   end
   object btCancel: TButton
     Left = 374
@@ -105,7 +104,6 @@ object PersonForm: TPersonForm
     Caption = #1054#1090#1084#1077#1085#1072
     ModalResult = 2
     TabOrder = 8
-    ExplicitTop = 259
   end
   object DBEdit1: TDBEdit
     Left = 12
@@ -128,7 +126,7 @@ object PersonForm: TPersonForm
   end
   object DBEdit3: TDBEdit
     Left = 12
-    Top = 126
+    Top = 127
     Width = 229
     Height = 21
     DataField = 'Phone'

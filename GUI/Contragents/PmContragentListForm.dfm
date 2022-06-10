@@ -102,7 +102,7 @@ object ContragentListForm: TContragentListForm
       Height = 21
       Style = csDropDownList
       DropDownCount = 25
-      ItemHeight = 0
+      ItemHeight = 13
       TabOrder = 1
       OnChange = cbbCatChange
     end
@@ -113,7 +113,7 @@ object ContragentListForm: TContragentListForm
       Height = 21
       Style = csDropDownList
       DropDownCount = 25
-      ItemHeight = 0
+      ItemHeight = 13
       TabOrder = 2
       OnChange = edNameChange
     end

@@ -128,6 +128,7 @@ type
     procedure cbPersonTypeClick(Sender: TObject);
     procedure cbStatusCloseUp(Sender: TObject; Accept: Boolean);
     procedure cbMultiActivityChange(Sender: TObject);
+    procedure btEditRelatedClick(Sender: TObject);
   private
     FAllowUserChange: Boolean;
     FSetActivities: Boolean;
@@ -139,13 +140,14 @@ type
     FPersons: TPersons;
     FRelated: TRelated;
     FAddrs: TAddresses;
-    FActivities: TActivities;
     function CheckNullDate(d: variant): TDateTime;
     function EditPerson: boolean;
     function EditAddress: boolean;
     //function EditRelatedContragent: boolean;
     function AddPerson: boolean;
     function AddRelatedContragent: boolean;
+    function EditRelatedContragent: boolean;
+    procedure DeleteRelatedContragent;
     function AddAddress: boolean;
     procedure DeletePerson;
     procedure DeleteAddress;
@@ -153,7 +155,6 @@ type
     procedure SetDataSource(ds: TDataSource);
     procedure SetInfoData(cd: TDataSet);
     procedure SetUserData(cd: TDataSet);
-    procedure DeleteRelated;
     procedure UpdateActivityFilter;
     procedure FillActivities;
     procedure SetActivities;
@@ -432,7 +433,6 @@ begin
   FContragents := Value;
   FPersons := nil;
   FAddrs := nil;
-  FActivities := nil;
   if FContragents <> nil then
   begin
     FPersons := TPersons.Copy(FContragents.Persons);
@@ -449,8 +449,6 @@ begin
 
     FAddrs := TAddresses.Copy(FContragents.Addresses);
     dsAddrs.DataSet := FAddrs.DataSet;
-
-    FActivities := TActivities.Copy(FContragents.Activities);
 
     FContragents.DataSet.FieldByName(TContragents.F_Alert).OnChange := cbAlertChange;
   end;
@@ -516,7 +514,7 @@ end;
 
 procedure TContragentForm.btDeleteRelatedClick(Sender: TObject);
 begin
-  DeleteRelated;
+  DeleteRelatedContragent;
 end;
 
 // Пришлось сделать такой обработчик, иначе не получается одновременно вводить
@@ -543,7 +541,6 @@ begin
   FreeAndNil(FPersons);
   FreeAndNil(FAddrs);
   FreeAndNil(FRelated);
-  FreeAndNil(FActivities);
 end;
 
 procedure TContragentForm.FormCloseQuery(Sender: TObject; var CanClose: Boolean);
@@ -570,7 +567,6 @@ begin
       if FRelated <> nil then
         FContragents.Related.MergeData(FRelated.DataSet as TClientDataSet);
       FContragents.Addresses.MergeData(FAddrs.DataSet as TClientDataSet);
-      FContragents.Activities.MergeData(FActivities.DataSet as TClientDataSet);
     end;
   end;
 end;
@@ -583,6 +579,11 @@ end;
 procedure TContragentForm.btEditClick(Sender: TObject);
 begin
   EditPerson;
+end;
+
+procedure TContragentForm.btEditRelatedClick(Sender: TObject);
+begin
+  EditRelatedContragent;
 end;
 
 function TContragentForm.AddPerson: boolean;
@@ -712,22 +713,14 @@ end;
 
 function TContragentForm.AddRelatedContragent: boolean;
 var
-  FContragentsCopy: TContragents;
-  ContragentKey: integer;
-  Info: TContragentInfo;
+  FContragentsCopy: TRelated;
 begin
-  FContragentsCopy := TContragents.Copy(FContragents);
+  FContragentsCopy := TRelated.Copy(FRelated);
   try
-    if ExecRelatedContragentForm(FContragentsCopy, ContragentKey) then
+    FContragentsCopy.DataSet.Append;
+    if ExecRelatedContragentForm(FContragentsCopy) then
     begin
-      FRelated.DataSet.Append;
-      FRelated.ParentID := FContragents.KeyValue;
-      FRelated.DataSet[FRelated.KeyField] := ContragentKey;
-      Info := FContragentsCopy.GetInfo;
-      FRelated.ContragentName := Info.Name;
-      FRelated.ContragentFullName := Info.FullName;
-      FRelated.ContragentPhone := Info.Phone;
-      FRelated.DataSet.Post;
+      FRelated.MergeData(FContragentsCopy.DataSet as TClientDataSet);
       Result := true;
     end
     else
@@ -737,30 +730,30 @@ begin
   end;
 end;
 
-{function TContragentForm.EditRelatedContragent: boolean;
-//var
-//  FRelatedCopy: TRelated;
+function TContragentForm.EditRelatedContragent: boolean;
+var
+  FContragentsCopy: TRelated;
 begin
-  if not FRelated.DataSet.IsEmpty then
+  if not FRelated.IsEmpty then
   begin
-    FRelatedCopy := TRelated.Copy(FRelated);
+    FContragentsCopy := TRelated.Copy(FRelated);
     try
-      if ExecPersonForm(FRelatedCopy) then
+      if ExecRelatedContragentForm(FContragentsCopy) then
       begin
-        FRelated.MergeData(FRelatedCopy.DataSet as TClientDataSet);
+        FRelated.MergeData(FContragentsCopy.DataSet as TClientDataSet);
         Result := true;
       end
       else
         Result := false;
     finally
-      FRelatedCopy.Free;
+      FContragentsCopy.Free;
     end;
-  end;
+  end
   else
     Result := false;
-end;}
+end;
 
-procedure TContragentForm.DeleteRelated;
+procedure TContragentForm.DeleteRelatedContragent;
 begin
   if not FRelated.DataSet.IsEmpty then
     FRelated.DataSet.Delete;
