@@ -692,6 +692,13 @@ var
   bk: TColor;
 begin
   Background := clWindow;
+
+  if FContragents.IsDead then
+  begin
+    AFont.Color := clMedGray;
+    Exit;
+  end;
+
   if NvlInteger(FContragents.StatusCode) > 0 then
   begin
     s := Trim(NvlString(TConfigManager.Instance.StandardDics.deContragentStatus.ItemValue[FContragents.StatusCode, 2]));

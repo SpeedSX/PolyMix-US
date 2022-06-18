@@ -54,7 +54,7 @@ begin
   if E is EJvInterpreterError then
   begin
     ejv := E as EJvInterpreterError;
-    // Игнорируем ошибку, выскакивающую при пустом скрипте
+    // РРіРЅРѕСЂРёСЂСѓРµРј РѕС€РёР±РєСѓ, РІС‹СЃРєР°РєРёРІР°СЋС‰СѓСЋ РїСЂРё РїСѓСЃС‚РѕРј СЃРєСЂРёРїС‚Рµ
     if (ejv.ErrCode = ieExpected) and
        (CompareText(ejv.ErrName1, LoadStr(irExpression)) = 0) then Exit;
     Msg := IntToStr(ejv.ErrCode) + ': ' + StringReplace(ejv.ErrMessage, #10, ' ', [rfReplaceAll]);
@@ -134,7 +134,7 @@ end;
 
 procedure RAI2_WorkOrderDataSource(var Value: Variant; Args: TJvInterpreterArgs);
 begin
-  raise Exception.Create('Вызов CalcOrderDataSource не поддерживается данной версией');
+  raise Exception.Create('Р’С‹Р·РѕРІ CalcOrderDataSource РЅРµ РїРѕРґРґРµСЂР¶РёРІР°РµС‚СЃСЏ РґР°РЅРЅРѕР№ РІРµСЂСЃРёРµР№');
 end;
 
 procedure RAI2_CalcOrderData(var Value: Variant; Args: TJvInterpreterArgs);
@@ -144,7 +144,7 @@ end;
 
 procedure RAI2_CalcOrderDataSource(var Value: Variant; Args: TJvInterpreterArgs);
 begin
-  raise Exception.Create('Вызов CalcOrderDataSource не поддерживается данной версией');
+  raise Exception.Create('Р’С‹Р·РѕРІ CalcOrderDataSource РЅРµ РїРѕРґРґРµСЂР¶РёРІР°РµС‚СЃСЏ РґР°РЅРЅРѕР№ РІРµСЂСЃРёРµР№');
 end;
 
 procedure RAI2_CurrentData(var Value: Variant; Args: TJvInterpreterArgs);
@@ -316,11 +316,11 @@ begin
   //if MForm.CurrentView is TOrderView then
   //  Value := (MForm.CurrentView as TOrderView).SaveCurrent
   //else
-  //  raise Exception.Create('Для выполнения SaveOrder текущий вид должен содержать заказ');
+  //  raise Exception.Create('Р”Р»СЏ РІС‹РїРѕР»РЅРµРЅРёСЏ SaveOrder С‚РµРєСѓС‰РёР№ РІРёРґ РґРѕР»Р¶РµРЅ СЃРѕРґРµСЂР¶Р°С‚СЊ Р·Р°РєР°Р·');
   if MForm.CurrentController is TOrderController then
     Value := (MForm.CurrentController as TOrderController).SaveCurrent
   else
-    ExceptionHandler.Raise_('Недопустимая операция в данном контексте');
+    ExceptionHandler.Raise_('РќРµРґРѕРїСѓСЃС‚РёРјР°СЏ РѕРїРµСЂР°С†РёСЏ РІ РґР°РЅРЅРѕРј РєРѕРЅС‚РµРєСЃС‚Рµ');
 end;
 
 procedure RAI2_CreatingOrder(var Value: Variant; Args: TJvInterpreterArgs);
@@ -335,13 +335,13 @@ end;
 
 procedure RAI2_CloseOrder(var Value: Variant; Args: TJvInterpreterArgs);
 begin
-  RusMessageDlg('Вызов устаревшей функции CloseOrder', mtWarning, [mbOk], 0);
+  RusMessageDlg('Р’С‹Р·РѕРІ СѓСЃС‚Р°СЂРµРІС€РµР№ С„СѓРЅРєС†РёРё CloseOrder', mtWarning, [mbOk], 0);
   (MForm.CurrentController as TOrderController).CloseOrder;
 end;
 
 procedure RAI2_CloseServices(var Value: Variant; Args: TJvInterpreterArgs);
 begin
-  RusMessageDlg('Вызов устаревшей функции CloseServices', mtWarning, [mbOk], 0);
+  RusMessageDlg('Р’С‹Р·РѕРІ СѓСЃС‚Р°СЂРµРІС€РµР№ С„СѓРЅРєС†РёРё CloseServices', mtWarning, [mbOk], 0);
   (MForm.CurrentController as TOrderController).Order.Processes.CloseServices;
 end;
 
@@ -361,8 +361,8 @@ begin
     TBitmap(V2O(Args.Values[3])), Args.Values[4]);
 end;
 
-{ TODO -cJEDI Bug: Пришлось ввести такую процедуру, т.к. DecodeDate, описанная в JvInterpreter_SysUtils,
- не выдавала правильный год. Надо еще проверить и отправить ошибку }
+{ TODO -cJEDI Bug: РџСЂРёС€Р»РѕСЃСЊ РІРІРµСЃС‚Рё С‚Р°РєСѓСЋ РїСЂРѕС†РµРґСѓСЂСѓ, С‚.Рє. DecodeDate, РѕРїРёСЃР°РЅРЅР°СЏ РІ JvInterpreter_SysUtils,
+ РЅРµ РІС‹РґР°РІР°Р»Р° РїСЂР°РІРёР»СЊРЅС‹Р№ РіРѕРґ. РќР°РґРѕ РµС‰Рµ РїСЂРѕРІРµСЂРёС‚СЊ Рё РѕС‚РїСЂР°РІРёС‚СЊ РѕС€РёР±РєСѓ }
 procedure RAI2_DateToYear(var Value: Variant; Args: TJvInterpreterArgs);
 {var
   Year, Month, Day: word;}
@@ -488,7 +488,7 @@ end;
 
 procedure TBaseReport_Write_WinCaption1(const Value: Variant; Args: TJvInterpreterArgs);
 begin
-  // Отключено, устанавливается автоматически
+  // РћС‚РєР»СЋС‡РµРЅРѕ, СѓСЃС‚Р°РЅР°РІР»РёРІР°РµС‚СЃСЏ Р°РІС‚РѕРјР°С‚РёС‡РµСЃРєРё
   //TBaseReport(Args.Obj).WinCaption1 := Value;
 end;
 
@@ -1129,7 +1129,17 @@ end;
 
 procedure TStringList_Write_Delimiter(const Value: Variant; Args: TJvInterpreterArgs);
 begin
-  TStringList(Args.Obj).Delimiter := chr(byte(Value));
+  TStringList(Args.Obj).Delimiter := string(Value)[1];
+end;
+
+procedure TStringList_Read_StrictDelimiter(var Value: Variant; Args: TJvInterpreterArgs);
+begin
+  Value := TStringList(Args.Obj).StrictDelimiter;
+end;
+
+procedure TStringList_Write_StrictDelimiter(const Value: Variant; Args: TJvInterpreterArgs);
+begin
+  TStringList(Args.Obj).StrictDelimiter := boolean(Value);
 end;
 
 procedure JvInterpreter_Invoices(var Value: Variant; Args: TJvInterpreterArgs);
@@ -1441,7 +1451,7 @@ end;
 
 procedure JvInterpreter_Shipment(var Value: Variant; Args: TJvInterpreterArgs);
 begin
-  // Зависит от контекста
+  // Р—Р°РІРёСЃРёС‚ РѕС‚ РєРѕРЅС‚РµРєСЃС‚Р°
   if MForm.CurrentController is TShipmentController then
     Value := O2V(MForm.CurrentController.Entity)
   else
@@ -1703,7 +1713,7 @@ begin
   Value := TSaleItems(Args.Obj).SaleCost;
 end;
 
-{$REGION 'TMaterialRequests - Заявки на материалы'}
+{$REGION 'TMaterialRequests - Р—Р°СЏРІРєРё РЅР° РјР°С‚РµСЂРёР°Р»С‹'}
 
 procedure JvInterpreter_MaterialRequests(var Value: Variant; Args: TJvInterpreterArgs);
 begin
@@ -1797,10 +1807,10 @@ end;
 
 {$ENDREGION}
 
-{$REGION 'TPlan, TWorkload - Планирование'}
+{$REGION 'TPlan, TWorkload - РџР»Р°РЅРёСЂРѕРІР°РЅРёРµ'}
 
 const
-  SCHEDULE_EXPECTED = 'Нет текущего плана';
+  SCHEDULE_EXPECTED = 'РќРµС‚ С‚РµРєСѓС‰РµРіРѕ РїР»Р°РЅР°';
 
 procedure TProcessEntity_EquipGroupCode(var Value: Variant; Args: TJvInterpreterArgs);
 begin
@@ -1890,13 +1900,13 @@ begin
   Value := TPlan(Args.Obj).EquipCode;
 end;
 
-// Признак есть ли комментарий к работе (JobComment)
+// РџСЂРёР·РЅР°Рє РµСЃС‚СЊ Р»Рё РєРѕРјРјРµРЅС‚Р°СЂРёР№ Рє СЂР°Р±РѕС‚Рµ (JobComment)
 procedure TScheduleQueue_HasComment(var Value: Variant; Args: TJvInterpreterArgs);
 begin
   Value := TPlan(Args.Obj).HasComment;
 end;
 
-// Признак есть ли технологические примечания к заказу
+// РџСЂРёР·РЅР°Рє РµСЃС‚СЊ Р»Рё С‚РµС…РЅРѕР»РѕРіРёС‡РµСЃРєРёРµ РїСЂРёРјРµС‡Р°РЅРёСЏ Рє Р·Р°РєР°Р·Сѓ
 procedure TScheduleQueue_HasTechNotes(var Value: Variant; Args: TJvInterpreterArgs);
 begin
   Value := TPlan(Args.Obj).HasTechNotes;
@@ -1958,7 +1968,7 @@ end;
 {$ENDREGION}
 
 const
-  ORDER_EXPECTED = 'Нет текущего заказа';
+  ORDER_EXPECTED = 'РќРµС‚ С‚РµРєСѓС‰РµРіРѕ Р·Р°РєР°Р·Р°';
 
 procedure JvInterpreter_Order(var Value: Variant; Args: TJvInterpreterArgs);
 begin
@@ -2396,174 +2406,174 @@ begin
     AddSet(TBaseReport, 'BordersLineStyle', TBaseReport_Write_BordersLineStyle, 0, [0]);
     AddGet(TBaseReport, 'GetRowHeight', TBaseReport_GetRowHeight, 1, [varEmpty], varEmpty);
     AddGet(TBaseReport, 'SetRowHeight', TBaseReport_SetRowHeight, 2, [varEmpty, varEmpty], varEmpty);
-    { TODO -cInterpreter: Вообще-то есть еще SetRowsHeight, но там динамический массив }
+    { TODO -cInterpreter: Р’РѕРѕР±С‰Рµ-С‚Рѕ РµСЃС‚СЊ РµС‰Рµ SetRowsHeight, РЅРѕ С‚Р°Рј РґРёРЅР°РјРёС‡РµСЃРєРёР№ РјР°СЃСЃРёРІ }
     AddGet(TBaseReport, 'GetColumnWidth', TBaseReport_GetColumnWidth, 1, [varEmpty], varEmpty);
     AddGet(TBaseReport, 'SetColumnWidth', TBaseReport_SetColumnWidth, 2, [varEmpty, varEmpty], varEmpty);
 
     AddGet(TBaseReport, 'CopyRange', TBaseReport_CopyRange, 4, [varEmpty, varEmpty, varEmpty, varEmpty], varEmpty);
     AddGet(TBaseReport, 'Paste', TBaseReport_Paste, 4, [varEmpty, varEmpty, varEmpty, varEmpty], varEmpty);
 
-    AddConst('OrdRep', 'frBordersLineStyle', frBordersLineStyle);  // Задание стиля линий
-    AddConst('OrdRep', 'frBordersWeight', frBordersWeight); // Задание толщины линий
-    AddConst('OrdRep', 'frBordersColorIndex', frBordersColorIndex);  // Задание цвета линий
-    AddConst('OrdRep', 'frFontBold', frFontBold);  // Включение/отключение жирного шрифта
-    AddConst('OrdRep', 'frFontColorIndex', frFontColorIndex); // Задание цвета шрифта
-    AddConst('OrdRep', 'frFontItalic', frFontItalic); // Включение/отключение наклонного шрифта
-    AddConst('OrdRep', 'frFontName', frFontName); // Выбор типа шрифта (названия фонта)
-    AddConst('OrdRep', 'frFontSize', frFontSize);  // Изменение размера символов
-    AddConst('OrdRep', 'frFontStrikethrough', frFontStrikethrough); // Включение/отключение наклонного шрифта
-    AddConst('OrdRep', 'frFontSubscript', frFontSubscript);  // Включение/отключение нижнего индекса
-    AddConst('OrdRep', 'frFontSuperscript', frFontSuperscript);// Включение/отключение верхнего индекса
-    AddConst('OrdRep', 'frFontUnderline', frFontUnderline);// Включение/отключение режима подчеркивания
-    AddConst('OrdRep', 'frHorizontalAlignment', frHorizontalAlignment);  // Задание режима горизонтального выравнивания
-    AddConst('OrdRep', 'frVerticalAlignment', frVerticalAlignment); // Задание режима вертикального выравнивания
-    AddConst('OrdRep', 'frOrientation', frOrientation); // Задание ориентации надписей
-    AddConst('OrdRep', 'frWrapText' , frWrapText); // Включение/отключение режима переноса слов
-    AddConst('OrdRep', 'frShrinkToFit', frShrinkToFit); // Изменение размера символов так, чтобы надписи умещались в ячейках
-    AddConst('OrdRep', 'frInteriorColorIndex', frInteriorColorIndex);  // Задание цвета фона ячеек
-    AddConst('OrdRep', 'frInteriorPattern', frInteriorPattern); // Задание способа штриховки ячеек
-    AddConst('OrdRep', 'frInteriorPCI', frInteriorPCI); // Задание цвета штриховки
-    AddConst('OrdRep', 'frNumberFormat', frNumberFormat); // Изменение формата представления содержимого ячеек
+    AddConst('OrdRep', 'frBordersLineStyle', frBordersLineStyle);  // Р—Р°РґР°РЅРёРµ СЃС‚РёР»СЏ Р»РёРЅРёР№
+    AddConst('OrdRep', 'frBordersWeight', frBordersWeight); // Р—Р°РґР°РЅРёРµ С‚РѕР»С‰РёРЅС‹ Р»РёРЅРёР№
+    AddConst('OrdRep', 'frBordersColorIndex', frBordersColorIndex);  // Р—Р°РґР°РЅРёРµ С†РІРµС‚Р° Р»РёРЅРёР№
+    AddConst('OrdRep', 'frFontBold', frFontBold);  // Р’РєР»СЋС‡РµРЅРёРµ/РѕС‚РєР»СЋС‡РµРЅРёРµ Р¶РёСЂРЅРѕРіРѕ С€СЂРёС„С‚Р°
+    AddConst('OrdRep', 'frFontColorIndex', frFontColorIndex); // Р—Р°РґР°РЅРёРµ С†РІРµС‚Р° С€СЂРёС„С‚Р°
+    AddConst('OrdRep', 'frFontItalic', frFontItalic); // Р’РєР»СЋС‡РµРЅРёРµ/РѕС‚РєР»СЋС‡РµРЅРёРµ РЅР°РєР»РѕРЅРЅРѕРіРѕ С€СЂРёС„С‚Р°
+    AddConst('OrdRep', 'frFontName', frFontName); // Р’С‹Р±РѕСЂ С‚РёРїР° С€СЂРёС„С‚Р° (РЅР°Р·РІР°РЅРёСЏ С„РѕРЅС‚Р°)
+    AddConst('OrdRep', 'frFontSize', frFontSize);  // РР·РјРµРЅРµРЅРёРµ СЂР°Р·РјРµСЂР° СЃРёРјРІРѕР»РѕРІ
+    AddConst('OrdRep', 'frFontStrikethrough', frFontStrikethrough); // Р’РєР»СЋС‡РµРЅРёРµ/РѕС‚РєР»СЋС‡РµРЅРёРµ РЅР°РєР»РѕРЅРЅРѕРіРѕ С€СЂРёС„С‚Р°
+    AddConst('OrdRep', 'frFontSubscript', frFontSubscript);  // Р’РєР»СЋС‡РµРЅРёРµ/РѕС‚РєР»СЋС‡РµРЅРёРµ РЅРёР¶РЅРµРіРѕ РёРЅРґРµРєСЃР°
+    AddConst('OrdRep', 'frFontSuperscript', frFontSuperscript);// Р’РєР»СЋС‡РµРЅРёРµ/РѕС‚РєР»СЋС‡РµРЅРёРµ РІРµСЂС…РЅРµРіРѕ РёРЅРґРµРєСЃР°
+    AddConst('OrdRep', 'frFontUnderline', frFontUnderline);// Р’РєР»СЋС‡РµРЅРёРµ/РѕС‚РєР»СЋС‡РµРЅРёРµ СЂРµР¶РёРјР° РїРѕРґС‡РµСЂРєРёРІР°РЅРёСЏ
+    AddConst('OrdRep', 'frHorizontalAlignment', frHorizontalAlignment);  // Р—Р°РґР°РЅРёРµ СЂРµР¶РёРјР° РіРѕСЂРёР·РѕРЅС‚Р°Р»СЊРЅРѕРіРѕ РІС‹СЂР°РІРЅРёРІР°РЅРёСЏ
+    AddConst('OrdRep', 'frVerticalAlignment', frVerticalAlignment); // Р—Р°РґР°РЅРёРµ СЂРµР¶РёРјР° РІРµСЂС‚РёРєР°Р»СЊРЅРѕРіРѕ РІС‹СЂР°РІРЅРёРІР°РЅРёСЏ
+    AddConst('OrdRep', 'frOrientation', frOrientation); // Р—Р°РґР°РЅРёРµ РѕСЂРёРµРЅС‚Р°С†РёРё РЅР°РґРїРёСЃРµР№
+    AddConst('OrdRep', 'frWrapText' , frWrapText); // Р’РєР»СЋС‡РµРЅРёРµ/РѕС‚РєР»СЋС‡РµРЅРёРµ СЂРµР¶РёРјР° РїРµСЂРµРЅРѕСЃР° СЃР»РѕРІ
+    AddConst('OrdRep', 'frShrinkToFit', frShrinkToFit); // РР·РјРµРЅРµРЅРёРµ СЂР°Р·РјРµСЂР° СЃРёРјРІРѕР»РѕРІ С‚Р°Рє, С‡С‚РѕР±С‹ РЅР°РґРїРёСЃРё СѓРјРµС‰Р°Р»РёСЃСЊ РІ СЏС‡РµР№РєР°С…
+    AddConst('OrdRep', 'frInteriorColorIndex', frInteriorColorIndex);  // Р—Р°РґР°РЅРёРµ С†РІРµС‚Р° С„РѕРЅР° СЏС‡РµРµРє
+    AddConst('OrdRep', 'frInteriorPattern', frInteriorPattern); // Р—Р°РґР°РЅРёРµ СЃРїРѕСЃРѕР±Р° С€С‚СЂРёС…РѕРІРєРё СЏС‡РµРµРє
+    AddConst('OrdRep', 'frInteriorPCI', frInteriorPCI); // Р—Р°РґР°РЅРёРµ С†РІРµС‚Р° С€С‚СЂРёС…РѕРІРєРё
+    AddConst('OrdRep', 'frNumberFormat', frNumberFormat); // РР·РјРµРЅРµРЅРёРµ С„РѕСЂРјР°С‚Р° РїСЂРµРґСЃС‚Р°РІР»РµРЅРёСЏ СЃРѕРґРµСЂР¶РёРјРѕРіРѕ СЏС‡РµРµРє
 
-    AddConst('OrdRep', 'frBorders', frBorders);  // Изменение всех параметров, касающихся границ ячеек
-    AddConst('OrdRep', 'frFont', frFont);  // Изменение всех параметров, касающихся шрифта
-    AddConst('OrdRep', 'frAligns', frAligns); // Изменение всех параметров, связанных с выравниванием содержимого ячеек
-    AddConst('OrdRep', 'frInterior', frInterior);  // Изменение параметров, касающихся фона и заливки ячеек
+    AddConst('OrdRep', 'frBorders', frBorders);  // РР·РјРµРЅРµРЅРёРµ РІСЃРµС… РїР°СЂР°РјРµС‚СЂРѕРІ, РєР°СЃР°СЋС‰РёС…СЃСЏ РіСЂР°РЅРёС† СЏС‡РµРµРє
+    AddConst('OrdRep', 'frFont', frFont);  // РР·РјРµРЅРµРЅРёРµ РІСЃРµС… РїР°СЂР°РјРµС‚СЂРѕРІ, РєР°СЃР°СЋС‰РёС…СЃСЏ С€СЂРёС„С‚Р°
+    AddConst('OrdRep', 'frAligns', frAligns); // РР·РјРµРЅРµРЅРёРµ РІСЃРµС… РїР°СЂР°РјРµС‚СЂРѕРІ, СЃРІСЏР·Р°РЅРЅС‹С… СЃ РІС‹СЂР°РІРЅРёРІР°РЅРёРµРј СЃРѕРґРµСЂР¶РёРјРѕРіРѕ СЏС‡РµРµРє
+    AddConst('OrdRep', 'frInterior', frInterior);  // РР·РјРµРЅРµРЅРёРµ РїР°СЂР°РјРµС‚СЂРѕРІ, РєР°СЃР°СЋС‰РёС…СЃСЏ С„РѕРЅР° Рё Р·Р°Р»РёРІРєРё СЏС‡РµРµРє
 
-    // Стиль линий (XlLineStyle)
-    AddConst('OrdRep', 'xlNone', xlNone);           // Линия отсутствует
-    AddConst('OrdRep', 'xlLineStyleNone', xlLineStyleNone); // Линия отсутствует
-    AddConst('OrdRep', 'xlContinuous', xlContinuous); // Непрерывная линия
-    AddConst('OrdRep', 'xlDash', xlDash);           // Линия состоит из тире
-    AddConst('OrdRep', 'xlDashDot', xlDashDot);     // Точка - тире
-    AddConst('OrdRep', 'xlDashDotDot', xlDashDotDot);  // Тире - точка - точка
-    AddConst('OrdRep', 'xlDot', xlDot);            // Линия состоит из точек
-    AddConst('OrdRep', 'xlDouble', xlDouble);         // Двойная сплошная линия
-    AddConst('OrdRep', 'xlSlantDashDot', xlSlantDashDot); // Линия состоит из тире и косых черточек
+    // РЎС‚РёР»СЊ Р»РёРЅРёР№ (XlLineStyle)
+    AddConst('OrdRep', 'xlNone', xlNone);           // Р›РёРЅРёСЏ РѕС‚СЃСѓС‚СЃС‚РІСѓРµС‚
+    AddConst('OrdRep', 'xlLineStyleNone', xlLineStyleNone); // Р›РёРЅРёСЏ РѕС‚СЃСѓС‚СЃС‚РІСѓРµС‚
+    AddConst('OrdRep', 'xlContinuous', xlContinuous); // РќРµРїСЂРµСЂС‹РІРЅР°СЏ Р»РёРЅРёСЏ
+    AddConst('OrdRep', 'xlDash', xlDash);           // Р›РёРЅРёСЏ СЃРѕСЃС‚РѕРёС‚ РёР· С‚РёСЂРµ
+    AddConst('OrdRep', 'xlDashDot', xlDashDot);     // РўРѕС‡РєР° - С‚РёСЂРµ
+    AddConst('OrdRep', 'xlDashDotDot', xlDashDotDot);  // РўРёСЂРµ - С‚РѕС‡РєР° - С‚РѕС‡РєР°
+    AddConst('OrdRep', 'xlDot', xlDot);            // Р›РёРЅРёСЏ СЃРѕСЃС‚РѕРёС‚ РёР· С‚РѕС‡РµРє
+    AddConst('OrdRep', 'xlDouble', xlDouble);         // Р”РІРѕР№РЅР°СЏ СЃРїР»РѕС€РЅР°СЏ Р»РёРЅРёСЏ
+    AddConst('OrdRep', 'xlSlantDashDot', xlSlantDashDot); // Р›РёРЅРёСЏ СЃРѕСЃС‚РѕРёС‚ РёР· С‚РёСЂРµ Рё РєРѕСЃС‹С… С‡РµСЂС‚РѕС‡РµРє
 
-    // Толщина линий (XlBordersWeight)
-    AddConst('OrdRep', 'xlHairline', xlHairline); // Самая тонкая линия
-    AddConst('OrdRep', 'xlThin', xlThin);             // Тонкая линия
-    AddConst('OrdRep', 'xlMedium', int(xlMedium));  // Линия средней толщины (жирная)
-    AddConst('OrdRep', 'xlThick', xlThick); // Толстая линия
+    // РўРѕР»С‰РёРЅР° Р»РёРЅРёР№ (XlBordersWeight)
+    AddConst('OrdRep', 'xlHairline', xlHairline); // РЎР°РјР°СЏ С‚РѕРЅРєР°СЏ Р»РёРЅРёСЏ
+    AddConst('OrdRep', 'xlThin', xlThin);             // РўРѕРЅРєР°СЏ Р»РёРЅРёСЏ
+    AddConst('OrdRep', 'xlMedium', int(xlMedium));  // Р›РёРЅРёСЏ СЃСЂРµРґРЅРµР№ С‚РѕР»С‰РёРЅС‹ (Р¶РёСЂРЅР°СЏ)
+    AddConst('OrdRep', 'xlThick', xlThick); // РўРѕР»СЃС‚Р°СЏ Р»РёРЅРёСЏ
 
-    AddConst('OrdRep', 'xlColorIndexAutomatic', xlColorIndexAutomatic); // Цвет выбирается автоматически
-    AddConst('OrdRep', 'xlColorIndexNone', xlColorIndexNone); // Цвет отсутствует
-    AddConst('OrdRep', 'xlColor1', xlColor1); // Черный
-    AddConst('OrdRep', 'xlColor53', xlColor53); // Коричневый
-    AddConst('OrdRep', 'xlColor52', xlColor52); // Оливковый
-    AddConst('OrdRep', 'xlColor51', xlColor51); // Темно-зеленый
-    AddConst('OrdRep', 'xlColor49', xlColor49); // Темно-сизый
-    AddConst('OrdRep', 'xlColor11', xlColor11); // Темно-синий
-    AddConst('OrdRep', 'xlColor55', xlColor55); // Индиго
-    AddConst('OrdRep', 'xlColor56', xlColor56); // Серый 80%
-    AddConst('OrdRep', 'xlColor9', xlColor9); // Темно-красный
-    AddConst('OrdRep', 'xlColor46', xlColor46); // Оранжевый
-    AddConst('OrdRep', 'xlColor12', xlColor12); // Коричнево-зеленый
-    AddConst('OrdRep', 'xlColor10', xlColor10); // Зеленый
-    AddConst('OrdRep', 'xlColor14', xlColor14); // Сине-зеленый
-    AddConst('OrdRep', 'xlColor5', xlColor5); // Синий
-    AddConst('OrdRep', 'xlColor47', xlColor47); // Сизый
-    AddConst('OrdRep', 'xlColor16', xlColor16); // Серый 50%
-    AddConst('OrdRep', 'xlColor3', xlColor3); // Красный
-    AddConst('OrdRep', 'xlColor45', xlColor45); // Светло-оранжевый
-    AddConst('OrdRep', 'xlColor43', xlColor43); // Травяной
-    AddConst('OrdRep', 'xlColor50', xlColor50); // Изумрудный
-    AddConst('OrdRep', 'xlColor42', xlColor42); // Темно-бирюзовый
-    AddConst('OrdRep', 'xlColor41', xlColor41); // Темно-голубой
-    AddConst('OrdRep', 'xlColor13', xlColor13); // Фиолетовый
-    AddConst('OrdRep', 'xlColor48', xlColor48); // Серый 40%
-    AddConst('OrdRep', 'xlColor7', xlColor7); // Лиловый
-    AddConst('OrdRep', 'xlColor44', xlColor44); // Золотистый
-    AddConst('OrdRep', 'xlColor6', xlColor6); // Желтый
-    AddConst('OrdRep', 'xlColor4', xlColor4); // Ярко-зеленый
-    AddConst('OrdRep', 'xlColor8', xlColor8); // Бирюзовый
-    AddConst('OrdRep', 'xlColor33', xlColor33); // Голубой
-    AddConst('OrdRep', 'xlColor54', xlColor54); // Вишневый
-    AddConst('OrdRep', 'xlColor15', xlColor15); // Серый 25%
-    AddConst('OrdRep', 'xlColor38', xlColor38); // Розовый
-    AddConst('OrdRep', 'xlColor40', xlColor40); // Светло-коричневый
-    AddConst('OrdRep', 'xlColor36', xlColor36); // Светло-желтый
-    AddConst('OrdRep', 'xlColor35', xlColor35); // Бледно-зеленый
-    AddConst('OrdRep', 'xlColor34', xlColor34); // Светло-бирюзовый
-    AddConst('OrdRep', 'xlColor37', xlColor37); // Бледно-голубой
-    AddConst('OrdRep', 'xlColor39', xlColor39); // Сиреневый
-    AddConst('OrdRep', 'xlColor2', xlColor2); // Белый
-    AddConst('OrdRep', 'xlColor17', xlColor17); // Сине-фиолетовый
-    AddConst('OrdRep', 'xlColor18', xlColor18); // Вишневый
-    AddConst('OrdRep', 'xlColor19', xlColor19); // Слоновая кость
-    AddConst('OrdRep', 'xlColor20', xlColor20); // Светло-бирюзовый
-    AddConst('OrdRep', 'xlColor21', xlColor21); // Темно-фиолетовый
-    AddConst('OrdRep', 'xlColor22', xlColor22); // Коралловый
-    AddConst('OrdRep', 'xlColor23', xlColor23); // Васильковый
-    AddConst('OrdRep', 'xlColor24', xlColor24); // Пастельный голубой
-    AddConst('OrdRep', 'xlColor25', xlColor25); // Темно-синий
-    AddConst('OrdRep', 'xlColor26', xlColor26); // Лиловый
-    AddConst('OrdRep', 'xlColor27', xlColor27); // Желтый
-    AddConst('OrdRep', 'xlColor28', xlColor28); // Бирюзовый
-    AddConst('OrdRep', 'xlColor29', xlColor29); // Фиолетовый
-    AddConst('OrdRep', 'xlColor30', xlColor30); // Темно-красный
-    AddConst('OrdRep', 'xlColor31', xlColor31); // Сине-зеленый
-    AddConst('OrdRep', 'xlColor32', xlColor32); // Синий
+    AddConst('OrdRep', 'xlColorIndexAutomatic', xlColorIndexAutomatic); // Р¦РІРµС‚ РІС‹Р±РёСЂР°РµС‚СЃСЏ Р°РІС‚РѕРјР°С‚РёС‡РµСЃРєРё
+    AddConst('OrdRep', 'xlColorIndexNone', xlColorIndexNone); // Р¦РІРµС‚ РѕС‚СЃСѓС‚СЃС‚РІСѓРµС‚
+    AddConst('OrdRep', 'xlColor1', xlColor1); // Р§РµСЂРЅС‹Р№
+    AddConst('OrdRep', 'xlColor53', xlColor53); // РљРѕСЂРёС‡РЅРµРІС‹Р№
+    AddConst('OrdRep', 'xlColor52', xlColor52); // РћР»РёРІРєРѕРІС‹Р№
+    AddConst('OrdRep', 'xlColor51', xlColor51); // РўРµРјРЅРѕ-Р·РµР»РµРЅС‹Р№
+    AddConst('OrdRep', 'xlColor49', xlColor49); // РўРµРјРЅРѕ-СЃРёР·С‹Р№
+    AddConst('OrdRep', 'xlColor11', xlColor11); // РўРµРјРЅРѕ-СЃРёРЅРёР№
+    AddConst('OrdRep', 'xlColor55', xlColor55); // РРЅРґРёРіРѕ
+    AddConst('OrdRep', 'xlColor56', xlColor56); // РЎРµСЂС‹Р№ 80%
+    AddConst('OrdRep', 'xlColor9', xlColor9); // РўРµРјРЅРѕ-РєСЂР°СЃРЅС‹Р№
+    AddConst('OrdRep', 'xlColor46', xlColor46); // РћСЂР°РЅР¶РµРІС‹Р№
+    AddConst('OrdRep', 'xlColor12', xlColor12); // РљРѕСЂРёС‡РЅРµРІРѕ-Р·РµР»РµРЅС‹Р№
+    AddConst('OrdRep', 'xlColor10', xlColor10); // Р—РµР»РµРЅС‹Р№
+    AddConst('OrdRep', 'xlColor14', xlColor14); // РЎРёРЅРµ-Р·РµР»РµРЅС‹Р№
+    AddConst('OrdRep', 'xlColor5', xlColor5); // РЎРёРЅРёР№
+    AddConst('OrdRep', 'xlColor47', xlColor47); // РЎРёР·С‹Р№
+    AddConst('OrdRep', 'xlColor16', xlColor16); // РЎРµСЂС‹Р№ 50%
+    AddConst('OrdRep', 'xlColor3', xlColor3); // РљСЂР°СЃРЅС‹Р№
+    AddConst('OrdRep', 'xlColor45', xlColor45); // РЎРІРµС‚Р»Рѕ-РѕСЂР°РЅР¶РµРІС‹Р№
+    AddConst('OrdRep', 'xlColor43', xlColor43); // РўСЂР°РІСЏРЅРѕР№
+    AddConst('OrdRep', 'xlColor50', xlColor50); // РР·СѓРјСЂСѓРґРЅС‹Р№
+    AddConst('OrdRep', 'xlColor42', xlColor42); // РўРµРјРЅРѕ-Р±РёСЂСЋР·РѕРІС‹Р№
+    AddConst('OrdRep', 'xlColor41', xlColor41); // РўРµРјРЅРѕ-РіРѕР»СѓР±РѕР№
+    AddConst('OrdRep', 'xlColor13', xlColor13); // Р¤РёРѕР»РµС‚РѕРІС‹Р№
+    AddConst('OrdRep', 'xlColor48', xlColor48); // РЎРµСЂС‹Р№ 40%
+    AddConst('OrdRep', 'xlColor7', xlColor7); // Р›РёР»РѕРІС‹Р№
+    AddConst('OrdRep', 'xlColor44', xlColor44); // Р—РѕР»РѕС‚РёСЃС‚С‹Р№
+    AddConst('OrdRep', 'xlColor6', xlColor6); // Р–РµР»С‚С‹Р№
+    AddConst('OrdRep', 'xlColor4', xlColor4); // РЇСЂРєРѕ-Р·РµР»РµРЅС‹Р№
+    AddConst('OrdRep', 'xlColor8', xlColor8); // Р‘РёСЂСЋР·РѕРІС‹Р№
+    AddConst('OrdRep', 'xlColor33', xlColor33); // Р“РѕР»СѓР±РѕР№
+    AddConst('OrdRep', 'xlColor54', xlColor54); // Р’РёС€РЅРµРІС‹Р№
+    AddConst('OrdRep', 'xlColor15', xlColor15); // РЎРµСЂС‹Р№ 25%
+    AddConst('OrdRep', 'xlColor38', xlColor38); // Р РѕР·РѕРІС‹Р№
+    AddConst('OrdRep', 'xlColor40', xlColor40); // РЎРІРµС‚Р»Рѕ-РєРѕСЂРёС‡РЅРµРІС‹Р№
+    AddConst('OrdRep', 'xlColor36', xlColor36); // РЎРІРµС‚Р»Рѕ-Р¶РµР»С‚С‹Р№
+    AddConst('OrdRep', 'xlColor35', xlColor35); // Р‘Р»РµРґРЅРѕ-Р·РµР»РµРЅС‹Р№
+    AddConst('OrdRep', 'xlColor34', xlColor34); // РЎРІРµС‚Р»Рѕ-Р±РёСЂСЋР·РѕРІС‹Р№
+    AddConst('OrdRep', 'xlColor37', xlColor37); // Р‘Р»РµРґРЅРѕ-РіРѕР»СѓР±РѕР№
+    AddConst('OrdRep', 'xlColor39', xlColor39); // РЎРёСЂРµРЅРµРІС‹Р№
+    AddConst('OrdRep', 'xlColor2', xlColor2); // Р‘РµР»С‹Р№
+    AddConst('OrdRep', 'xlColor17', xlColor17); // РЎРёРЅРµ-С„РёРѕР»РµС‚РѕРІС‹Р№
+    AddConst('OrdRep', 'xlColor18', xlColor18); // Р’РёС€РЅРµРІС‹Р№
+    AddConst('OrdRep', 'xlColor19', xlColor19); // РЎР»РѕРЅРѕРІР°СЏ РєРѕСЃС‚СЊ
+    AddConst('OrdRep', 'xlColor20', xlColor20); // РЎРІРµС‚Р»Рѕ-Р±РёСЂСЋР·РѕРІС‹Р№
+    AddConst('OrdRep', 'xlColor21', xlColor21); // РўРµРјРЅРѕ-С„РёРѕР»РµС‚РѕРІС‹Р№
+    AddConst('OrdRep', 'xlColor22', xlColor22); // РљРѕСЂР°Р»Р»РѕРІС‹Р№
+    AddConst('OrdRep', 'xlColor23', xlColor23); // Р’Р°СЃРёР»СЊРєРѕРІС‹Р№
+    AddConst('OrdRep', 'xlColor24', xlColor24); // РџР°СЃС‚РµР»СЊРЅС‹Р№ РіРѕР»СѓР±РѕР№
+    AddConst('OrdRep', 'xlColor25', xlColor25); // РўРµРјРЅРѕ-СЃРёРЅРёР№
+    AddConst('OrdRep', 'xlColor26', xlColor26); // Р›РёР»РѕРІС‹Р№
+    AddConst('OrdRep', 'xlColor27', xlColor27); // Р–РµР»С‚С‹Р№
+    AddConst('OrdRep', 'xlColor28', xlColor28); // Р‘РёСЂСЋР·РѕРІС‹Р№
+    AddConst('OrdRep', 'xlColor29', xlColor29); // Р¤РёРѕР»РµС‚РѕРІС‹Р№
+    AddConst('OrdRep', 'xlColor30', xlColor30); // РўРµРјРЅРѕ-РєСЂР°СЃРЅС‹Р№
+    AddConst('OrdRep', 'xlColor31', xlColor31); // РЎРёРЅРµ-Р·РµР»РµРЅС‹Р№
+    AddConst('OrdRep', 'xlColor32', xlColor32); // РЎРёРЅРёР№
 
-    AddConst('OrdRep', 'xlUnderlineStyleNone', xlUnderlineStyleNone); // Подчеркивание отсутствует
-    AddConst('OrdRep', 'xlUnderlineStyleSingle', xlUnderlineStyleSingle); // Одинарное подчеркивание по значению
-    AddConst('OrdRep', 'xlUnderlineStyleSingleAccounting', xlUnderlineStyleSingleAccounting); // Одинарное подчеркивание по ячейке
-    AddConst('OrdRep', 'xlUnderlineStyleDouble', xlUnderlineStyleDouble); // Двойное подчеркивание по значению
-    AddConst('OrdRep', 'xlUnderlineStyleDoubleAccounting', xlUnderlineStyleDoubleAccounting); // Двойное подчеркивание по ячейке
+    AddConst('OrdRep', 'xlUnderlineStyleNone', xlUnderlineStyleNone); // РџРѕРґС‡РµСЂРєРёРІР°РЅРёРµ РѕС‚СЃСѓС‚СЃС‚РІСѓРµС‚
+    AddConst('OrdRep', 'xlUnderlineStyleSingle', xlUnderlineStyleSingle); // РћРґРёРЅР°СЂРЅРѕРµ РїРѕРґС‡РµСЂРєРёРІР°РЅРёРµ РїРѕ Р·РЅР°С‡РµРЅРёСЋ
+    AddConst('OrdRep', 'xlUnderlineStyleSingleAccounting', xlUnderlineStyleSingleAccounting); // РћРґРёРЅР°СЂРЅРѕРµ РїРѕРґС‡РµСЂРєРёРІР°РЅРёРµ РїРѕ СЏС‡РµР№РєРµ
+    AddConst('OrdRep', 'xlUnderlineStyleDouble', xlUnderlineStyleDouble); // Р”РІРѕР№РЅРѕРµ РїРѕРґС‡РµСЂРєРёРІР°РЅРёРµ РїРѕ Р·РЅР°С‡РµРЅРёСЋ
+    AddConst('OrdRep', 'xlUnderlineStyleDoubleAccounting', xlUnderlineStyleDoubleAccounting); // Р”РІРѕР№РЅРѕРµ РїРѕРґС‡РµСЂРєРёРІР°РЅРёРµ РїРѕ СЏС‡РµР№РєРµ
 
-    AddConst('OrdRep', 'xlHAlignCenter', xlHAlignCenter); // Выравнивание по центру
-    AddConst('OrdRep', 'xlHAlignCenterAcrossSelection', xlHAlignCenterAcrossSelection); // Выравнивание по центру выделения
-    AddConst('OrdRep', 'xlHAlignLeft', xlHAlignLeft); // Выравнивание по левому краю (может быть отступ)
-    AddConst('OrdRep', 'xlHAlignRight', xlHAlignRight); // Выравнивание по правому краю
-    AddConst('OrdRep', 'xlHAlignFill', xlHAlignFill); // Выравнивание с заполнением
-    AddConst('OrdRep', 'xlHAlignGeneral', xlHAlignGeneral); // Выравнивание в зависимости от значения ячейки
-    AddConst('OrdRep', 'xlHAlignJustify', xlHAlignJustify); // Изменение ширины столбца, чтобы полностью отобразить содержимое ячейки
-    AddConst('OrdRep', 'xlVAlignCenter', xlVAlignCenter); // Выравнивание по центру
-    AddConst('OrdRep', 'xlVAlignTop', xlVAlignTop); // Выравнивание по верхнему краю
-    AddConst('OrdRep', 'xlVAlignBottom', xlVAlignBottom); // Выравнивание по нижнему краю
-    AddConst('OrdRep', 'xlVAlignJustify', xlVAlignJustify); // Подбор высоты строки, чтобы полностью отобразить содержимое ячейки
+    AddConst('OrdRep', 'xlHAlignCenter', xlHAlignCenter); // Р’С‹СЂР°РІРЅРёРІР°РЅРёРµ РїРѕ С†РµРЅС‚СЂСѓ
+    AddConst('OrdRep', 'xlHAlignCenterAcrossSelection', xlHAlignCenterAcrossSelection); // Р’С‹СЂР°РІРЅРёРІР°РЅРёРµ РїРѕ С†РµРЅС‚СЂСѓ РІС‹РґРµР»РµРЅРёСЏ
+    AddConst('OrdRep', 'xlHAlignLeft', xlHAlignLeft); // Р’С‹СЂР°РІРЅРёРІР°РЅРёРµ РїРѕ Р»РµРІРѕРјСѓ РєСЂР°СЋ (РјРѕР¶РµС‚ Р±С‹С‚СЊ РѕС‚СЃС‚СѓРї)
+    AddConst('OrdRep', 'xlHAlignRight', xlHAlignRight); // Р’С‹СЂР°РІРЅРёРІР°РЅРёРµ РїРѕ РїСЂР°РІРѕРјСѓ РєСЂР°СЋ
+    AddConst('OrdRep', 'xlHAlignFill', xlHAlignFill); // Р’С‹СЂР°РІРЅРёРІР°РЅРёРµ СЃ Р·Р°РїРѕР»РЅРµРЅРёРµРј
+    AddConst('OrdRep', 'xlHAlignGeneral', xlHAlignGeneral); // Р’С‹СЂР°РІРЅРёРІР°РЅРёРµ РІ Р·Р°РІРёСЃРёРјРѕСЃС‚Рё РѕС‚ Р·РЅР°С‡РµРЅРёСЏ СЏС‡РµР№РєРё
+    AddConst('OrdRep', 'xlHAlignJustify', xlHAlignJustify); // РР·РјРµРЅРµРЅРёРµ С€РёСЂРёРЅС‹ СЃС‚РѕР»Р±С†Р°, С‡С‚РѕР±С‹ РїРѕР»РЅРѕСЃС‚СЊСЋ РѕС‚РѕР±СЂР°Р·РёС‚СЊ СЃРѕРґРµСЂР¶РёРјРѕРµ СЏС‡РµР№РєРё
+    AddConst('OrdRep', 'xlVAlignCenter', xlVAlignCenter); // Р’С‹СЂР°РІРЅРёРІР°РЅРёРµ РїРѕ С†РµРЅС‚СЂСѓ
+    AddConst('OrdRep', 'xlVAlignTop', xlVAlignTop); // Р’С‹СЂР°РІРЅРёРІР°РЅРёРµ РїРѕ РІРµСЂС…РЅРµРјСѓ РєСЂР°СЋ
+    AddConst('OrdRep', 'xlVAlignBottom', xlVAlignBottom); // Р’С‹СЂР°РІРЅРёРІР°РЅРёРµ РїРѕ РЅРёР¶РЅРµРјСѓ РєСЂР°СЋ
+    AddConst('OrdRep', 'xlVAlignJustify', xlVAlignJustify); // РџРѕРґР±РѕСЂ РІС‹СЃРѕС‚С‹ СЃС‚СЂРѕРєРё, С‡С‚РѕР±С‹ РїРѕР»РЅРѕСЃС‚СЊСЋ РѕС‚РѕР±СЂР°Р·РёС‚СЊ СЃРѕРґРµСЂР¶РёРјРѕРµ СЏС‡РµР№РєРё
 
-    AddConst('OrdRep', 'xlPatternAutomatic', xlPatternAutomatic); // Автоматическая штриховка
-    AddConst('OrdRep', 'xlPatternChecker', xlPatternChecker); // Диагональная клетчатая штриховка
-    AddConst('OrdRep', 'xlPatternCrissCross', xlPatternCrissCross); // Тонкая диагональная клетчатая
-    AddConst('OrdRep', 'xlPatternDown', xlPatternDown); // Диагональная штриховка вниз
-    AddConst('OrdRep', 'xlPatternGray16', xlPatternGray16); // 12.5-ный серый
-    AddConst('OrdRep', 'xlPatternGray25', xlPatternGray25); // 25%-ный серый
-    AddConst('OrdRep', 'xlPatternGray50', xlPatternGray50); // 50%-ный серый
-    AddConst('OrdRep', 'xlPatternGray75', xlPatternGray75); // 75%-ный серый
-    AddConst('OrdRep', 'xlPatternGray8', xlPatternGray8); // 6.25-ный серый
-    AddConst('OrdRep', 'xlPatternGrid', xlPatternGrid); // Тонкая горизонтальная клетчатая
-    AddConst('OrdRep', 'xlPatternHorizontal', xlPatternHorizontal); // Горизонтальная штриховка
-    AddConst('OrdRep', 'xlPatternLightDown', xlPatternLightDown); // Тонкая диагональная штриховка вниз
-    AddConst('OrdRep', 'xlPatternLightHorizontal', xlPatternLightHorizontal); // Тонкая горизонтальная штриховка
-    AddConst('OrdRep', 'xlPatternLightUp', xlPatternLightUp); // Тонкая диагональная штриховка вверх
-    AddConst('OrdRep', 'xlPatternLightVertical', xlPatternLightVertical); // Тонкая вертикальная штриховка
-    AddConst('OrdRep', 'xlPatternNone', xlPatternNone); // Штриховка отсутствует
-    AddConst('OrdRep', 'xlPatternSemiGray75', xlPatternSemiGray75); // Толстая диагональная клетчатая
-    AddConst('OrdRep', 'xlPatternSolid', xlPatternSolid); // Сплошная штриховка
-    AddConst('OrdRep', 'xlPatternUp', xlPatternUp); // Диагональная штриховка вверх
-    AddConst('OrdRep', 'xlPatternVertical', xlPatternVertical); // Вертикальная штриховка
+    AddConst('OrdRep', 'xlPatternAutomatic', xlPatternAutomatic); // РђРІС‚РѕРјР°С‚РёС‡РµСЃРєР°СЏ С€С‚СЂРёС…РѕРІРєР°
+    AddConst('OrdRep', 'xlPatternChecker', xlPatternChecker); // Р”РёР°РіРѕРЅР°Р»СЊРЅР°СЏ РєР»РµС‚С‡Р°С‚Р°СЏ С€С‚СЂРёС…РѕРІРєР°
+    AddConst('OrdRep', 'xlPatternCrissCross', xlPatternCrissCross); // РўРѕРЅРєР°СЏ РґРёР°РіРѕРЅР°Р»СЊРЅР°СЏ РєР»РµС‚С‡Р°С‚Р°СЏ
+    AddConst('OrdRep', 'xlPatternDown', xlPatternDown); // Р”РёР°РіРѕРЅР°Р»СЊРЅР°СЏ С€С‚СЂРёС…РѕРІРєР° РІРЅРёР·
+    AddConst('OrdRep', 'xlPatternGray16', xlPatternGray16); // 12.5-РЅС‹Р№ СЃРµСЂС‹Р№
+    AddConst('OrdRep', 'xlPatternGray25', xlPatternGray25); // 25%-РЅС‹Р№ СЃРµСЂС‹Р№
+    AddConst('OrdRep', 'xlPatternGray50', xlPatternGray50); // 50%-РЅС‹Р№ СЃРµСЂС‹Р№
+    AddConst('OrdRep', 'xlPatternGray75', xlPatternGray75); // 75%-РЅС‹Р№ СЃРµСЂС‹Р№
+    AddConst('OrdRep', 'xlPatternGray8', xlPatternGray8); // 6.25-РЅС‹Р№ СЃРµСЂС‹Р№
+    AddConst('OrdRep', 'xlPatternGrid', xlPatternGrid); // РўРѕРЅРєР°СЏ РіРѕСЂРёР·РѕРЅС‚Р°Р»СЊРЅР°СЏ РєР»РµС‚С‡Р°С‚Р°СЏ
+    AddConst('OrdRep', 'xlPatternHorizontal', xlPatternHorizontal); // Р“РѕСЂРёР·РѕРЅС‚Р°Р»СЊРЅР°СЏ С€С‚СЂРёС…РѕРІРєР°
+    AddConst('OrdRep', 'xlPatternLightDown', xlPatternLightDown); // РўРѕРЅРєР°СЏ РґРёР°РіРѕРЅР°Р»СЊРЅР°СЏ С€С‚СЂРёС…РѕРІРєР° РІРЅРёР·
+    AddConst('OrdRep', 'xlPatternLightHorizontal', xlPatternLightHorizontal); // РўРѕРЅРєР°СЏ РіРѕСЂРёР·РѕРЅС‚Р°Р»СЊРЅР°СЏ С€С‚СЂРёС…РѕРІРєР°
+    AddConst('OrdRep', 'xlPatternLightUp', xlPatternLightUp); // РўРѕРЅРєР°СЏ РґРёР°РіРѕРЅР°Р»СЊРЅР°СЏ С€С‚СЂРёС…РѕРІРєР° РІРІРµСЂС…
+    AddConst('OrdRep', 'xlPatternLightVertical', xlPatternLightVertical); // РўРѕРЅРєР°СЏ РІРµСЂС‚РёРєР°Р»СЊРЅР°СЏ С€С‚СЂРёС…РѕРІРєР°
+    AddConst('OrdRep', 'xlPatternNone', xlPatternNone); // РЁС‚СЂРёС…РѕРІРєР° РѕС‚СЃСѓС‚СЃС‚РІСѓРµС‚
+    AddConst('OrdRep', 'xlPatternSemiGray75', xlPatternSemiGray75); // РўРѕР»СЃС‚Р°СЏ РґРёР°РіРѕРЅР°Р»СЊРЅР°СЏ РєР»РµС‚С‡Р°С‚Р°СЏ
+    AddConst('OrdRep', 'xlPatternSolid', xlPatternSolid); // РЎРїР»РѕС€РЅР°СЏ С€С‚СЂРёС…РѕРІРєР°
+    AddConst('OrdRep', 'xlPatternUp', xlPatternUp); // Р”РёР°РіРѕРЅР°Р»СЊРЅР°СЏ С€С‚СЂРёС…РѕРІРєР° РІРІРµСЂС…
+    AddConst('OrdRep', 'xlPatternVertical', xlPatternVertical); // Р’РµСЂС‚РёРєР°Р»СЊРЅР°СЏ С€С‚СЂРёС…РѕРІРєР°
 
-   // Ориентация надписи (может быть также целым числом от -90 до 90 градусов)
+   // РћСЂРёРµРЅС‚Р°С†РёСЏ РЅР°РґРїРёСЃРё (РјРѕР¶РµС‚ Р±С‹С‚СЊ С‚Р°РєР¶Рµ С†РµР»С‹Рј С‡РёСЃР»РѕРј РѕС‚ -90 РґРѕ 90 РіСЂР°РґСѓСЃРѕРІ)
    // (XlOrientation)
-    AddConst('OrdRep', 'xlDownward', xlDownward); // Надпись сверху вниз.
-    AddConst('OrdRep', 'xlHorizontal', xlHorizontal); // Обычная горизонтальная надпись
-    AddConst('OrdRep', 'xlUpward', xlUpward); // Надпись снизу вверх.
-    AddConst('OrdRep', 'xlVertical', xlVertical); // Вертикальная надпись. Буквы пишутся одна под другой и располагаются горизонтально.
+    AddConst('OrdRep', 'xlDownward', xlDownward); // РќР°РґРїРёСЃСЊ СЃРІРµСЂС…Сѓ РІРЅРёР·.
+    AddConst('OrdRep', 'xlHorizontal', xlHorizontal); // РћР±С‹С‡РЅР°СЏ РіРѕСЂРёР·РѕРЅС‚Р°Р»СЊРЅР°СЏ РЅР°РґРїРёСЃСЊ
+    AddConst('OrdRep', 'xlUpward', xlUpward); // РќР°РґРїРёСЃСЊ СЃРЅРёР·Сѓ РІРІРµСЂС….
+    AddConst('OrdRep', 'xlVertical', xlVertical); // Р’РµСЂС‚РёРєР°Р»СЊРЅР°СЏ РЅР°РґРїРёСЃСЊ. Р‘СѓРєРІС‹ РїРёС€СѓС‚СЃСЏ РѕРґРЅР° РїРѕРґ РґСЂСѓРіРѕР№ Рё СЂР°СЃРїРѕР»Р°РіР°СЋС‚СЃСЏ РіРѕСЂРёР·РѕРЅС‚Р°Р»СЊРЅРѕ.
 
-    AddConst('OrdRep', 'xlNoRestrictions', xlNoRestrictions); // Без всяких ограничений
-    AddConst('OrdRep', 'xlUnlockedCells', xlUnlockedCells); // Можно выделять только незаблокированные ячейки
-    AddConst('OrdRep', 'xlNoSelection', xlNoSelection); // Выделение ячеек на рабочем листе не разрешено
+    AddConst('OrdRep', 'xlNoRestrictions', xlNoRestrictions); // Р‘РµР· РІСЃСЏРєРёС… РѕРіСЂР°РЅРёС‡РµРЅРёР№
+    AddConst('OrdRep', 'xlUnlockedCells', xlUnlockedCells); // РњРѕР¶РЅРѕ РІС‹РґРµР»СЏС‚СЊ С‚РѕР»СЊРєРѕ РЅРµР·Р°Р±Р»РѕРєРёСЂРѕРІР°РЅРЅС‹Рµ СЏС‡РµР№РєРё
+    AddConst('OrdRep', 'xlNoSelection', xlNoSelection); // Р’С‹РґРµР»РµРЅРёРµ СЏС‡РµРµРє РЅР° СЂР°Р±РѕС‡РµРј Р»РёСЃС‚Рµ РЅРµ СЂР°Р·СЂРµС€РµРЅРѕ
 
-    // Ориентация страницы (XlPageOrientation)
-    AddConst('OrdRep', 'xlPortrait', xlPortrait);   // Книжная
-    AddConst('OrdRep', 'xlLandscape', xlLandscape);  // Альбомная
+    // РћСЂРёРµРЅС‚Р°С†РёСЏ СЃС‚СЂР°РЅРёС†С‹ (XlPageOrientation)
+    AddConst('OrdRep', 'xlPortrait', xlPortrait);   // РљРЅРёР¶РЅР°СЏ
+    AddConst('OrdRep', 'xlLandscape', xlLandscape);  // РђР»СЊР±РѕРјРЅР°СЏ
 
-   // Способ отображения примечаний (XlCommentDisplayMode)
-    AddConst('OrdRep', 'xlNoIndicator', xlNoIndicator);  // Не отображать
-    AddConst('OrdRep', 'xlCommentIndicatorOnly', xlCommentIndicatorOnly); // Только индикатор
-    AddConst('OrdRep', 'xlCommentAndIndicator', xlCommentAndIndicator); // Примечание и индикатор
+   // РЎРїРѕСЃРѕР± РѕС‚РѕР±СЂР°Р¶РµРЅРёСЏ РїСЂРёРјРµС‡Р°РЅРёР№ (XlCommentDisplayMode)
+    AddConst('OrdRep', 'xlNoIndicator', xlNoIndicator);  // РќРµ РѕС‚РѕР±СЂР°Р¶Р°С‚СЊ
+    AddConst('OrdRep', 'xlCommentIndicatorOnly', xlCommentIndicatorOnly); // РўРѕР»СЊРєРѕ РёРЅРґРёРєР°С‚РѕСЂ
+    AddConst('OrdRep', 'xlCommentAndIndicator', xlCommentAndIndicator); // РџСЂРёРјРµС‡Р°РЅРёРµ Рё РёРЅРґРёРєР°С‚РѕСЂ
 
     AddFunction('OrdRep', 'ShortDateFormat', RAI2_Read_ShortDateFormat, 0, [0], varEmpty);
     AddFunction('OrdRep', 'ShortDateFormat2', RAI2_Read_ShortDateFormat2, 0, [0], varEmpty);
@@ -2582,7 +2592,7 @@ begin
     AddIDSet(TVarArray, TVarArray_Write_Value, 2, [0]);
     AddGet(TVarArray, 'Free', TVarArray_Free, 0, [0], varEmpty);
 
-    // вообще-то это должно быть в jvInterpreter_ComCtrls, но ребята не добавили
+    // РІРѕРѕР±С‰Рµ-С‚Рѕ СЌС‚Рѕ РґРѕР»Р¶РЅРѕ Р±С‹С‚СЊ РІ jvInterpreter_ComCtrls, РЅРѕ СЂРµР±СЏС‚Р° РЅРµ РґРѕР±Р°РІРёР»Рё
     AddGet(TPageControl, 'ActivePage', TPageControl_Read_ActivePage, 0, [0], varEmpty);
     AddSet(TPageControl, 'ActivePage', TPageControl_Write_ActivePage, 0, [0]);
     AddGet(TPageControl, 'ActivePageIndex', TPageControl_Read_ActivePageIndex, 0, [0], varEmpty);
@@ -2592,8 +2602,10 @@ begin
     AddSet(TStringList, 'DelimitedText', TStringList_Write_DelimitedText, 0, [varEmpty]);
     AddGet(TStringList, 'Delimiter', TStringList_Read_Delimiter, 0, [varEmpty], varEmpty);
     AddSet(TStringList, 'Delimiter', TStringList_Write_Delimiter, 0, [varEmpty]);
+    AddGet(TStringList, 'StrictDelimiter', TStringList_Read_StrictDelimiter, 0, [varEmpty], varEmpty);
+    AddSet(TStringList, 'StrictDelimiter', TStringList_Write_StrictDelimiter, 0, [varEmpty]);
 
-    // устаревшие - оставлены заглушки которые бросают исключение
+    // СѓСЃС‚Р°СЂРµРІС€РёРµ - РѕСЃС‚Р°РІР»РµРЅС‹ Р·Р°РіР»СѓС€РєРё РєРѕС‚РѕСЂС‹Рµ Р±СЂРѕСЃР°СЋС‚ РёСЃРєР»СЋС‡РµРЅРёРµ
     AddFunction('OrdRep', 'CalcOrderDataSource', RAI2_CalcOrderDataSource, 0, [0], varEmpty);
     AddFunction('OrdRep', 'WorkOrderDataSource', RAI2_WorkOrderDataSource, 0, [0], varEmpty);
 
@@ -2840,9 +2852,9 @@ begin
     AddGet(TProcessEntity, 'JobID', TProcessEntity_JobID, 0, [0], varEmpty);
     AddGet(TProcessEntity, 'Part', TProcessEntity_Part, 0, [0], varEmpty);
     AddGet(TProcessEntity, 'ProcessID', TProcessEntity_ProcessID, 0, [0], varEmpty);
-    // количество листов
+    // РєРѕР»РёС‡РµСЃС‚РІРѕ Р»РёСЃС‚РѕРІ
     AddGet(TProcessEntity, 'Multiplier', TProcessEntity_Multiplier, 0, [0], varEmpty);
-    // количество сторон
+    // РєРѕР»РёС‡РµСЃС‚РІРѕ СЃС‚РѕСЂРѕРЅ
     AddGet(TProcessEntity, 'SideCount', TProcessEntity_SideCount, 0, [0], varEmpty);
     AddGet(TProcessEntity, 'EstimatedDuration', TProcessEntity_EstimatedDuration, 0, [0], varEmpty);
     AddGet(TProcessEntity, 'OrderID', TProcessEntity_OrderID, 0, [0], varEmpty);
@@ -2851,9 +2863,9 @@ begin
     AddClass('PmSchedule', TPlan, 'TScheduleQueue');
     AddFunction('PmSchedule', 'ScheduleQueue', JvInterpreter_ScheduleQueue, 0, [0], varEmpty);
     AddGet(TPlan, 'EquipCode', TScheduleQueue_EquipCode, 0, [0], varEmpty);
-    // Признак есть ли комментарий к работе (JobComment)
+    // РџСЂРёР·РЅР°Рє РµСЃС‚СЊ Р»Рё РєРѕРјРјРµРЅС‚Р°СЂРёР№ Рє СЂР°Р±РѕС‚Рµ (JobComment)
     AddGet(TPlan, 'HasComment', TScheduleQueue_HasComment, 0, [0], varEmpty);
-    // Признак есть ли технологические примечания к заказу
+    // РџСЂРёР·РЅР°Рє РµСЃС‚СЊ Р»Рё С‚РµС…РЅРѕР»РѕРіРёС‡РµСЃРєРёРµ РїСЂРёРјРµС‡Р°РЅРёСЏ Рє Р·Р°РєР°Р·Сѓ
     AddGet(TPlan, 'HasTechNotes', TScheduleQueue_HasTechNotes, 0, [0], varEmpty);
     AddGet(TPlan, 'JobComment', TScheduleQueue_JobComment, 0, [0], varEmpty);
 
@@ -2868,7 +2880,7 @@ initialization
   {ExcelReportLauncher := TBaseReportLauncher.Create;}
 
 finalization
-  ToggleScrollLockOff;   // Выключение режима ScrollLock
+  ToggleScrollLockOff;   // Р’С‹РєР»СЋС‡РµРЅРёРµ СЂРµР¶РёРјР° ScrollLock
   //FreeAndNil(ExcelReportLauncher);
-  FreeAndNil(Rpt);       // Освобождение экземпляра объекта
+  FreeAndNil(Rpt);       // РћСЃРІРѕР±РѕР¶РґРµРЅРёРµ СЌРєР·РµРјРїР»СЏСЂР° РѕР±СЉРµРєС‚Р°
 end.

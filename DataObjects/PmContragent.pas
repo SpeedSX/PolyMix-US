@@ -58,6 +58,7 @@ type
     function GetBriefNote: variant;
     function GetContragentTypeValue: integer;
     function GetActivityCodes: string;
+    function GetIsDead: boolean;
     procedure SetContragentType(id: integer);
     procedure SetName(_Name: string);
     procedure SetFullName(_FullName: string);
@@ -159,6 +160,7 @@ type
     // имя во внешней системе
     property ExternalName: string read GetExternalName;
     property ActivityCodes: string read GetActivityCodes write SetActivityCodes;
+    property IsDead: boolean read GetIsDead;
   end;
 
   TCustomers = class(TContragents)
@@ -722,6 +724,11 @@ begin
   Result := NvlInteger(DataSet[F_ContragentType]);
 end;
 
+function TContragents.GetIsDead: boolean;
+begin
+  Result := NvlBoolean(DataSet[F_IsDead]);
+end;
+
 procedure TContragents.SetContragentType(id: integer);
 var
   I: Integer;
@@ -940,7 +947,7 @@ begin
             Msg := 'Некорректные условия оплаты'
           else
           begin
-            Result := not EntSettings.RequireActivity or (NvlInteger(ActivityCode) <> 0);
+            Result := not EntSettings.RequireActivity or (NvlString(ActivityCodes) <> '');
             if not Result then
               Msg := 'Не указан вид деятельности контрагента'
             else
