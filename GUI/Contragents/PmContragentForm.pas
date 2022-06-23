@@ -345,8 +345,14 @@ begin
     begin
       cbIsDead.Enabled := NvlBoolean(dicPerm.ItemValue[permCode, 1]);
       tsRelated.TabVisible := NvlBoolean(dicPerm.ItemValue[permCode, 2]);
-    end else
+      tsAddress.TabVisible := NvlBoolean(dicPerm.ItemValue[permCode, 3]);
+    end
+    else
+    begin
       cbIsDead.Enabled := false;
+      tsRelated.TabVisible := false;
+      tsAddress.TabVisible := false;
+    end;
   end;
 end;
 

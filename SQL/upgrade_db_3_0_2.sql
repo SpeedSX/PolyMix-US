@@ -1230,6 +1230,8 @@ deallocate UserCursor
 
 
 go
+exec up_SetupUserRoles
+go
 
 update DBVersion set Version = 30002
 go
