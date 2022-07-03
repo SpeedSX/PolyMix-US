@@ -158,6 +158,7 @@ type
     procedure UpdateActivityFilter;
     procedure FillActivities;
     procedure SetActivities;
+    function HasDicPermission(PermIndex: integer): boolean;
   public
     property AllowUserChange: Boolean read FAllowUserChange write FAllowUserChange;
     property Contragents: TContragents read FContragents write SetContragents;
@@ -182,6 +183,11 @@ uses Variants, JvTypes, StdDic, PmAccessManager, RDialogs, Dialogs, RDBUtils,
   PmConfigManager, DicObj;
 
 {$R *.DFM}
+
+const
+  DicPermission_IsDead = 1;
+  DicPermission_Related = 2;
+  DicPermission_Addresses = 3;
 
 procedure TContragentForm.SetDataSource(ds: TDataSource);
 begin
@@ -266,8 +272,6 @@ var
   LockSync: boolean;
   StatusData: TDataSet;
   s: string;
-  dicPerm: TDictionary;
-  permCode: integer;
 begin
   if DataSource <> nil then
   begin
@@ -286,7 +290,9 @@ begin
       lbFullName.Caption := 'Дополнительная информация';
     //end;
     pcProps.ActivePage := tsCommon;
-    if FReadOnly then
+    if FReadOnly
+       and not HasDicPermission(DicPermission_Related)
+       and not HasDicPermission(DicPermission_Addresses) then
     begin
       btOk.Visible := false;
       btCancel.Caption := 'Закрыть';
@@ -299,20 +305,31 @@ begin
       LockSync := not VarIsNull(Contragents.KeyValue)
         and EntSettings.LockSyncData
         and (Contragents.SyncState = SyncState_Syncronized);
-      edFullName.ReadOnly := LockSync;
-      edOKPO.ReadOnly := LockSync;
-      edNDSCode.ReadOnly := LockSync;
-      edIndCode.ReadOnly := LockSync;
-      edBank.ReadOnly := LockSync;
-      edAddress.ReadOnly := LockSync;
-      edLegalAddress.ReadOnly := LockSync;
-      edExternalName.ReadOnly := LockSync;
+      edFullName.ReadOnly := LockSync or FReadOnly;
+      edOKPO.ReadOnly := LockSync or FReadOnly;
+      edNDSCode.ReadOnly := LockSync or FReadOnly;
+      edIndCode.ReadOnly := LockSync or FReadOnly;
+      edBank.ReadOnly := LockSync or FReadOnly;
+      edAddress.ReadOnly := LockSync or FReadOnly;
+      edLegalAddress.ReadOnly := LockSync or FReadOnly;
+      edExternalName.ReadOnly := LockSync or FReadOnly;
 
       btOk.Visible := true;
       btCancel.Caption := 'Отмена';
-      lkUser.ReadOnly := not AllowUserChange;
+      lkUser.ReadOnly := not AllowUserChange or FReadOnly;
       ActiveControl := edName;
     end;
+
+    edName.ReadOnly := FReadOnly;
+    cbPersonType.ReadOnly := FReadOnly;
+    cbStatus.ReadOnly := FReadOnly;
+    edPhone.ReadOnly := FReadOnly;
+    edPhone2.ReadOnly := FReadOnly;
+    cbMultiActivity.ReadOnly := FReadOnly;
+    edEmail.ReadOnly := FReadOnly;
+    lkSource.ReadOnly := FReadOnly;
+    edOther.ReadOnly := FReadOnly;
+    
     if EntSettings.AllContractors and (Contragents.ContragentType <> caCustomer) then
     begin
       // В режиме объединения вместо категории отображаем вид контрагента
@@ -339,21 +356,23 @@ begin
     cbPersonTypeChange(Sender);
     cbAlertChange(FContragents.DataSet.FieldByName(TContragents.F_Alert));
 
-    dicPerm := TConfigManager.Instance.StandardDics.deContragentAttrPerm;
-    permCode := dicPerm.ItemCode[AccessManager.CurUser.Login];
-    if permCode > 0 then
-    begin
-      cbIsDead.Enabled := NvlBoolean(dicPerm.ItemValue[permCode, 1]);
-      tsRelated.TabVisible := NvlBoolean(dicPerm.ItemValue[permCode, 2]);
-      tsAddress.TabVisible := NvlBoolean(dicPerm.ItemValue[permCode, 3]);
-    end
-    else
-    begin
-      cbIsDead.Enabled := false;
-      tsRelated.TabVisible := false;
-      tsAddress.TabVisible := false;
-    end;
+    cbIsDead.Enabled := HasDicPermission(DicPermission_IsDead);
+    tsRelated.TabVisible := HasDicPermission(DicPermission_Related);
+    tsAddress.TabVisible := HasDicPermission(DicPermission_Addresses);
   end;
+end;
+
+function TContragentForm.HasDicPermission(PermIndex: integer): boolean;
+var
+  dicPerm: TDictionary;
+  permCode: integer;
+begin
+  dicPerm := TConfigManager.Instance.StandardDics.deContragentAttrPerm;
+  permCode := dicPerm.ItemCode[AccessManager.CurUser.Login];
+  if permCode > 0 then
+    Result := NvlBoolean(dicPerm.ItemValue[permCode, PermIndex])
+  else
+    Result := false;
 end;
 
 procedure TContragentForm.UpdateActivityFilter;
