@@ -438,7 +438,7 @@ object ContragentForm: TContragentForm
         TitleFont.Height = -11
         TitleFont.Name = 'Tahoma'
         TitleFont.Style = []
-        OnDblClick = btEditClick
+        OnDblClick = btEditPersonClick
         Columns = <
           item
             EditButtons = <>
@@ -539,7 +539,7 @@ object ContragentForm: TContragentForm
           Height = 25
           Caption = #1048#1079#1084#1077#1085#1080#1090#1100'...'
           TabOrder = 1
-          OnClick = btEditClick
+          OnClick = btEditPersonClick
         end
       end
     end
@@ -987,7 +987,7 @@ object ContragentForm: TContragentForm
         TitleFont.Height = -11
         TitleFont.Name = 'Tahoma'
         TitleFont.Style = []
-        OnDblClick = btEditClick
+        OnDblClick = btEditAddressClick
         Columns = <
           item
             EditButtons = <>

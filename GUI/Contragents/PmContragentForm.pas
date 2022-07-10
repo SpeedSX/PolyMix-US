@@ -114,7 +114,7 @@ type
     procedure dgPersonsColumnsBirthdayUpdateData(Sender: TObject;
       var Text: String; var Value: Variant; var UseText, Handled: Boolean);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
-    procedure btEditClick(Sender: TObject);
+    procedure btEditPersonClick(Sender: TObject);
     procedure cbPersonTypeChange(Sender: TObject);
     procedure cbAlertChange(Field: TField);
     procedure btAddRelatedClick(Sender: TObject);
@@ -601,7 +601,7 @@ begin
   EditAddress;
 end;
 
-procedure TContragentForm.btEditClick(Sender: TObject);
+procedure TContragentForm.btEditPersonClick(Sender: TObject);
 begin
   EditPerson;
 end;
