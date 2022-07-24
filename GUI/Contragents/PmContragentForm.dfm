@@ -787,6 +787,140 @@ object ContragentForm: TContragentForm
       Caption = #1050#1086#1085#1090#1072#1082#1090#1099
       ImageIndex = 4
     end
+    object tsAnalystPersons: TTabSheet
+      BorderWidth = 2
+      Caption = #1040#1085#1072#1083#1080#1090#1080#1082
+      ImageIndex = 7
+      object Panel5: TPanel
+        Left = 0
+        Top = 341
+        Width = 626
+        Height = 35
+        Align = alBottom
+        BevelOuter = bvNone
+        Caption = ' '
+        TabOrder = 0
+        object btAddAnalystPerson: TBitBtn
+          Left = 8
+          Top = 6
+          Width = 86
+          Height = 25
+          Caption = #1044#1086#1073#1072#1074#1080#1090#1100
+          TabOrder = 0
+          OnClick = btAddAnalystPersonClick
+          Glyph.Data = {
+            F6000000424DF600000000000000760000002800000010000000100000000100
+            04000000000080000000120B0000120B00001000000000000000000000000000
+            80000080000000808000800000008000800080800000C0C0C000808080000000
+            FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00777777777777
+            7777777777777777777777777777777777777777777000777777777777700077
+            7777777777700077777777770000000007777777000000000777777700000000
+            0777777777700077777777777770007777777777777000777777777777777777
+            7777777777777777777777777777777777777777777777777777}
+        end
+        object btDeleteAnalystPerson: TBitBtn
+          Left = 192
+          Top = 6
+          Width = 86
+          Height = 25
+          Caption = #1059#1076#1072#1083#1080#1090#1100
+          TabOrder = 2
+          OnClick = btDeleteAnalystPersonClick
+          Glyph.Data = {
+            F6000000424DF600000000000000760000002800000010000000100000000100
+            04000000000080000000120B0000120B00001000000000000000000000000000
+            80000080000000808000800000008000800080800000C0C0C000808080000000
+            FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00777777777777
+            7777777777777777777777777777777777777777777777777777777777777777
+            7777777777777777777777700000000007777770000000000777777000000000
+            0777777777777777777777777777777777777777777777777777777777777777
+            7777777777777777777777777777777777777777777777777777}
+        end
+        object btEditAnalystPerson: TBitBtn
+          Left = 100
+          Top = 6
+          Width = 81
+          Height = 25
+          Caption = #1048#1079#1084#1077#1085#1080#1090#1100'...'
+          TabOrder = 1
+          OnClick = btEditAnalystPersonClick
+        end
+      end
+      object dgAnalystPersons: TMyDBGridEh
+        Left = 0
+        Top = 0
+        Width = 626
+        Height = 341
+        Align = alClient
+        AllowedOperations = []
+        DataGrouping.GroupLevels = <>
+        DataSource = dsAnalystPersons
+        Flat = True
+        FooterColor = clWindow
+        FooterFont.Charset = DEFAULT_CHARSET
+        FooterFont.Color = clWindowText
+        FooterFont.Height = -11
+        FooterFont.Name = 'Tahoma'
+        FooterFont.Style = []
+        Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgConfirmDelete, dgCancelOnExit]
+        RowDetailPanel.Color = clBtnFace
+        RowHeight = 18
+        TabOrder = 1
+        TitleFont.Charset = DEFAULT_CHARSET
+        TitleFont.Color = clWindowText
+        TitleFont.Height = -11
+        TitleFont.Name = 'Tahoma'
+        TitleFont.Style = []
+        OnDblClick = btEditAnalystPersonClick
+        Columns = <
+          item
+            EditButtons = <>
+            FieldName = 'Name'
+            Footers = <>
+            Title.Caption = #1048#1084#1103
+            Width = 163
+          end
+          item
+            EditButtons = <>
+            FieldName = 'PersonTypeName'
+            Footers = <>
+            Title.Caption = #1042#1080#1076' '#1082#1086#1085#1090#1072#1082#1090#1072
+            Width = 113
+          end
+          item
+            EditButtons = <>
+            FieldName = 'Phone'
+            Footers = <>
+            Title.Caption = #1058#1077#1083#1077#1092#1086#1085
+            Width = 102
+          end
+          item
+            EditButtons = <>
+            FieldName = 'PhoneCell'
+            Footers = <>
+            Title.Caption = #1052#1086#1073'. '#1090#1077#1083#1077#1092#1086#1085
+            Width = 100
+          end
+          item
+            EditButtons = <>
+            FieldName = 'Email'
+            Footers = <>
+            Title.Caption = 'E-mail'
+            Width = 95
+          end
+          item
+            AlwaysShowEditButton = True
+            EditButtons = <>
+            FieldName = 'Birthday'
+            Footers = <>
+            Title.Caption = #1044#1077#1085#1100' '#1088#1086#1078#1076#1077#1085#1080#1103
+            Width = 96
+            OnUpdateData = dgAnalystPersonsColumnsBirthdayUpdateData
+          end>
+        object RowDetailData: TRowDetailPanelControlEh
+        end
+      end
+    end
     object tsFinance: TTabSheet
       Caption = #1056#1077#1082#1074#1080#1079#1080#1090#1099
       ImageIndex = 1
@@ -1091,6 +1225,10 @@ object ContragentForm: TContragentForm
   end
   object dsActivity: TDataSource
     Left = 202
+    Top = 402
+  end
+  object dsAnalystPersons: TDataSource
+    Left = 240
     Top = 402
   end
 end

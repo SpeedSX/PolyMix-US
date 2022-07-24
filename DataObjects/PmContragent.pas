@@ -36,6 +36,7 @@ type
   end;
 
   TPersons = class;
+  TAnalystPersons = class;
   TRelated = class;
   TAddresses = class;
 
@@ -47,6 +48,7 @@ type
     function GetFirmBirthday: variant;
     function GetExternalName: string;
     function GetPersons: TPersons;
+    function GetAnalystPersons: TAnalystPersons;
     function GetRelated: TRelated;
     function GetAddresses: TAddresses;
     function GetPersonType: Integer;
@@ -72,6 +74,7 @@ type
     FRequireFirmType: boolean;
     FWorkSeparation: boolean;
     FPersons: TPersons;
+    FAnalystPersons: TAnalystPersons;
     FRelated: TRelated;
     FAddresses: TAddresses;
     FChangeDetector: TDataChangeDetect;
@@ -142,6 +145,7 @@ type
     property RequireInfoSource: boolean read FRequireInfoSource;
     property RequireFirmType: boolean read FRequireFirmType;
     property Persons: TPersons read GetPersons;
+    property AnalystPersons: TAnalystPersons read GetAnalystPersons;
     property Related: TRelated read GetRelated;
     property Addresses: TAddresses read GetAddresses;
     property PersonType: Integer read GetPersonType;
@@ -221,6 +225,11 @@ type
     function Validate(var Msg: string): boolean;
 
     property Birthday: variant read GetBirthday write SetBirthday;
+  end;
+
+  TAnalystPersons = class(TPersons)
+  protected
+    function GetSQL: string; override;
   end;
 
   TRelated = class(TContragentDetails)
@@ -339,6 +348,8 @@ begin
   DetailData[1] := FRelated;
   FAddresses := TAddresses.Create(Self);
   DetailData[2] := FAddresses;
+  FAnalystPersons := TAnalystPersons.Create(Self);
+  DetailData[3] := FAnalystPersons;
   // Контрагенты будут обновляться только если были изменения в таблице
   FChangeDetector := TADODataChangeDetect.Create(TChangeObjectID.Contragent);
 end;
@@ -354,6 +365,7 @@ end;
 destructor TContragents.Destroy;
 begin
   FreeAndNil(FPersons);
+  FreeAndNil(FAnalystPersons);
   FreeAndNil(FRelated);
   FreeAndNil(FAddresses);
   FreeAndNil(FChangeDetector);
@@ -1098,6 +1110,11 @@ begin
   Result := DetailData[2] as TAddresses;
 end;
 
+function TContragents.GetAnalystPersons: TAnalystPersons;
+begin
+  Result := DetailData[3] as TAnalystPersons;
+end;
+
 function TContragents.GetPersonType: Integer;
 begin
   Result := DataSet['PersonType'];
@@ -1309,6 +1326,7 @@ end;
 
 {$ENDREGION}
 
+
 {$REGION '--------------- TPersons ------------------' }
 
 constructor TPersons.Create(_ParentEntity: TContragents);
@@ -1469,6 +1487,18 @@ begin
     Msg := 'Пожалуйста, укажите имя вид контакта'
   else
     Result := true;
+end;
+
+{$ENDREGION}
+
+{$REGION '--------------- TAnalystPersons ------------------' }
+
+function TAnalystPersons.GetSQL: string;
+begin
+  Result := 'select PersonID, p.[Name], p.Email, p.Phone, p.PhoneCell, p.[PersonNote], p.Birthday, p.CustomerID, p.PersonType'#13#10
+             + ' from AnalystPersons p inner join Customer c on p.CustomerID = c.N'#13#10
+             + ' where ' + GetParentFilter('c') + ' and c.IsDeleted = 0'#13#10
+             + ' order by p.[Name]';
 end;
 
 {$ENDREGION}

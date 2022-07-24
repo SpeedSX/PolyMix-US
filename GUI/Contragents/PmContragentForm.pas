@@ -106,12 +106,21 @@ type
     cbIsDead: TDBCheckBox;
     cbMultiActivity: TJvCheckedComboBox;
     cbAlert: TDBCheckBox;
+    tsAnalystPersons: TTabSheet;
+    Panel5: TPanel;
+    btAddAnalystPerson: TBitBtn;
+    btDeleteAnalystPerson: TBitBtn;
+    btEditAnalystPerson: TBitBtn;
+    dgAnalystPersons: TMyDBGridEh;
+    dsAnalystPersons: TDataSource;
     procedure FormActivate(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure btSendMailClick(Sender: TObject);
     procedure btAddClick(Sender: TObject);
     procedure btDeleteClick(Sender: TObject);
     procedure dgPersonsColumnsBirthdayUpdateData(Sender: TObject;
+      var Text: String; var Value: Variant; var UseText, Handled: Boolean);
+    procedure dgAnalystPersonsColumnsBirthdayUpdateData(Sender: TObject;
       var Text: String; var Value: Variant; var UseText, Handled: Boolean);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure btEditPersonClick(Sender: TObject);
@@ -129,6 +138,9 @@ type
     procedure cbStatusCloseUp(Sender: TObject; Accept: Boolean);
     procedure cbMultiActivityChange(Sender: TObject);
     procedure btEditRelatedClick(Sender: TObject);
+    procedure btAddAnalystPersonClick(Sender: TObject);
+    procedure btEditAnalystPersonClick(Sender: TObject);
+    procedure btDeleteAnalystPersonClick(Sender: TObject);
   private
     FAllowUserChange: Boolean;
     FSetActivities: Boolean;
@@ -140,16 +152,20 @@ type
     FPersons: TPersons;
     FRelated: TRelated;
     FAddrs: TAddresses;
+    FAnalystPersons: TAnalystPersons;
     function CheckNullDate(d: variant): TDateTime;
     function EditPerson: boolean;
+    function EditAnalystPerson: boolean;
     function EditAddress: boolean;
     //function EditRelatedContragent: boolean;
     function AddPerson: boolean;
+    function AddAnalystPerson: boolean;
     function AddRelatedContragent: boolean;
     function EditRelatedContragent: boolean;
     procedure DeleteRelatedContragent;
     function AddAddress: boolean;
     procedure DeletePerson;
+    procedure DeleteAnalystPerson;
     procedure DeleteAddress;
     procedure SetContragents(const Value: TContragents);
     procedure SetDataSource(ds: TDataSource);
@@ -188,6 +204,7 @@ const
   DicPermission_IsDead = 1;
   DicPermission_Related = 2;
   DicPermission_Addresses = 3;
+  DicPermission_Analyst = 4;
 
 procedure TContragentForm.SetDataSource(ds: TDataSource);
 begin
@@ -292,7 +309,8 @@ begin
     pcProps.ActivePage := tsCommon;
     if FReadOnly
        and not HasDicPermission(DicPermission_Related)
-       and not HasDicPermission(DicPermission_Addresses) then
+       and not HasDicPermission(DicPermission_Addresses)
+       and not HasDicPermission(DicPermission_Analyst) then
     begin
       btOk.Visible := false;
       btCancel.Caption := 'Закрыть';
@@ -359,6 +377,7 @@ begin
     cbIsDead.Enabled := HasDicPermission(DicPermission_IsDead);
     tsRelated.TabVisible := HasDicPermission(DicPermission_Related);
     tsAddress.TabVisible := HasDicPermission(DicPermission_Addresses);
+    tsAnalystPersons.TabVisible := HasDicPermission(DicPermission_Analyst);
   end;
 end;
 
@@ -457,11 +476,15 @@ procedure TContragentForm.SetContragents(const Value: TContragents);
 begin
   FContragents := Value;
   FPersons := nil;
+  FAnalystPersons := nil;
   FAddrs := nil;
   if FContragents <> nil then
   begin
     FPersons := TPersons.Copy(FContragents.Persons);
     dsPersons.DataSet := FPersons.DataSet;
+
+    FAnalystPersons := TAnalystPersons.Copy(FContragents.AnalystPersons);
+    dsAnalystPersons.DataSet := FAnalystPersons.DataSet;
 
     if FContragents = Customers then
     begin
@@ -515,6 +538,11 @@ begin
   AddAddress;
 end;
 
+procedure TContragentForm.btAddAnalystPersonClick(Sender: TObject);
+begin
+  AddAnalystPerson;
+end;
+
 procedure TContragentForm.btAddClick(Sender: TObject);
 begin
   {FPersons.DataSet.Append;
@@ -530,6 +558,11 @@ end;
 procedure TContragentForm.btDeleteAddressClick(Sender: TObject);
 begin
   DeleteAddress;
+end;
+
+procedure TContragentForm.btDeleteAnalystPersonClick(Sender: TObject);
+begin
+  DeleteAnalystPerson;
 end;
 
 procedure TContragentForm.btDeleteClick(Sender: TObject);
@@ -552,6 +585,16 @@ begin
   Handled := true;
 end;
 
+// Пришлось сделать такой обработчик, иначе не получается одновременно вводить
+// дату вручную и выбирать из календаря.
+procedure TContragentForm.dgAnalystPersonsColumnsBirthdayUpdateData(Sender: TObject;
+  var Text: String; var Value: Variant; var UseText, Handled: Boolean);
+begin
+  FAnalystPersons.Birthday := Value;
+  FAnalystPersons.DataSet.Post;
+  Handled := true;
+end;
+
 procedure TContragentForm.FormClose(Sender: TObject;
   var Action: TCloseAction);
 begin
@@ -564,6 +607,7 @@ begin
   TConfigManager.Instance.StandardDics.deContragentActivity.DicItems.Filtered := false;
 
   FreeAndNil(FPersons);
+  FreeAndNil(FAnalystPersons);
   FreeAndNil(FAddrs);
   FreeAndNil(FRelated);
 end;
@@ -589,6 +633,7 @@ begin
       Contragents.DataSet.Post;
       // Применяем изменения в дочерних таблицах контрагента
       FContragents.Persons.MergeData(FPersons.DataSet as TClientDataSet);
+      FContragents.AnalystPersons.MergeData(FAnalystPersons.DataSet as TClientDataSet);
       if FRelated <> nil then
         FContragents.Related.MergeData(FRelated.DataSet as TClientDataSet);
       FContragents.Addresses.MergeData(FAddrs.DataSet as TClientDataSet);
@@ -599,6 +644,11 @@ end;
 procedure TContragentForm.btEditAddressClick(Sender: TObject);
 begin
   EditAddress;
+end;
+
+procedure TContragentForm.btEditAnalystPersonClick(Sender: TObject);
+begin
+  EditAnalystPerson;
 end;
 
 procedure TContragentForm.btEditPersonClick(Sender: TObject);
@@ -657,6 +707,55 @@ procedure TContragentForm.DeletePerson;
 begin
   if not FPersons.DataSet.IsEmpty then
     FPersons.DataSet.Delete;
+end;
+
+
+function TContragentForm.AddAnalystPerson: boolean;
+var
+  FAnalystPersonsCopy: TAnalystPersons;
+begin
+  FAnalystPersonsCopy := TAnalystPersons.Copy(FAnalystPersons);
+  try
+    FAnalystPersonsCopy.DataSet.Append;
+    if ExecPersonForm(FAnalystPersonsCopy) then
+    begin
+      FAnalystPersons.MergeData(FAnalystPersonsCopy.DataSet as TClientDataSet);
+      Result := true;
+    end
+    else
+      Result := false;
+  finally
+    FAnalystPersonsCopy.Free;
+  end;
+end;
+
+function TContragentForm.EditAnalystPerson: boolean;
+var
+  FAnalystPersonsCopy: TPersons;
+begin
+  if not FAnalystPersons.DataSet.IsEmpty then
+  begin
+    FAnalystPersonsCopy := TAnalystPersons.Copy(FAnalystPersons);
+    try
+      if ExecPersonForm(FAnalystPersonsCopy) then
+      begin
+        FAnalystPersons.MergeData(FAnalystPersonsCopy.DataSet as TClientDataSet);
+        Result := true;
+      end
+      else
+        Result := false;
+    finally
+      FAnalystPersonsCopy.Free;
+    end;
+  end
+  else
+    Result := false;
+end;
+
+procedure TContragentForm.DeleteAnalystPerson;
+begin
+  if not FAnalystPersons.DataSet.IsEmpty then
+    FAnalystPersons.DataSet.Delete;
 end;
 
 procedure TContragentForm.cbActivityClick(Sender: TObject);
