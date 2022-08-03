@@ -9,7 +9,8 @@ uses
   JvDBCombobox, DB, DBClient,
 
   AnyColor, PmProcess, PmProcessCfg, PmCustomReport, PmOrder,
-  BaseRpt, FIBVTreeCmps, VirtualTrees, DBVirtualStringTree, DBGridEhGrouping;
+  BaseRpt, FIBVTreeCmps, VirtualTrees, DBVirtualStringTree, DBGridEhGrouping,
+  DBCtrlsEh, DBLookupEh;
 
 type
   TCustomReportDetailsForm = class(TForm)
@@ -109,6 +110,9 @@ type
     colorBk: TAnyColorCombo;
     Label4: TLabel;
     DBCheckBox7: TDBCheckBox;
+    Label17: TLabel;
+    dsReportGroups: TDataSource;
+    cbReportGroup: TDBLookupComboboxEh;
     procedure btAddClick(Sender: TObject);
     procedure btRemoveClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
@@ -200,9 +204,9 @@ uses ExHandler, ServMod, RDBUtils, PmAppController, CalcUtils,
   PmConfigManager, PmOrderProcessItems, PmMaterials, PmInvoice, PmShipment;
 
 const
-  InvoiceItemsName = 'Счет-фактура';
-  OrderPaymentsName = 'Оплаты';
-  OrderShipmentName = 'Отгрузка';
+  InvoiceItemsName = 'РЎС‡РµС‚-С„Р°РєС‚СѓСЂР°';
+  OrderPaymentsName = 'РћРїР»Р°С‚С‹';
+  OrderShipmentName = 'РћС‚РіСЂСѓР·РєР°';
 
 function ExecCustomReportDetailsEditor(ReportData: TCustomReports; _CurOrder: TOrder): boolean;
 var
@@ -214,7 +218,7 @@ begin
   finally
     FreeAndNil(CustomReportDetailsForm);
   end;
-end;
+end;            
 
 constructor TCustomReportDetailsForm.Create(_ReportData: TCustomReports; _CurOrder: TOrder);
 begin
@@ -222,9 +226,10 @@ begin
   FReportData := _ReportData;
   FOrder := _CurOrder;
   FColData := TCustomReportColumns(_ReportData.Details);
-  // Настройка которая позволяет повторно добавлять поле
+  // РќР°СЃС‚СЂРѕР№РєР° РєРѕС‚РѕСЂР°СЏ РїРѕР·РІРѕР»СЏРµС‚ РїРѕРІС‚РѕСЂРЅРѕ РґРѕР±Р°РІР»СЏС‚СЊ РїРѕР»Рµ
   FShowAdded := true;
   FixColumnOrder;
+  dsReportGroups.DataSet := TConfigManager.Instance.StandardDics.deReportGroups.DicItems;
 end;
 
 procedure TCustomReportDetailsForm.AddColor(box: TAnyColorCombo; Name: string;
@@ -257,7 +262,7 @@ begin
   cdOrderFields['FieldName'] := FieldName;
   cdOrderFields['Caption'] := Caption;
   cdOrderFields['DisplayFormat'] := DisplayFormat;
-  // влияет на фильтр, поэтому последним полем добавляем
+  // РІР»РёСЏРµС‚ РЅР° С„РёР»СЊС‚СЂ, РїРѕСЌС‚РѕРјСѓ РїРѕСЃР»РµРґРЅРёРј РїРѕР»РµРј РґРѕР±Р°РІР»СЏРµРј
   cdOrderFields['IsAdded'] := LocateOrderFieldInReport(FieldName);
   Inc(OrderNum);
 end;
@@ -274,7 +279,7 @@ begin
   cdProcessFields['ParentID'] := ProcessID;
   cdProcessFields['DisplayFormat'] := DisplayFormat;
   //cdProcessFields.Post;
-  // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! НЕ ПОЛУЧИЛОСЬ! НАДО РАЗОБРАТЬСЯ
+  // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! РќР• РџРћР›РЈР§РР›РћРЎР¬! РќРђР”Рћ Р РђР—РћР‘Р РђРўР¬РЎРЇ
   //cdProcessFields.Edit;
   cdProcessFields['IsAdded'] := LocateProcessFieldInReport(ProcessID, FieldName);
   Inc(OrderNum);
@@ -293,7 +298,7 @@ begin
   Inc(OrderNum);
 end;
 
-// заполняет список полей заказа, которые могут включаться в отчет
+// Р·Р°РїРѕР»РЅСЏРµС‚ СЃРїРёСЃРѕРє РїРѕР»РµР№ Р·Р°РєР°Р·Р°, РєРѕС‚РѕСЂС‹Рµ РјРѕРіСѓС‚ РІРєР»СЋС‡Р°С‚СЊСЃСЏ РІ РѕС‚С‡РµС‚
 procedure TCustomReportDetailsForm.CreateOrderFields;
 var
   cdOrd: TDataSet;
@@ -304,58 +309,58 @@ begin
   try
     cdOrd := AppController.WorkOrder.DataSet;
     OrderNum := 1;
-    //AddOrderField('ID', 'Шифр');
-    AddOrderFieldFormat(TOrder.F_OrderNumber, 'Номер', CalcUtils.OrderNumDisplayFmt);
-    AddOrderField('Comment', 'Наименование');
-    AddOrderField('Comment2', 'Комментарий');
-    AddOrderField('Tirazz', 'Тираж');
-    AddOrderField('CustomerName', 'Заказчик');
-    //AddOrderField('CustomerFullName', 'Полное имя заказчика'); не добавлял, т.к. нету в наборе данных заказа и вообще надо ли?
-    AddOrderField('CustomerPhone', 'Телефон заказчика');
-    AddOrderField('CustomerFax', 'Факс заказчика');
-    AddOrderField('TotalGrn', 'Стоимость, грн.');
-    AddOrderFieldFormat('ClientTotalGrn', 'Конечная стоимость, грн.', GetDisplayFormat(cdOrd.FieldByName('TotalGrn')));
-    //AddOrderFieldFormat('TotalGrn', 'Стоимость без наценки, грн.', GetDisplayFormat(cdOrd.FieldByName('TotalGrn')));
-    AddOrderField('TotalCost', 'Стоимость без наценки в расчетных ед.');
-    AddOrderField('ClientTotal', 'Конечная стоимость в расчетных ед.');
-    AddOrderField('ProfitPercent', 'Общая наценка, %');
-    AddOrderField(TOrder.F_Course, 'Курс расчетной ед.');
-    AddOrderFieldFormat(TOrder.F_KindName, 'Вид заказа', '');
-    AddOrderField(TOrder.F_CreatorName, 'Создатель');
-    // TODO: Добавить дату-время одним полем
-    AddOrderField('CreationDate', 'Дата создания');
-    AddOrderField('CreationTime', 'Время создания');
-    AddOrderField('ModifyDate', 'Дата изменения');
-    AddOrderField('ModifyTime', 'Время изменения');
-    AddOrderField('CloseDate', 'Дата закрытия');
-    AddOrderField('CloseTime', 'Время закрытия');
-    AddOrderField(TOrder.F_OrderState, 'Состояние выполнения');
-    AddOrderField(TOrder.F_PayState, 'Состояние оплаты');
-    AddOrderFieldFormat('FinishDate', 'Плановая дата завершения', 'dd/mm/yyyy h:mm');
-    AddOrderFieldFormat('FactFinishDate', 'Фактическая дата завершения', 'dd/mm/yyyy h:mm');
-    AddOrderFieldFormat('StartDate', 'Дата начала работ', 'dd/mm/yyyy');
-    AddOrderField('CostOf1', 'Стоимость экз. в расчетных ед.');
-    AddOrderFieldFormat('CostOf1Grn', 'Стоимость экз., грн.', GetDisplayFormat(cdOrd.FieldByName('CostOf1')));
+    //AddOrderField('ID', 'РЁРёС„СЂ');
+    AddOrderFieldFormat(TOrder.F_OrderNumber, 'РќРѕРјРµСЂ', CalcUtils.OrderNumDisplayFmt);
+    AddOrderField('Comment', 'РќР°РёРјРµРЅРѕРІР°РЅРёРµ');
+    AddOrderField('Comment2', 'РљРѕРјРјРµРЅС‚Р°СЂРёР№');
+    AddOrderField('Tirazz', 'РўРёСЂР°Р¶');
+    AddOrderField('CustomerName', 'Р—Р°РєР°Р·С‡РёРє');
+    //AddOrderField('CustomerFullName', 'РџРѕР»РЅРѕРµ РёРјСЏ Р·Р°РєР°Р·С‡РёРєР°'); РЅРµ РґРѕР±Р°РІР»СЏР», С‚.Рє. РЅРµС‚Сѓ РІ РЅР°Р±РѕСЂРµ РґР°РЅРЅС‹С… Р·Р°РєР°Р·Р° Рё РІРѕРѕР±С‰Рµ РЅР°РґРѕ Р»Рё?
+    AddOrderField('CustomerPhone', 'РўРµР»РµС„РѕРЅ Р·Р°РєР°Р·С‡РёРєР°');
+    AddOrderField('CustomerFax', 'Р¤Р°РєСЃ Р·Р°РєР°Р·С‡РёРєР°');
+    AddOrderField('TotalGrn', 'РЎС‚РѕРёРјРѕСЃС‚СЊ, РіСЂРЅ.');
+    AddOrderFieldFormat('ClientTotalGrn', 'РљРѕРЅРµС‡РЅР°СЏ СЃС‚РѕРёРјРѕСЃС‚СЊ, РіСЂРЅ.', GetDisplayFormat(cdOrd.FieldByName('TotalGrn')));
+    //AddOrderFieldFormat('TotalGrn', 'РЎС‚РѕРёРјРѕСЃС‚СЊ Р±РµР· РЅР°С†РµРЅРєРё, РіСЂРЅ.', GetDisplayFormat(cdOrd.FieldByName('TotalGrn')));
+    AddOrderField('TotalCost', 'РЎС‚РѕРёРјРѕСЃС‚СЊ Р±РµР· РЅР°С†РµРЅРєРё РІ СЂР°СЃС‡РµС‚РЅС‹С… РµРґ.');
+    AddOrderField('ClientTotal', 'РљРѕРЅРµС‡РЅР°СЏ СЃС‚РѕРёРјРѕСЃС‚СЊ РІ СЂР°СЃС‡РµС‚РЅС‹С… РµРґ.');
+    AddOrderField('ProfitPercent', 'РћР±С‰Р°СЏ РЅР°С†РµРЅРєР°, %');
+    AddOrderField(TOrder.F_Course, 'РљСѓСЂСЃ СЂР°СЃС‡РµС‚РЅРѕР№ РµРґ.');
+    AddOrderFieldFormat(TOrder.F_KindName, 'Р’РёРґ Р·Р°РєР°Р·Р°', '');
+    AddOrderField(TOrder.F_CreatorName, 'РЎРѕР·РґР°С‚РµР»СЊ');
+    // TODO: Р”РѕР±Р°РІРёС‚СЊ РґР°С‚Сѓ-РІСЂРµРјСЏ РѕРґРЅРёРј РїРѕР»РµРј
+    AddOrderField('CreationDate', 'Р”Р°С‚Р° СЃРѕР·РґР°РЅРёСЏ');
+    AddOrderField('CreationTime', 'Р’СЂРµРјСЏ СЃРѕР·РґР°РЅРёСЏ');
+    AddOrderField('ModifyDate', 'Р”Р°С‚Р° РёР·РјРµРЅРµРЅРёСЏ');
+    AddOrderField('ModifyTime', 'Р’СЂРµРјСЏ РёР·РјРµРЅРµРЅРёСЏ');
+    AddOrderField('CloseDate', 'Р”Р°С‚Р° Р·Р°РєСЂС‹С‚РёСЏ');
+    AddOrderField('CloseTime', 'Р’СЂРµРјСЏ Р·Р°РєСЂС‹С‚РёСЏ');
+    AddOrderField(TOrder.F_OrderState, 'РЎРѕСЃС‚РѕСЏРЅРёРµ РІС‹РїРѕР»РЅРµРЅРёСЏ');
+    AddOrderField(TOrder.F_PayState, 'РЎРѕСЃС‚РѕСЏРЅРёРµ РѕРїР»Р°С‚С‹');
+    AddOrderFieldFormat('FinishDate', 'РџР»Р°РЅРѕРІР°СЏ РґР°С‚Р° Р·Р°РІРµСЂС€РµРЅРёСЏ', 'dd/mm/yyyy h:mm');
+    AddOrderFieldFormat('FactFinishDate', 'Р¤Р°РєС‚РёС‡РµСЃРєР°СЏ РґР°С‚Р° Р·Р°РІРµСЂС€РµРЅРёСЏ', 'dd/mm/yyyy h:mm');
+    AddOrderFieldFormat('StartDate', 'Р”Р°С‚Р° РЅР°С‡Р°Р»Р° СЂР°Р±РѕС‚', 'dd/mm/yyyy');
+    AddOrderField('CostOf1', 'РЎС‚РѕРёРјРѕСЃС‚СЊ СЌРєР·. РІ СЂР°СЃС‡РµС‚РЅС‹С… РµРґ.');
+    AddOrderFieldFormat('CostOf1Grn', 'РЎС‚РѕРёРјРѕСЃС‚СЊ СЌРєР·., РіСЂРЅ.', GetDisplayFormat(cdOrd.FieldByName('CostOf1')));
     DispFmt := GetDisplayFormat(cdOrd.FieldByName('TotalGrn'));
-    AddOrderFieldFormat(TWorkOrder.F_TotalPayCost, 'Сумма оплат по заказу, грн.', DispFmt);
-    AddOrderFieldFormat(TWorkOrder.F_DebtCost, 'Долг по заказу (без переплат), грн.', DispFmt);
-    AddOrderFieldFormat(TWorkOrder.F_AllDebtCost, 'Долг по заказу, грн.', DispFmt);
-    AddOrderFieldFormat(TWorkOrder.F_TotalInvoiceCost, 'Сумма выставленных счетов по заказу, грн.', DispFmt);
-    AddOrderFieldFormat(TOrder.F_TotalExpenseCost, 'Сумма затрат по заказу, грн.', DispFmt);
-    AddOrderFieldFormat(TOrder.F_TotalOrderProfitCost, 'Прибыль по заказу, грн.', DispFmt);
-    AddOrderField('ProductFormat', 'Формат продукции');
-    AddOrderField('ProductPages', 'Кол-во страниц');
-    AddOrderField('IncludeCover', 'Включая обложку');
-    AddOrderField('IsComposite', 'Составной заказ');
-    AddOrderField('CallCustomer', 'Вызвать заказчика');
-    AddOrderField('CallCustomerPhone', 'Тел. для вызова заказчика');
-    AddOrderField('HaveLayout', 'Есть макет');
-    AddOrderField('HavePattern', 'Есть образец');
-    AddOrderField('HaveProof', 'Есть цветопроба');
-    AddOrderField('SignProof', 'Нужна подпись пруфов');
-    AddOrderField('SignManager', 'Утвердить макет у менеджера');
-    AddOrderField(TWorkOrder.F_ExternalId, 'Внешний №');
-    //AddOrderField(F_TotalDebtCost, 'Сумма задолженности по заказу', GetDisplayFormat(cdOrd.FieldByName('TotalGrn')));
+    AddOrderFieldFormat(TWorkOrder.F_TotalPayCost, 'РЎСѓРјРјР° РѕРїР»Р°С‚ РїРѕ Р·Р°РєР°Р·Сѓ, РіСЂРЅ.', DispFmt);
+    AddOrderFieldFormat(TWorkOrder.F_DebtCost, 'Р”РѕР»Рі РїРѕ Р·Р°РєР°Р·Сѓ (Р±РµР· РїРµСЂРµРїР»Р°С‚), РіСЂРЅ.', DispFmt);
+    AddOrderFieldFormat(TWorkOrder.F_AllDebtCost, 'Р”РѕР»Рі РїРѕ Р·Р°РєР°Р·Сѓ, РіСЂРЅ.', DispFmt);
+    AddOrderFieldFormat(TWorkOrder.F_TotalInvoiceCost, 'РЎСѓРјРјР° РІС‹СЃС‚Р°РІР»РµРЅРЅС‹С… СЃС‡РµС‚РѕРІ РїРѕ Р·Р°РєР°Р·Сѓ, РіСЂРЅ.', DispFmt);
+    AddOrderFieldFormat(TOrder.F_TotalExpenseCost, 'РЎСѓРјРјР° Р·Р°С‚СЂР°С‚ РїРѕ Р·Р°РєР°Р·Сѓ, РіСЂРЅ.', DispFmt);
+    AddOrderFieldFormat(TOrder.F_TotalOrderProfitCost, 'РџСЂРёР±С‹Р»СЊ РїРѕ Р·Р°РєР°Р·Сѓ, РіСЂРЅ.', DispFmt);
+    AddOrderField('ProductFormat', 'Р¤РѕСЂРјР°С‚ РїСЂРѕРґСѓРєС†РёРё');
+    AddOrderField('ProductPages', 'РљРѕР»-РІРѕ СЃС‚СЂР°РЅРёС†');
+    AddOrderField('IncludeCover', 'Р’РєР»СЋС‡Р°СЏ РѕР±Р»РѕР¶РєСѓ');
+    AddOrderField('IsComposite', 'РЎРѕСЃС‚Р°РІРЅРѕР№ Р·Р°РєР°Р·');
+    AddOrderField('CallCustomer', 'Р’С‹Р·РІР°С‚СЊ Р·Р°РєР°Р·С‡РёРєР°');
+    AddOrderField('CallCustomerPhone', 'РўРµР». РґР»СЏ РІС‹Р·РѕРІР° Р·Р°РєР°Р·С‡РёРєР°');
+    AddOrderField('HaveLayout', 'Р•СЃС‚СЊ РјР°РєРµС‚');
+    AddOrderField('HavePattern', 'Р•СЃС‚СЊ РѕР±СЂР°Р·РµС†');
+    AddOrderField('HaveProof', 'Р•СЃС‚СЊ С†РІРµС‚РѕРїСЂРѕР±Р°');
+    AddOrderField('SignProof', 'РќСѓР¶РЅР° РїРѕРґРїРёСЃСЊ РїСЂСѓС„РѕРІ');
+    AddOrderField('SignManager', 'РЈС‚РІРµСЂРґРёС‚СЊ РјР°РєРµС‚ Сѓ РјРµРЅРµРґР¶РµСЂР°');
+    AddOrderField(TWorkOrder.F_ExternalId, 'Р’РЅРµС€РЅРёР№ в„–');
+    //AddOrderField(F_TotalDebtCost, 'РЎСѓРјРјР° Р·Р°РґРѕР»Р¶РµРЅРЅРѕСЃС‚Рё РїРѕ Р·Р°РєР°Р·Сѓ', GetDisplayFormat(cdOrd.FieldByName('TotalGrn')));
     EnableFilter(cdOrderFields);
     //cdOrderFields.First;
   finally
@@ -370,8 +375,8 @@ var
   i: Integer;
   DataPrc: TPolyProcess;
 begin
-  // TODO: вообще то неправильно что оно лезет прямо в поля процесса !!!!!!!!!!!
-  // но больше некуда. Надо сделать структуру данных, описывающую поля, в TPolyProcessCfg.
+  // TODO: РІРѕРѕР±С‰Рµ С‚Рѕ РЅРµРїСЂР°РІРёР»СЊРЅРѕ С‡С‚Рѕ РѕРЅРѕ Р»РµР·РµС‚ РїСЂСЏРјРѕ РІ РїРѕР»СЏ РїСЂРѕС†РµСЃСЃР° !!!!!!!!!!!
+  // РЅРѕ Р±РѕР»СЊС€Рµ РЅРµРєСѓРґР°. РќР°РґРѕ СЃРґРµР»Р°С‚СЊ СЃС‚СЂСѓРєС‚СѓСЂСѓ РґР°РЅРЅС‹С…, РѕРїРёСЃС‹РІР°СЋС‰СѓСЋ РїРѕР»СЏ, РІ TPolyProcessCfg.
   DataPrc := FOrder.Processes.ServiceByID(Prc.SrvID, false);
   Fields := DataPrc.DataSet.Fields;
   for I := 0 to Fields.Count - 1 do
@@ -421,28 +426,28 @@ begin
 
   if (Prc.TableName <> ClientPriceTableName) and (Prc.TableName <> ShipmentTableName) then
   begin
-    // поля, которых нет в таблице процесса
-    AddProcessField(Prc.SrvID, TOrderProcessItems.F_ItemDesc, 'Описание', '');
-    AddProcessField(Prc.SrvID, TOrderProcessItems.F_EquipName, 'Оборудование', '');
-    AddProcessField(Prc.SrvID, F_PartName, 'Часть', '');
-    AddProcessField(Prc.SrvID, TOrderProcessItems.F_Cost, 'Расчетная стоимость для заказчика', CalcUtils.NumDisplayFmt);
-    AddProcessField(Prc.SrvID, TOrderProcessItems.F_MatCost, 'Расчетная стоимость материалов, грн.', CalcUtils.NumDisplayFmt);
-    AddProcessField(Prc.SrvID, TOrderProcessItems.F_EnabledWorkCost, 'Расчетная стоимость работы', CalcUtils.NumDisplayFmt);
-    AddProcessField(Prc.SrvID, TOrderProcessItems.F_ContractorCost, 'Расчетная стоимость субподряда', CalcUtils.NumDisplayFmt);
-    AddProcessField(Prc.SrvID, TOrderProcessItems.F_FactContractorCost, 'Фактическая стоимость субподряда', CalcUtils.NumDisplayFmt);
-    AddProcessField(Prc.SrvID, F_ContractorName, 'Субподрядчик', '');
-    AddProcessField(Prc.SrvID, TOrderProcessItems.F_OwnCost, 'Расчетная стоимость своего процесса', CalcUtils.NumDisplayFmt);
-    AddProcessField(Prc.SrvID, TOrderProcessItems.F_ItemProfit, 'Прибыль, грн.', CalcUtils.NumDisplayFmt);
-    AddProcessField(Prc.SrvID, TOrderProcessItems.F_EstimatedDuration, 'Расчетное время, мин', '');
-    AddProcessField(Prc.SrvID, TOrderProcessItems.F_PlanDuration, 'Плановое время, мин', '');
-    AddProcessField(Prc.SrvID, TOrderProcessItems.F_FactDuration, 'Фактическое время, мин', '');
-    AddProcessField(Prc.SrvID, TOrderProcessItems.F_FactProductOut, 'Фактическое количество на выходе', '');
-    // материалы
-    AddProcessField(Prc.SrvID, TMaterials.F_SupplierName, 'Поставщик', '');
-    AddProcessField(Prc.SrvID, TMaterials.F_FactMatAmount, 'Фактическое кол-во материала', '');
-    AddProcessField(Prc.SrvID, TMaterials.F_FactMatCost, 'Фактическая стоимость материала, грн.', '');
-    AddProcessField(Prc.SrvID, TMaterials.F_PlanReceiveDate, 'Плановая дата поставки материала', '');
-    AddProcessField(Prc.SrvID, TMaterials.F_FactReceiveDate, 'Фактическая дата поставки материала', '');
+    // РїРѕР»СЏ, РєРѕС‚РѕСЂС‹С… РЅРµС‚ РІ С‚Р°Р±Р»РёС†Рµ РїСЂРѕС†РµСЃСЃР°
+    AddProcessField(Prc.SrvID, TOrderProcessItems.F_ItemDesc, 'РћРїРёСЃР°РЅРёРµ', '');
+    AddProcessField(Prc.SrvID, TOrderProcessItems.F_EquipName, 'РћР±РѕСЂСѓРґРѕРІР°РЅРёРµ', '');
+    AddProcessField(Prc.SrvID, F_PartName, 'Р§Р°СЃС‚СЊ', '');
+    AddProcessField(Prc.SrvID, TOrderProcessItems.F_Cost, 'Р Р°СЃС‡РµС‚РЅР°СЏ СЃС‚РѕРёРјРѕСЃС‚СЊ РґР»СЏ Р·Р°РєР°Р·С‡РёРєР°', CalcUtils.NumDisplayFmt);
+    AddProcessField(Prc.SrvID, TOrderProcessItems.F_MatCost, 'Р Р°СЃС‡РµС‚РЅР°СЏ СЃС‚РѕРёРјРѕСЃС‚СЊ РјР°С‚РµСЂРёР°Р»РѕРІ, РіСЂРЅ.', CalcUtils.NumDisplayFmt);
+    AddProcessField(Prc.SrvID, TOrderProcessItems.F_EnabledWorkCost, 'Р Р°СЃС‡РµС‚РЅР°СЏ СЃС‚РѕРёРјРѕСЃС‚СЊ СЂР°Р±РѕС‚С‹', CalcUtils.NumDisplayFmt);
+    AddProcessField(Prc.SrvID, TOrderProcessItems.F_ContractorCost, 'Р Р°СЃС‡РµС‚РЅР°СЏ СЃС‚РѕРёРјРѕСЃС‚СЊ СЃСѓР±РїРѕРґСЂСЏРґР°', CalcUtils.NumDisplayFmt);
+    AddProcessField(Prc.SrvID, TOrderProcessItems.F_FactContractorCost, 'Р¤Р°РєС‚РёС‡РµСЃРєР°СЏ СЃС‚РѕРёРјРѕСЃС‚СЊ СЃСѓР±РїРѕРґСЂСЏРґР°', CalcUtils.NumDisplayFmt);
+    AddProcessField(Prc.SrvID, F_ContractorName, 'РЎСѓР±РїРѕРґСЂСЏРґС‡РёРє', '');
+    AddProcessField(Prc.SrvID, TOrderProcessItems.F_OwnCost, 'Р Р°СЃС‡РµС‚РЅР°СЏ СЃС‚РѕРёРјРѕСЃС‚СЊ СЃРІРѕРµРіРѕ РїСЂРѕС†РµСЃСЃР°', CalcUtils.NumDisplayFmt);
+    AddProcessField(Prc.SrvID, TOrderProcessItems.F_ItemProfit, 'РџСЂРёР±С‹Р»СЊ, РіСЂРЅ.', CalcUtils.NumDisplayFmt);
+    AddProcessField(Prc.SrvID, TOrderProcessItems.F_EstimatedDuration, 'Р Р°СЃС‡РµС‚РЅРѕРµ РІСЂРµРјСЏ, РјРёРЅ', '');
+    AddProcessField(Prc.SrvID, TOrderProcessItems.F_PlanDuration, 'РџР»Р°РЅРѕРІРѕРµ РІСЂРµРјСЏ, РјРёРЅ', '');
+    AddProcessField(Prc.SrvID, TOrderProcessItems.F_FactDuration, 'Р¤Р°РєС‚РёС‡РµСЃРєРѕРµ РІСЂРµРјСЏ, РјРёРЅ', '');
+    AddProcessField(Prc.SrvID, TOrderProcessItems.F_FactProductOut, 'Р¤Р°РєС‚РёС‡РµСЃРєРѕРµ РєРѕР»РёС‡РµСЃС‚РІРѕ РЅР° РІС‹С…РѕРґРµ', '');
+    // РјР°С‚РµСЂРёР°Р»С‹
+    AddProcessField(Prc.SrvID, TMaterials.F_SupplierName, 'РџРѕСЃС‚Р°РІС‰РёРє', '');
+    AddProcessField(Prc.SrvID, TMaterials.F_FactMatAmount, 'Р¤Р°РєС‚РёС‡РµСЃРєРѕРµ РєРѕР»-РІРѕ РјР°С‚РµСЂРёР°Р»Р°', '');
+    AddProcessField(Prc.SrvID, TMaterials.F_FactMatCost, 'Р¤Р°РєС‚РёС‡РµСЃРєР°СЏ СЃС‚РѕРёРјРѕСЃС‚СЊ РјР°С‚РµСЂРёР°Р»Р°, РіСЂРЅ.', '');
+    AddProcessField(Prc.SrvID, TMaterials.F_PlanReceiveDate, 'РџР»Р°РЅРѕРІР°СЏ РґР°С‚Р° РїРѕСЃС‚Р°РІРєРё РјР°С‚РµСЂРёР°Р»Р°', '');
+    AddProcessField(Prc.SrvID, TMaterials.F_FactReceiveDate, 'Р¤Р°РєС‚РёС‡РµСЃРєР°СЏ РґР°С‚Р° РїРѕСЃС‚Р°РІРєРё РјР°С‚РµСЂРёР°Р»Р°', '');
   end;
 
   Result := true;
@@ -451,13 +456,13 @@ end;
 function TCustomReportDetailsForm.TotalFields(Prc: TPolyProcessCfg): boolean;
 begin
   AddProcessName(Prc.SrvID, Prc.ServiceName);
-  AddProcessField(Prc.SrvID, TOrderProcessItems.F_Cost, 'Расчетная стоимость для заказчика', CalcUtils.NumDisplayFmt);
-  AddProcessField(Prc.SrvID, TOrderProcessItems.F_EnabledWorkCost, 'Расчетная стоимость работы', CalcUtils.NumDisplayFmt);
-  AddProcessField(Prc.SrvID, TOrderProcessItems.F_MatCost, 'Расчетная стоимость материалов, грн.', CalcUtils.NumDisplayFmt);
-  AddProcessField(Prc.SrvID, TOrderProcessItems.F_ContractorCost, 'Расчетная стоимость субподряда', CalcUtils.NumDisplayFmt);
-  AddProcessField(Prc.SrvID, TOrderProcessItems.F_FactContractorCost, 'Фактическая стоимость субподряда, грн.', CalcUtils.NumDisplayFmt);
-  AddProcessField(Prc.SrvID, TOrderProcessItems.F_OwnCost, 'Расчетная стоимость своего процесса', CalcUtils.NumDisplayFmt);
-  AddProcessField(Prc.SrvID, TOrderProcessItems.F_ItemProfit, 'Прибыль, грн.', CalcUtils.NumDisplayFmt);
+  AddProcessField(Prc.SrvID, TOrderProcessItems.F_Cost, 'Р Р°СЃС‡РµС‚РЅР°СЏ СЃС‚РѕРёРјРѕСЃС‚СЊ РґР»СЏ Р·Р°РєР°Р·С‡РёРєР°', CalcUtils.NumDisplayFmt);
+  AddProcessField(Prc.SrvID, TOrderProcessItems.F_EnabledWorkCost, 'Р Р°СЃС‡РµС‚РЅР°СЏ СЃС‚РѕРёРјРѕСЃС‚СЊ СЂР°Р±РѕС‚С‹', CalcUtils.NumDisplayFmt);
+  AddProcessField(Prc.SrvID, TOrderProcessItems.F_MatCost, 'Р Р°СЃС‡РµС‚РЅР°СЏ СЃС‚РѕРёРјРѕСЃС‚СЊ РјР°С‚РµСЂРёР°Р»РѕРІ, РіСЂРЅ.', CalcUtils.NumDisplayFmt);
+  AddProcessField(Prc.SrvID, TOrderProcessItems.F_ContractorCost, 'Р Р°СЃС‡РµС‚РЅР°СЏ СЃС‚РѕРёРјРѕСЃС‚СЊ СЃСѓР±РїРѕРґСЂСЏРґР°', CalcUtils.NumDisplayFmt);
+  AddProcessField(Prc.SrvID, TOrderProcessItems.F_FactContractorCost, 'Р¤Р°РєС‚РёС‡РµСЃРєР°СЏ СЃС‚РѕРёРјРѕСЃС‚СЊ СЃСѓР±РїРѕРґСЂСЏРґР°, РіСЂРЅ.', CalcUtils.NumDisplayFmt);
+  AddProcessField(Prc.SrvID, TOrderProcessItems.F_OwnCost, 'Р Р°СЃС‡РµС‚РЅР°СЏ СЃС‚РѕРёРјРѕСЃС‚СЊ СЃРІРѕРµРіРѕ РїСЂРѕС†РµСЃСЃР°', CalcUtils.NumDisplayFmt);
+  AddProcessField(Prc.SrvID, TOrderProcessItems.F_ItemProfit, 'РџСЂРёР±С‹Р»СЊ, РіСЂРЅ.', CalcUtils.NumDisplayFmt);
   Result := true;
 end;
 
@@ -470,31 +475,31 @@ end;
 function TCustomReportDetailsForm.GetInvoiceItemsFieldCaption(const FieldName: string): string;
 begin
   if FieldName = TInvoices.F_InvoiceNum then
-    Result := 'Номер счета'
+    Result := 'РќРѕРјРµСЂ СЃС‡РµС‚Р°'
   else if FieldName = TInvoices.F_InvoiceDate then
-    Result := 'Дата счета'
+    Result := 'Р”Р°С‚Р° СЃС‡РµС‚Р°'
   else if FieldName = TOrderInvoiceItems.F_ContragentName then
-    Result := 'Заказчик'
+    Result := 'Р—Р°РєР°Р·С‡РёРє'
   else if FieldName = TOrderInvoiceItems.F_ContragentFullName then
-    Result := 'Полное наименование заказчика'
+    Result := 'РџРѕР»РЅРѕРµ РЅР°РёРјРµРЅРѕРІР°РЅРёРµ Р·Р°РєР°Р·С‡РёРєР°'
   else if FieldName = TOrderInvoiceItems.F_PayTypeName then
-    Result := 'Вид оплаты'
+    Result := 'Р’РёРґ РѕРїР»Р°С‚С‹'
   else if FieldName = TInvoiceItems.F_ItemText then
-    Result := 'Номенклатура'
+    Result := 'РќРѕРјРµРЅРєР»Р°С‚СѓСЂР°'
   else if FieldName = TInvoiceItems.F_Price then
-    Result := 'Цена'
+    Result := 'Р¦РµРЅР°'
   else if FieldName = TInvoiceItems.F_Quantity then
-    Result := 'Количество'
+    Result := 'РљРѕР»РёС‡РµСЃС‚РІРѕ'
   else if FieldName = TInvoiceItems.F_ItemCost then
-    Result := 'Стоимость'
+    Result := 'РЎС‚РѕРёРјРѕСЃС‚СЊ'
   else if FieldName = TInvoiceItems.F_PayCost then
-    Result := 'Сумма оплат по заказу'
+    Result := 'РЎСѓРјРјР° РѕРїР»Р°С‚ РїРѕ Р·Р°РєР°Р·Сѓ'
   else if FieldName = TInvoiceItems.F_InvoicePayCost then
-    Result := 'Сумма оплат по счету'
+    Result := 'РЎСѓРјРјР° РѕРїР»Р°С‚ РїРѕ СЃС‡РµС‚Сѓ'
   else if FieldName = TInvoiceItems.F_ItemDebt then
-    Result := 'Сумма долга'
+    Result := 'РЎСѓРјРјР° РґРѕР»РіР°'
   else
-    ExceptionHandler.Raise_(Exception.Create('Не могу определить описание для поля счета ' + FieldName));
+    ExceptionHandler.Raise_(Exception.Create('РќРµ РјРѕРіСѓ РѕРїСЂРµРґРµР»РёС‚СЊ РѕРїРёСЃР°РЅРёРµ РґР»СЏ РїРѕР»СЏ СЃС‡РµС‚Р° ' + FieldName));
 end;
 
 procedure TCustomReportDetailsForm.AddInvoiceItemsFields;
@@ -517,19 +522,19 @@ end;
 function TCustomReportDetailsForm.GetOrderPaymentsFieldCaption(const FieldName: string): string;
 begin
   if FieldName = TOrderPayments.F_InvoiceNum then
-    Result := 'Номер счета'
+    Result := 'РќРѕРјРµСЂ СЃС‡РµС‚Р°'
   else if FieldName = TOrderPayments.F_PayDate then
-    Result := 'Дата оплаты'
+    Result := 'Р”Р°С‚Р° РѕРїР»Р°С‚С‹'
   else if FieldName = TOrderPayments.F_ContragentName then
-    Result := 'Заказчик'
+    Result := 'Р—Р°РєР°Р·С‡РёРє'
   else if FieldName = TOrderPayments.F_PayTypeName then
-    Result := 'Вид оплаты'
+    Result := 'Р’РёРґ РѕРїР»Р°С‚С‹'
   else if FieldName = TOrderPayments.F_PayCost then
-    Result := 'Сумма, грн.'
+    Result := 'РЎСѓРјРјР°, РіСЂРЅ.'
   else if FieldName = TOrderPayments.F_GetterName then
-    Result := 'Принял'
+    Result := 'РџСЂРёРЅСЏР»'
   else
-    ExceptionHandler.Raise_(Exception.Create('Не могу определить описание для поля оплат ' + FieldName));
+    ExceptionHandler.Raise_(Exception.Create('РќРµ РјРѕРіСѓ РѕРїСЂРµРґРµР»РёС‚СЊ РѕРїРёСЃР°РЅРёРµ РґР»СЏ РїРѕР»СЏ РѕРїР»Р°С‚ ' + FieldName));
 end;
 
 procedure TCustomReportDetailsForm.AddOrderPaymentsField(const FieldName, DisplayFormat: string);
@@ -569,22 +574,22 @@ end;
 function TCustomReportDetailsForm.GetOrderShipmentFieldCaption(const FieldName: string): string;
 begin
   if FieldName = TShipment.F_NumberToShip then
-    Result := 'Отгружено'
+    Result := 'РћС‚РіСЂСѓР¶РµРЅРѕ'
   else if FieldName = TShipment.F_ShipmentDate then
-    Result := 'Дата отгрузки'
+    Result := 'Р”Р°С‚Р° РѕС‚РіСЂСѓР·РєРё'
   else if FieldName = TShipment.F_ShipmentDocNum then
-    Result := 'Номер документа'
+    Result := 'РќРѕРјРµСЂ РґРѕРєСѓРјРµРЅС‚Р°'
   else if FieldName = TShipment.F_WhoIn then
-    Result := 'Принял'
+    Result := 'РџСЂРёРЅСЏР»'
   else if FieldName = TShipment.F_WhoOut then
-    Result := 'Выдал'
+    Result := 'Р’С‹РґР°Р»'
   else if FieldName = TShipment.F_Comment then
-    Result := 'Примечание'
+    Result := 'РџСЂРёРјРµС‡Р°РЅРёРµ'
   else
-    ExceptionHandler.Raise_(Exception.Create('Не могу определить описание для поля отгрузки ' + FieldName));
+    ExceptionHandler.Raise_(Exception.Create('РќРµ РјРѕРіСѓ РѕРїСЂРµРґРµР»РёС‚СЊ РѕРїРёСЃР°РЅРёРµ РґР»СЏ РїРѕР»СЏ РѕС‚РіСЂСѓР·РєРё ' + FieldName));
 end;
 
-// заполняет список полей процессов, которые могут включаться в отчет
+// Р·Р°РїРѕР»РЅСЏРµС‚ СЃРїРёСЃРѕРє РїРѕР»РµР№ РїСЂРѕС†РµСЃСЃРѕРІ, РєРѕС‚РѕСЂС‹Рµ РјРѕРіСѓС‚ РІРєР»СЋС‡Р°С‚СЊСЃСЏ РІ РѕС‚С‡РµС‚
 procedure TCustomReportDetailsForm.CreateProcessFields(AllFields: boolean);
 var
   I: Integer;
@@ -595,7 +600,7 @@ begin
   DisableFilter(cdProcessFields);
   try
     OrderNum := 1;
-    // Если включена детализация, то добавляем все поля, иначе только итоговые
+    // Р•СЃР»Рё РІРєР»СЋС‡РµРЅР° РґРµС‚Р°Р»РёР·Р°С†РёСЏ, С‚Рѕ РґРѕР±Р°РІР»СЏРµРј РІСЃРµ РїРѕР»СЏ, РёРЅР°С‡Рµ С‚РѕР»СЊРєРѕ РёС‚РѕРіРѕРІС‹Рµ
     if cbProcessDetails.Checked then
     begin
       TConfigManager.Instance.ForEachProcess(GridFields, @AllFields);
@@ -678,7 +683,7 @@ begin
       FColData.DataSet['CaptionFontColor'] := xlColorIndexAutomatic;
       FColData.DataSet['CaptionBkColor'] := xlColorIndexAutomatic;
       FColData.DataSet['CaptionAlignment'] := xlHAlignGeneral;
-      FColData.DataSet.Post; // иначе не выйдет из режима вставки и номер записи будет неизвестен
+      FColData.DataSet.Post; // РёРЅР°С‡Рµ РЅРµ РІС‹Р№РґРµС‚ РёР· СЂРµР¶РёРјР° РІСЃС‚Р°РІРєРё Рё РЅРѕРјРµСЂ Р·Р°РїРёСЃРё Р±СѓРґРµС‚ РЅРµРёР·РІРµСЃС‚РµРЅ
     end;
     FixColumnOrder;
   finally
@@ -690,11 +695,11 @@ end;
 procedure TCustomReportDetailsForm.FillAlignList(box: TJvDBComboBox);
 begin
   box.Items.Clear;
-  box.Items.Add('По значению');
-  box.Items.Add('Влево');
-  box.Items.Add('Вправо');
-  box.Items.Add('По центру');
-  box.Items.Add('Подбор ширины столбца');
+  box.Items.Add('РџРѕ Р·РЅР°С‡РµРЅРёСЋ');
+  box.Items.Add('Р’Р»РµРІРѕ');
+  box.Items.Add('Р’РїСЂР°РІРѕ');
+  box.Items.Add('РџРѕ С†РµРЅС‚СЂСѓ');
+  box.Items.Add('РџРѕРґР±РѕСЂ С€РёСЂРёРЅС‹ СЃС‚РѕР»Р±С†Р°');
   box.Values.Clear;
   box.Values.Add(IntToStr(xlHAlignGeneral));
   box.Values.Add(IntToStr(xlHAlignLeft));
@@ -706,20 +711,20 @@ end;
 procedure TCustomReportDetailsForm.FillColorList(box: TAnyColorCombo);
 begin
   box.Items.Clear;
-  AddColor(box, 'Авто', xlColorIndexAutomatic, RGB(255, 255, 255));
-  AddColor(box, 'Отсутствует', xlColorIndexNone, RGB(255, 255, 255));
-  AddColor(box, 'Черный', xlColor1, RGB(0, 0, 0));
-  AddColor(box, 'Коричневый', xlColor53, RGB(153, 51, 0));
-  AddColor(box, 'Оливковый', xlColor52, RGB(51, 51, 0));
-  AddColor(box, 'Темно-зеленый', xlColor51, RGB(0, 51, 0));
-  AddColor(box, 'Темно-сизый', xlColor49, RGB(0, 51, 102));
-  AddColor(box, 'Темно-синий', xlColor11, RGB(0, 0, 128));
-  AddColor(box, 'Индиго', xlColor55, RGB(51, 51, 153));
-  AddColor(box, 'Серый 80%', xlColor56, RGB(51, 51, 51));
-  AddColor(box, 'Темно-красный', xlColor9, RGB(128, 0, 0));
-  AddColor(box, 'Оранжевый', xlColor46, RGB(255, 102, 0));
-  AddColor(box, 'Коричнево-зеленый', xlColor52, RGB(128, 128, 0));
-  // TODO: Остальные цвета!!!!!!!!!!!!!!!!!!!
+  AddColor(box, 'РђРІС‚Рѕ', xlColorIndexAutomatic, RGB(255, 255, 255));
+  AddColor(box, 'РћС‚СЃСѓС‚СЃС‚РІСѓРµС‚', xlColorIndexNone, RGB(255, 255, 255));
+  AddColor(box, 'Р§РµСЂРЅС‹Р№', xlColor1, RGB(0, 0, 0));
+  AddColor(box, 'РљРѕСЂРёС‡РЅРµРІС‹Р№', xlColor53, RGB(153, 51, 0));
+  AddColor(box, 'РћР»РёРІРєРѕРІС‹Р№', xlColor52, RGB(51, 51, 0));
+  AddColor(box, 'РўРµРјРЅРѕ-Р·РµР»РµРЅС‹Р№', xlColor51, RGB(0, 51, 0));
+  AddColor(box, 'РўРµРјРЅРѕ-СЃРёР·С‹Р№', xlColor49, RGB(0, 51, 102));
+  AddColor(box, 'РўРµРјРЅРѕ-СЃРёРЅРёР№', xlColor11, RGB(0, 0, 128));
+  AddColor(box, 'РРЅРґРёРіРѕ', xlColor55, RGB(51, 51, 153));
+  AddColor(box, 'РЎРµСЂС‹Р№ 80%', xlColor56, RGB(51, 51, 51));
+  AddColor(box, 'РўРµРјРЅРѕ-РєСЂР°СЃРЅС‹Р№', xlColor9, RGB(128, 0, 0));
+  AddColor(box, 'РћСЂР°РЅР¶РµРІС‹Р№', xlColor46, RGB(255, 102, 0));
+  AddColor(box, 'РљРѕСЂРёС‡РЅРµРІРѕ-Р·РµР»РµРЅС‹Р№', xlColor52, RGB(128, 128, 0));
+  // TODO: РћСЃС‚Р°Р»СЊРЅС‹Рµ С†РІРµС‚Р°!!!!!!!!!!!!!!!!!!!
 end;
 
 function TCustomReportDetailsForm.LocateOrderFieldInReport(FieldName: string): Boolean;
@@ -783,7 +788,7 @@ begin
   end;
 end;
 
-// Перенумерация столбцов
+// РџРµСЂРµРЅСѓРјРµСЂР°С†РёСЏ СЃС‚РѕР»Р±С†РѕРІ
 procedure TCustomReportDetailsForm.FixColumnOrder;
 var
   CurKey: variant;
@@ -830,10 +835,10 @@ begin
   dsReportCols.DataSet := FColData.DataSet;
   dsReport.DataSet := FReportData.DataSet;
   CreateOrderFields;
-  CreateProcessFields(true);  // сначала создаем список для всех полей
+  CreateProcessFields(true);  // СЃРЅР°С‡Р°Р»Р° СЃРѕР·РґР°РµРј СЃРїРёСЃРѕРє РґР»СЏ РІСЃРµС… РїРѕР»РµР№
   PrepareColumns;
-  CreateProcessFields(false); // теперь только для тех, которые есть в гридах
-  // тупой способ но самый простой. иначе придется делать фильтрацию.
+  CreateProcessFields(false); // С‚РµРїРµСЂСЊ С‚РѕР»СЊРєРѕ РґР»СЏ С‚РµС…, РєРѕС‚РѕСЂС‹Рµ РµСЃС‚СЊ РІ РіСЂРёРґР°С…
+  // С‚СѓРїРѕР№ СЃРїРѕСЃРѕР± РЅРѕ СЃР°РјС‹Р№ РїСЂРѕСЃС‚РѕР№. РёРЅР°С‡Рµ РїСЂРёРґРµС‚СЃСЏ РґРµР»Р°С‚СЊ С„РёР»СЊС‚СЂР°С†РёСЋ.
 
   ColorMap := TStringList.Create;
   ColorMap.Sorted := true;
@@ -951,7 +956,7 @@ begin
     else
       Located := FColData.DataSet.Locate('OrderNum;FieldName;FieldSourceType', VarArrayOf([NextOrderNum, NextFieldName, fstOrder]), []);
     if not Located then
-      raise Exception.Create('Не найдена следующая запись');}
+      raise Exception.Create('РќРµ РЅР°Р№РґРµРЅР° СЃР»РµРґСѓСЋС‰Р°СЏ Р·Р°РїРёСЃСЊ');}
     if FColData.Locate(NextColID) then
     begin
       FColData.DataSet.Edit;
@@ -959,14 +964,14 @@ begin
       FColData.DataSet.Post;
     end
     else
-      raise Exception.Create('Не найдена следующая запись');
+      raise Exception.Create('РќРµ РЅР°Р№РґРµРЅР° СЃР»РµРґСѓСЋС‰Р°СЏ Р·Р°РїРёСЃСЊ');
 
     {if ProcessID > 0 then
       Located := FColData.DataSet.Locate('OrderNum;FieldName;ProcessID', VarArrayOf([OrderNum + 1, FieldName, ProcessID]), [])
     else
       Located := FColData.DataSet.Locate('OrderNum;FieldName;FieldSourceType', VarArrayOf([OrderNum + 1, FieldName, fstOrder]), []);
     if not Located then
-      raise Exception.Create('Не найдена перемещенная запись');}
+      raise Exception.Create('РќРµ РЅР°Р№РґРµРЅР° РїРµСЂРµРјРµС‰РµРЅРЅР°СЏ Р·Р°РїРёСЃСЊ');}
 
     FColData.Locate(CurColID);
 
@@ -1023,14 +1028,14 @@ begin
     else
       Located := FColData.DataSet.Locate('OrderNum;FieldName;FieldSourceType', VarArrayOf([PrevOrderNum, PrevFieldName, fstOrder]), []);
     if not Located then
-      raise Exception.Create('Не найдена предыдущая запись');}
+      raise Exception.Create('РќРµ РЅР°Р№РґРµРЅР° РїСЂРµРґС‹РґСѓС‰Р°СЏ Р·Р°РїРёСЃСЊ');}
     if FColData.Locate(PrevColID) then
     begin
       FColData.DataSet.Edit;
       FColData.DataSet['OrderNum'] := OrderNum;
       FColData.DataSet.Post;
     end else
-      raise Exception.Create('Не найдена предыдущая запись');
+      raise Exception.Create('РќРµ РЅР°Р№РґРµРЅР° РїСЂРµРґС‹РґСѓС‰Р°СЏ Р·Р°РїРёСЃСЊ');
 
     FColData.Locate(CurColID);
     {if ProcessID > 0 then
@@ -1038,19 +1043,19 @@ begin
     else
       Located := FColData.DataSet.Locate('OrderNum;FieldName;FieldSourceType', VarArrayOf([OrderNum - 1, FieldName, fstOrder]), []);
     if not Located then
-      raise Exception.Create('Не найдена перемещенная запись');}
+      raise Exception.Create('РќРµ РЅР°Р№РґРµРЅР° РїРµСЂРµРјРµС‰РµРЅРЅР°СЏ Р·Р°РїРёСЃСЊ');}
 
     RefreshIndex(FColData.DataSet as TClientDataSet);
     FixColumnOrder;
   end;
 end;
 
-// TODO: Учесть язык Excel!
+// TODO: РЈС‡РµСЃС‚СЊ СЏР·С‹Рє Excel!
 function TCustomReportDetailsForm.ConvertToExcelFormat(Fmt: string): string;
 begin
   if Pos('#', Fmt) <> 0 then Result := ExcelMoneyFormat
-  else if Pos('dd', Fmt) <> 0 then Result := ExcelDateFormat//'ДД.ММ.ГГ'
-  else if Pos('h:', Fmt) <> 0 then Result := ExcelTimeFormat//'чч:мм'
+  else if Pos('dd', Fmt) <> 0 then Result := ExcelDateFormat//'Р”Р”.РњРњ.Р“Р“'
+  else if Pos('h:', Fmt) <> 0 then Result := ExcelTimeFormat//'С‡С‡:РјРј'
   else Result := Fmt;
 end;
 
@@ -1061,12 +1066,12 @@ begin
   Result := (Field.FieldName = 'Enabled')
     or (Field.FieldName = F_ProcessKey) or (Field.FieldName = F_ProcessKey)
     or (Field.FieldName = F_ItemID) or (Field.Tag = ftVirtual);
-  // С вычисляемыми разбираемся отдельно
+  // РЎ РІС‹С‡РёСЃР»СЏРµРјС‹РјРё СЂР°Р·Р±РёСЂР°РµРјСЃСЏ РѕС‚РґРµР»СЊРЅРѕ
   if not Result and (Field.FieldKind = fkCalculated) then
   begin
     FieldData := Process.ProcessCfg.GetFieldInfo(Field.FieldName);
     if FieldData = nil then
-      raise Exception.Create('Поле ' + Field.FieldName + ' не найдено');
+      raise Exception.Create('РџРѕР»Рµ ' + Field.FieldName + ' РЅРµ РЅР°Р№РґРµРЅРѕ');
     Result := VarIsNull(FieldData['LookupDicID']) or VarIsNull(FieldData['LookupKeyField']);
   end;
 end;
@@ -1087,7 +1092,7 @@ begin
   UpdateDetailControls;
 end;
 
-// Заполняет наименование поле источника во всех колонках отчета
+// Р—Р°РїРѕР»РЅСЏРµС‚ РЅР°РёРјРµРЅРѕРІР°РЅРёРµ РїРѕР»Рµ РёСЃС‚РѕС‡РЅРёРєР° РІРѕ РІСЃРµС… РєРѕР»РѕРЅРєР°С… РѕС‚С‡РµС‚Р°
 procedure TCustomReportDetailsForm.PrepareColumns;
 var
   SaveFiltered: boolean;
@@ -1112,7 +1117,7 @@ begin
   end;
 end;
 
-// Вычисляет наименование поля источника
+// Р’С‹С‡РёСЃР»СЏРµС‚ РЅР°РёРјРµРЅРѕРІР°РЅРёРµ РїРѕР»СЏ РёСЃС‚РѕС‡РЅРёРєР°
 function TCustomReportDetailsForm.GetColumnSourceName: string;
 var
   sn: string;
@@ -1122,7 +1127,7 @@ begin
   if VarIsNull(DataSet['FieldSourceType']) then
     sn := ''
   else if DataSet['FieldSourceType'] = fstOrder then
-    sn := 'Заказ: ' + GetOrderFieldCaption(NvlString(DataSet['FieldName']))
+    sn := 'Р—Р°РєР°Р·: ' + GetOrderFieldCaption(NvlString(DataSet['FieldName']))
   else if not VarIsNull(DataSet['ProcessID']) then
   begin
     if DataSet['ProcessID'] >= 0 then
@@ -1135,7 +1140,7 @@ begin
     else if DataSet['ProcessID'] = OrderDetails_Shipment then
       sn := OrderShipmentName + ' : ' + GetOrderShipmentFieldCaption(DataSet['FieldName'])
     else
-      ExceptionHandler.Raise_(Exception.Create('Неизвестный код процесса ' + VarToStr(DataSet['ProcessID'])));
+      ExceptionHandler.Raise_(Exception.Create('РќРµРёР·РІРµСЃС‚РЅС‹Р№ РєРѕРґ РїСЂРѕС†РµСЃСЃР° ' + VarToStr(DataSet['ProcessID'])));
   end
   else
     sn := '';
@@ -1163,7 +1168,7 @@ end;
 
 procedure TCustomReportDetailsForm.EnableFilter(DataSet: TClientDataSet);
 begin
-  // Ставим фильтр если не разрешается повторное добавление поля
+  // РЎС‚Р°РІРёРј С„РёР»СЊС‚СЂ РµСЃР»Рё РЅРµ СЂР°Р·СЂРµС€Р°РµС‚СЃСЏ РїРѕРІС‚РѕСЂРЅРѕРµ РґРѕР±Р°РІР»РµРЅРёРµ РїРѕР»СЏ
   if not DataSet.Filtered and not FShowAdded then
   begin
     DataSet.Filtered := true;

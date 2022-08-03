@@ -9,7 +9,7 @@ object rdm: Trdm
       
         'select ScriptID, Script, ScriptName, ScriptDesc, WorkInsideOrder' +
         ', ModifyDate,'
-      'ShortCut, IsUnit, IsDefault, ShowCancel'
+      'ShortCut, IsUnit, IsDefault, ShowCancel, ReportGroupId'
       'from GlobalScripts'
       '--order by ScriptDesc')
     Left = 12
@@ -55,6 +55,10 @@ object rdm: Trdm
     end
     object aqReportsShowCancel: TBooleanField
       FieldName = 'ShowCancel'
+      ProviderFlags = [pfInUpdate]
+    end
+    object aqReportsReportGroupId: TIntegerField
+      FieldName = 'ReportGroupId'
       ProviderFlags = [pfInUpdate]
     end
   end
@@ -115,6 +119,10 @@ object rdm: Trdm
     end
     object cdReportsShowCancel: TBooleanField
       FieldName = 'ShowCancel'
+      ProviderFlags = [pfInUpdate]
+    end
+    object cdReportsReportGroupId: TIntegerField
+      FieldName = 'ReportGroupId'
       ProviderFlags = [pfInUpdate]
     end
   end
@@ -346,6 +354,10 @@ object rdm: Trdm
       FieldName = 'AddRowAfterGroup'
       ProviderFlags = [pfInUpdate]
     end
+    object cdCustomReportsReportGroupId: TIntegerField
+      FieldName = 'ReportGroupId'
+      ProviderFlags = [pfInUpdate]
+    end
   end
   object pvCustomReports: TDataSetProvider
     DataSet = aqCustomReports
@@ -360,7 +372,9 @@ object rdm: Trdm
       
         'select ReportID, ReportName, AddFilter, ProcessLine, ProcessDeta' +
         'ils, IncludeEmptyDetails, RepeatOrderFields,'
-      'Sort1, Sort2, Sort3, Sort4, SortAscending, AddRowAfterGroup'
+      
+        'Sort1, Sort2, Sort3, Sort4, SortAscending, AddRowAfterGroup, Rep' +
+        'ortGroupId'
       'from CustomReports'
       'order by ReportName')
     Left = 28

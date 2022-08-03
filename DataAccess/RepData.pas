@@ -107,6 +107,9 @@ type
     cdCustomReportColsAutoFitColumn: TBooleanField;
     cdCustomReportColsColumnWidth: TIntegerField;
     cdCustomReportsAddRowAfterGroup: TBooleanField;
+    cdReportsReportGroupId: TIntegerField;
+    aqReportsReportGroupId: TIntegerField;
+    cdCustomReportsReportGroupId: TIntegerField;
     procedure cdFormsNewRecord(DataSet: TDataSet);
     procedure GetUnitSource(UnitName: String; var Source: String;
       var Done: Boolean);
@@ -196,7 +199,7 @@ begin
   cdOrdScripts.Close;
 end;
 
-{// Читает скрипты и возвращает, используется CodeEditForm
+{// Р§РёС‚Р°РµС‚ СЃРєСЂРёРїС‚С‹ Рё РІРѕР·РІСЂР°С‰Р°РµС‚, РёСЃРїРѕР»СЊР·СѓРµС‚СЃСЏ CodeEditForm
 function Trdm.GetFormScripts: TStringList;
 var
   i: integer;
@@ -205,10 +208,10 @@ var
   f: TField;
 begin
   Scripts := TStringList.Create;
-  if sdm.ScriptInfo.Count > 0 then  // инициализация списка именами скриптов
+  if sdm.ScriptInfo.Count > 0 then  // РёРЅРёС†РёР°Р»РёР·Р°С†РёСЏ СЃРїРёСЃРєР° РёРјРµРЅР°РјРё СЃРєСЂРёРїС‚РѕРІ
     for i := 0 to Pred(sdm.ScriptInfo.Count) do begin
-      // Добавляем, разумеется, только те скрипты, которые у нас есть,
-      // т.к. описаний больше, чем надо.
+      // Р”РѕР±Р°РІР»СЏРµРј, СЂР°Р·СѓРјРµРµС‚СЃСЏ, С‚РѕР»СЊРєРѕ С‚Рµ СЃРєСЂРёРїС‚С‹, РєРѕС‚РѕСЂС‹Рµ Сѓ РЅР°СЃ РµСЃС‚СЊ,
+      // С‚.Рє. РѕРїРёСЃР°РЅРёР№ Р±РѕР»СЊС€Рµ, С‡РµРј РЅР°РґРѕ.
       f := cdForms.FindField(sdm.ScriptInfo[i]);
       if f <> nil then begin
         so := NewScriptObj;

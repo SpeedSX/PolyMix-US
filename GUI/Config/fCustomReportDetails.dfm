@@ -3,8 +3,8 @@ object CustomReportDetailsForm: TCustomReportDetailsForm
   Top = 525
   BorderStyle = bsDialog
   Caption = #1056#1077#1076#1072#1082#1090#1080#1088#1086#1074#1072#1085#1080#1077' '#1086#1090#1095#1077#1090#1072
-  ClientHeight = 564
-  ClientWidth = 807
+  ClientHeight = 592
+  ClientWidth = 809
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -16,8 +16,8 @@ object CustomReportDetailsForm: TCustomReportDetailsForm
   OnCreate = FormCreate
   OnDestroy = FormDestroy
   DesignSize = (
-    807
-    564)
+    809
+    592)
   PixelsPerInch = 96
   TextHeight = 13
   object lbName: TLabel
@@ -28,19 +28,26 @@ object CustomReportDetailsForm: TCustomReportDetailsForm
     Caption = #1053#1072#1079#1074#1072#1085#1080#1077
   end
   object lbPreview: TLabel
-    Left = 4
-    Top = 536
+    Left = 8
+    Top = 559
     Width = 81
     Height = 13
     Caption = #1058#1072#1073#1083#1080#1094#1072' '#1086#1090#1095#1077#1090#1072
     Visible = False
   end
   object lbCols: TLabel
-    Left = 298
-    Top = 58
+    Left = 300
+    Top = 108
     Width = 84
     Height = 13
     Caption = #1057#1090#1086#1083#1073#1094#1099' '#1086#1090#1095#1077#1090#1072
+  end
+  object Label17: TLabel
+    Left = 14
+    Top = 54
+    Width = 36
+    Height = 13
+    Caption = #1043#1088#1091#1087#1087#1072
   end
   object edName: TDBEdit
     Left = 14
@@ -52,8 +59,8 @@ object CustomReportDetailsForm: TCustomReportDetailsForm
     TabOrder = 0
   end
   object cbAddFilter: TDBCheckBox
-    Left = 416
-    Top = 10
+    Left = 432
+    Top = 12
     Width = 201
     Height = 17
     Caption = #1044#1086#1073#1072#1074#1083#1103#1090#1100' '#1086#1087#1080#1089#1072#1085#1080#1077' '#1074#1099#1073#1086#1088#1082#1080
@@ -64,21 +71,21 @@ object CustomReportDetailsForm: TCustomReportDetailsForm
     ValueUnchecked = 'False'
   end
   object cbProcessDetails: TDBCheckBox
-    Left = 416
-    Top = 30
+    Left = 432
+    Top = 34
     Width = 197
     Height = 17
     Caption = #1044#1077#1090#1072#1083#1080#1079#1072#1094#1080#1103' '#1087#1088#1086#1094#1077#1089#1089#1086#1074
     DataField = 'ProcessDetails'
     DataSource = dsReport
-    TabOrder = 2
+    TabOrder = 3
     ValueChecked = 'True'
     ValueUnchecked = 'False'
     OnClick = cbProcessDetailsClick
   end
   object dgPreview: TMyDBGridEh
-    Left = 76
-    Top = 516
+    Left = 84
+    Top = 535
     Width = 587
     Height = 37
     DataGrouping.GroupLevels = <>
@@ -93,7 +100,7 @@ object CustomReportDetailsForm: TCustomReportDetailsForm
     OptionsEh = [dghHighlightFocus, dghClearSelection, dghDialogFind, dghColumnResize, dghColumnMove]
     RowDetailPanel.Color = clBtnFace
     RowHeight = 18
-    TabOrder = 3
+    TabOrder = 6
     TitleFont.Charset = DEFAULT_CHARSET
     TitleFont.Color = clWindowText
     TitleFont.Height = -11
@@ -104,20 +111,23 @@ object CustomReportDetailsForm: TCustomReportDetailsForm
     end
   end
   object pcSourceFields: TPageControl
-    Left = 14
-    Top = 60
-    Width = 245
-    Height = 466
+    Left = 15
+    Top = 108
+    Width = 247
+    Height = 438
     ActivePage = tsOrderFields
-    Anchors = [akLeft, akTop, akRight, akBottom]
-    TabOrder = 4
+    Anchors = [akLeft, akTop, akBottom]
+    TabOrder = 5
+    ExplicitHeight = 433
     object tsOrderFields: TTabSheet
       Caption = #1047#1072#1082#1072#1079
+      ExplicitWidth = 237
+      ExplicitHeight = 438
       object dgOrderFields: TMyDBGridEh
         Left = 0
         Top = 0
-        Width = 237
-        Height = 438
+        Width = 239
+        Height = 410
         Align = alClient
         AutoFitColWidths = True
         DataGrouping.GroupLevels = <>
@@ -154,11 +164,13 @@ object CustomReportDetailsForm: TCustomReportDetailsForm
     object tsProcessFields: TTabSheet
       Caption = #1057#1086#1089#1090#1072#1074' '#1079#1072#1082#1072#1079#1072
       ImageIndex = 1
+      ExplicitWidth = 237
+      ExplicitHeight = 437
       object dgProcessFields: TMyDBGridEh
         Left = 0
         Top = 0
-        Width = 237
-        Height = 409
+        Width = 239
+        Height = 381
         Align = alClient
         DataGrouping.GroupLevels = <>
         DataSource = dsProcessFields
@@ -198,13 +210,15 @@ object CustomReportDetailsForm: TCustomReportDetailsForm
       end
       object Panel1: TPanel
         Left = 0
-        Top = 409
-        Width = 237
+        Top = 381
+        Width = 239
         Height = 29
         Align = alBottom
         BevelOuter = bvNone
         Caption = ' '
         TabOrder = 1
+        ExplicitTop = 408
+        ExplicitWidth = 237
         object cbShowAllFields: TCheckBox
           Left = 6
           Top = 8
@@ -263,7 +277,7 @@ object CustomReportDetailsForm: TCustomReportDetailsForm
     Width = 29
     Height = 25
     Caption = '>'
-    TabOrder = 5
+    TabOrder = 7
     OnClick = btAddClick
   end
   object btAddAll: TBitBtn
@@ -273,7 +287,7 @@ object CustomReportDetailsForm: TCustomReportDetailsForm
     Height = 25
     Caption = '>>'
     Enabled = False
-    TabOrder = 6
+    TabOrder = 8
   end
   object btRemoveAll: TBitBtn
     Left = 264
@@ -282,7 +296,7 @@ object CustomReportDetailsForm: TCustomReportDetailsForm
     Height = 25
     Caption = '<<'
     Enabled = False
-    TabOrder = 7
+    TabOrder = 10
   end
   object btRemove: TBitBtn
     Left = 264
@@ -290,15 +304,16 @@ object CustomReportDetailsForm: TCustomReportDetailsForm
     Width = 29
     Height = 25
     Caption = '<'
-    TabOrder = 8
+    TabOrder = 9
     OnClick = btRemoveClick
   end
   object dgReportCols: TMyDBGridEh
-    Left = 298
-    Top = 76
-    Width = 465
-    Height = 223
+    Left = 299
+    Top = 127
+    Width = 500
+    Height = 203
     AllowedOperations = [alopUpdateEh]
+    Anchors = [akLeft, akTop, akRight, akBottom]
     AutoFitColWidths = True
     DataGrouping.GroupLevels = <>
     DataSource = dsReportCols
@@ -311,7 +326,7 @@ object CustomReportDetailsForm: TCustomReportDetailsForm
     FooterFont.Style = []
     OptionsEh = [dghHighlightFocus, dghClearSelection, dghRowHighlight, dghDblClickOptimizeColWidth, dghDialogFind, dghColumnResize, dghColumnMove]
     RowDetailPanel.Color = clBtnFace
-    TabOrder = 9
+    TabOrder = 11
     TitleFont.Charset = DEFAULT_CHARSET
     TitleFont.Color = clWindowText
     TitleFont.Height = -11
@@ -354,7 +369,7 @@ object CustomReportDetailsForm: TCustomReportDetailsForm
     Top = 184
     Width = 28
     Height = 25
-    TabOrder = 10
+    TabOrder = 12
     OnClick = btMoveDownClick
     Glyph.Data = {
       7E020000424D7E020000000000007E0100002800000010000000100000000100
@@ -385,7 +400,7 @@ object CustomReportDetailsForm: TCustomReportDetailsForm
     Top = 154
     Width = 28
     Height = 25
-    TabOrder = 11
+    TabOrder = 13
     OnClick = btMoveUpClick
     Glyph.Data = {
       5A020000424D5A020000000000005A0100002800000010000000100000000100
@@ -410,59 +425,68 @@ object CustomReportDetailsForm: TCustomReportDetailsForm
     Spacing = 0
   end
   object btOk: TButton
-    Left = 632
-    Top = 533
+    Left = 635
+    Top = 559
     Width = 79
     Height = 25
     Anchors = [akRight, akBottom]
     Caption = #1057#1086#1093#1088#1072#1085#1080#1090#1100
     ModalResult = 1
-    TabOrder = 12
+    TabOrder = 15
+    ExplicitLeft = 633
+    ExplicitTop = 554
   end
   object btCancel: TButton
-    Left = 722
-    Top = 533
+    Left = 726
+    Top = 559
     Width = 75
     Height = 25
     Anchors = [akRight, akBottom]
     Caption = #1054#1090#1084#1077#1085#1072
     ModalResult = 2
-    TabOrder = 13
+    TabOrder = 16
+    ExplicitLeft = 724
+    ExplicitTop = 554
   end
   object cbIncludeEmpty: TDBCheckBox
-    Left = 604
-    Top = 30
+    Left = 432
+    Top = 78
     Width = 197
     Height = 17
     Caption = #1042#1082#1083#1102#1095#1072#1090#1100' '#1079#1072#1087#1080#1089#1080' '#1073#1077#1079' '#1087#1088#1086#1094#1077#1089#1089#1086#1074
     DataField = 'IncludeEmptyDetails'
     DataSource = dsReport
-    TabOrder = 14
+    TabOrder = 4
     ValueChecked = 'True'
     ValueUnchecked = 'False'
   end
   object cbRepeat: TDBCheckBox
-    Left = 604
-    Top = 10
+    Left = 432
+    Top = 56
     Width = 187
     Height = 17
     Caption = #1055#1086#1074#1090#1086#1088#1103#1090#1100' '#1087#1072#1088#1072#1084#1077#1090#1088#1099' '#1079#1072#1082#1072#1079#1072
     DataField = 'RepeatOrderFields'
     DataSource = dsReport
-    TabOrder = 15
+    TabOrder = 2
     ValueChecked = 'True'
     ValueUnchecked = 'False'
   end
   object PageControl1: TPageControl
-    Left = 298
-    Top = 326
-    Width = 499
-    Height = 200
+    Left = 300
+    Top = 343
+    Width = 501
+    Height = 203
     ActivePage = TabSheet1
-    Anchors = [akLeft, akTop, akRight, akBottom]
-    TabOrder = 16
+    Anchors = [akLeft, akRight, akBottom]
+    TabOrder = 14
+    ExplicitTop = 338
+    ExplicitWidth = 499
     object TabSheet1: TTabSheet
       Caption = #1057#1090#1086#1083#1073#1077#1094
+      ExplicitLeft = 0
+      ExplicitWidth = 491
+      ExplicitHeight = 182
       object Label5: TLabel
         Left = 7
         Top = 12
@@ -603,6 +627,8 @@ object CustomReportDetailsForm: TCustomReportDetailsForm
     object tsStyle: TTabSheet
       Caption = #1057#1090#1080#1083#1100
       ImageIndex = 2
+      ExplicitWidth = 491
+      ExplicitHeight = 171
       object Bevel2: TBevel
         Left = 244
         Top = 36
@@ -832,6 +858,8 @@ object CustomReportDetailsForm: TCustomReportDetailsForm
     object tsSort: TTabSheet
       Caption = #1057#1086#1088#1090#1080#1088#1086#1074#1082#1072
       ImageIndex = 1
+      ExplicitWidth = 491
+      ExplicitHeight = 171
       object Label2: TLabel
         Left = 12
         Top = 10
@@ -925,6 +953,22 @@ object CustomReportDetailsForm: TCustomReportDetailsForm
         TabOrder = 3
       end
     end
+  end
+  object cbReportGroup: TDBLookupComboboxEh
+    Left = 15
+    Top = 71
+    Width = 245
+    Height = 21
+    DataField = 'ReportGroupId'
+    DataSource = dsReport
+    DropDownBox.ListSource = dsReportGroups
+    DropDownBox.Options = []
+    EditButtons = <>
+    KeyField = 'Code'
+    ListField = 'Name'
+    ListSource = dsReportGroups
+    TabOrder = 17
+    Visible = True
   end
   object dsReportCols: TDataSource
     Left = 438
@@ -1166,5 +1210,9 @@ object CustomReportDetailsForm: TCustomReportDetailsForm
       8000000000000000800000000000000080010000000000008001000000000000
       8001000000000000FFCF00000000000000000000000000000000000000000000
       000000000000}
+  end
+  object dsReportGroups: TDataSource
+    Left = 124
+    Top = 60
   end
 end

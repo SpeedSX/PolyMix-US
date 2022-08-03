@@ -7,7 +7,7 @@ uses
   Dialogs, Grids, DBGridEh, MyDBGridEh, StdCtrls, ExtCtrls, GridsEh,
   DB,
 
-  PmCustomReport, PmOrder;
+  PmCustomReport, PmOrder, DBGridEhGrouping;
 
 type
   TEditCustomReportsForm = class(TForm)
@@ -107,14 +107,14 @@ end;
 
 procedure TEditCustomReportsForm.btNewClick(Sender: TObject);
 const
-  NewReportStr = 'Новый отчет';
+  NewReportStr = 'РќРѕРІС‹Р№ РѕС‚С‡РµС‚';
 var
   NewName: string;
 begin
   NewName := GetIndexedName(FReportData.DataSet, 'ReportName', NewReportStr);
   FReportData.DataSet.Append;
   FReportData.DataSet['ReportName'] := NewName;
-  FReportData.ApplyUpdates;  // применяем и обновляем
+  FReportData.ApplyUpdates;  // РїСЂРёРјРµРЅСЏРµРј Рё РѕР±РЅРѕРІР»СЏРµРј
   FReportData.DataSet.Locate('ReportName', NewName, []);
   if ExecCustomReportDetailsEditor(FReportData, FOrder) then
     FReportData.ApplyUpdates
@@ -391,10 +391,10 @@ begin
       cd := FReportData.DataSet;
 
       NewName := xml.ReadString(ParamsTag + 'Name');
-      // Проверяем есть ли уже с таким же именем
+      // РџСЂРѕРІРµСЂСЏРµРј РµСЃС‚СЊ Р»Рё СѓР¶Рµ СЃ С‚Р°РєРёРј Р¶Рµ РёРјРµРЅРµРј
       if FReportData.DataSet.Locate('ReportName', NewName, []) then
         NewName := CalcReportName(NewName);
-      // Добавляем новый
+      // Р”РѕР±Р°РІР»СЏРµРј РЅРѕРІС‹Р№
       cd.Append;
       cd['ReportName'] := NewName;
 
@@ -408,7 +408,7 @@ begin
       ReadIntegerParam('Sort4');
       ReadBoolParam('SortAscending');
 
-      FReportData.ApplyUpdates;  // применяем и обновляем
+      FReportData.ApplyUpdates;  // РїСЂРёРјРµРЅСЏРµРј Рё РѕР±РЅРѕРІР»СЏРµРј
 
       if FReportData.DataSet.Locate('ReportName', NewName, []) then
         ReadFieldList(xml);
@@ -419,7 +419,7 @@ begin
       //  FieldList.Free;
       //end;
     finally
-      xml.FileName := '';   // Для того чтобы не сохранялся файл
+      xml.FileName := '';   // Р”Р»СЏ С‚РѕРіРѕ С‡С‚РѕР±С‹ РЅРµ СЃРѕС…СЂР°РЅСЏР»СЃСЏ С„Р°Р№Р»
       xml.Free;
     end;
   end;

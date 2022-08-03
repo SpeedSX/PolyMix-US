@@ -12,62 +12,62 @@ type
     Login: string;
     Name: string;
     ShortName: string;
-    EditUsers: boolean;    // Управление пользователями
-    ContragentGroup: variant;  // ограничение на просмотр заказчиков
-    EditDics: boolean;     // Пользователь имеет право на просмотр/редактирование справочников
-    EditProcCfg: boolean;  // право редактирования свойств процессов (но структура - только админ)
-    EditModules: boolean;  // Редактирование сценариев
-    UploadFiles: boolean;  // Загрузка файлов на сервер
-    SetCourse: boolean;    // Пользователь имеет право на установку курса доллара
-    DraftViewOwnOnly: boolean;  // Доступ только к своим расчетам
-    WorkViewOwnOnly: boolean;  // Доступ только к своим заказам
-    AddCustomer: boolean;  // Создание нового заказчика
-    DeleteOwnCustomer, EditOtherCustomer: boolean; // Редактирование и удаление своих и чужих заказчиков
-    ViewOtherCustomer: boolean; // Просмотр данных чужого заказчика
-    ChangeCustomerOwner: boolean; // Изменение пользователя-владельца заказчика
-    DefaultKindID: integer;    // Вид заказа по умолчанию
+    EditUsers: boolean;    // РЈРїСЂР°РІР»РµРЅРёРµ РїРѕР»СЊР·РѕРІР°С‚РµР»СЏРјРё
+    ContragentGroup: variant;  // РѕРіСЂР°РЅРёС‡РµРЅРёРµ РЅР° РїСЂРѕСЃРјРѕС‚СЂ Р·Р°РєР°Р·С‡РёРєРѕРІ
+    EditDics: boolean;     // РџРѕР»СЊР·РѕРІР°С‚РµР»СЊ РёРјРµРµС‚ РїСЂР°РІРѕ РЅР° РїСЂРѕСЃРјРѕС‚СЂ/СЂРµРґР°РєС‚РёСЂРѕРІР°РЅРёРµ СЃРїСЂР°РІРѕС‡РЅРёРєРѕРІ
+    EditProcCfg: boolean;  // РїСЂР°РІРѕ СЂРµРґР°РєС‚РёСЂРѕРІР°РЅРёСЏ СЃРІРѕР№СЃС‚РІ РїСЂРѕС†РµСЃСЃРѕРІ (РЅРѕ СЃС‚СЂСѓРєС‚СѓСЂР° - С‚РѕР»СЊРєРѕ Р°РґРјРёРЅ)
+    EditModules: boolean;  // Р РµРґР°РєС‚РёСЂРѕРІР°РЅРёРµ СЃС†РµРЅР°СЂРёРµРІ
+    UploadFiles: boolean;  // Р—Р°РіСЂСѓР·РєР° С„Р°Р№Р»РѕРІ РЅР° СЃРµСЂРІРµСЂ
+    SetCourse: boolean;    // РџРѕР»СЊР·РѕРІР°С‚РµР»СЊ РёРјРµРµС‚ РїСЂР°РІРѕ РЅР° СѓСЃС‚Р°РЅРѕРІРєСѓ РєСѓСЂСЃР° РґРѕР»Р»Р°СЂР°
+    DraftViewOwnOnly: boolean;  // Р”РѕСЃС‚СѓРї С‚РѕР»СЊРєРѕ Рє СЃРІРѕРёРј СЂР°СЃС‡РµС‚Р°Рј
+    WorkViewOwnOnly: boolean;  // Р”РѕСЃС‚СѓРї С‚РѕР»СЊРєРѕ Рє СЃРІРѕРёРј Р·Р°РєР°Р·Р°Рј
+    AddCustomer: boolean;  // РЎРѕР·РґР°РЅРёРµ РЅРѕРІРѕРіРѕ Р·Р°РєР°Р·С‡РёРєР°
+    DeleteOwnCustomer, EditOtherCustomer: boolean; // Р РµРґР°РєС‚РёСЂРѕРІР°РЅРёРµ Рё СѓРґР°Р»РµРЅРёРµ СЃРІРѕРёС… Рё С‡СѓР¶РёС… Р·Р°РєР°Р·С‡РёРєРѕРІ
+    ViewOtherCustomer: boolean; // РџСЂРѕСЃРјРѕС‚СЂ РґР°РЅРЅС‹С… С‡СѓР¶РѕРіРѕ Р·Р°РєР°Р·С‡РёРєР°
+    ChangeCustomerOwner: boolean; // РР·РјРµРЅРµРЅРёРµ РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ-РІР»Р°РґРµР»СЊС†Р° Р·Р°РєР°Р·С‡РёРєР°
+    DefaultKindID: integer;    // Р’РёРґ Р·Р°РєР°Р·Р° РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ
     WorkVisible: boolean;
     DraftVisible: boolean;
     ContractVisible: boolean;
-    PermitPlanView: boolean;  // разрешить просмотр планов по оборудованию
-    DataPaging: boolean;      // Постраничная выборка
-    ViewReports: boolean;     // Просмотр отчетов
-    EditCustomReports: boolean;   // Создание-редактирование пользовательских отчетов
-    DeleteCustomReports: boolean; // Удаление пользовательских отчетов
-    ViewPayments: boolean;     // Просмотр расчетов с заказчиками
-    EditPayments: boolean;     // Управление(изменение, удаление) поступлениями
-    AddPayments: boolean;      // Добавление новых поступлений
-    ViewInvoices: boolean;      // Просмотр счетов
-    AddInvoices: boolean;       // Создание и модификация счета
-    DeleteInvoices: boolean;    // Удаление счета
-    ViewShipment: boolean;      // Просмотр отгрузок
-    AddShipment: boolean;       // Создание и модификация отгрузок
-    DeleteShipment: boolean;    // Удаление отгрузок
-    ApproveShipment: boolean;    // Разрешение отгрузок
-    ApproveOrderMaterials: boolean;    // Разрешение закупки материалов
-    ViewMatRequests: boolean;   // Просмотр закупок
-    UpdateMatPayDate: boolean;  // Изменение даты оплаты
+    PermitPlanView: boolean;  // СЂР°Р·СЂРµС€РёС‚СЊ РїСЂРѕСЃРјРѕС‚СЂ РїР»Р°РЅРѕРІ РїРѕ РѕР±РѕСЂСѓРґРѕРІР°РЅРёСЋ
+    DataPaging: boolean;      // РџРѕСЃС‚СЂР°РЅРёС‡РЅР°СЏ РІС‹Р±РѕСЂРєР°
+    ViewReports: boolean;     // РџСЂРѕСЃРјРѕС‚СЂ РѕС‚С‡РµС‚РѕРІ
+    EditCustomReports: boolean;   // РЎРѕР·РґР°РЅРёРµ-СЂРµРґР°РєС‚РёСЂРѕРІР°РЅРёРµ РїРѕР»СЊР·РѕРІР°С‚РµР»СЊСЃРєРёС… РѕС‚С‡РµС‚РѕРІ
+    DeleteCustomReports: boolean; // РЈРґР°Р»РµРЅРёРµ РїРѕР»СЊР·РѕРІР°С‚РµР»СЊСЃРєРёС… РѕС‚С‡РµС‚РѕРІ
+    ViewPayments: boolean;     // РџСЂРѕСЃРјРѕС‚СЂ СЂР°СЃС‡РµС‚РѕРІ СЃ Р·Р°РєР°Р·С‡РёРєР°РјРё
+    EditPayments: boolean;     // РЈРїСЂР°РІР»РµРЅРёРµ(РёР·РјРµРЅРµРЅРёРµ, СѓРґР°Р»РµРЅРёРµ) РїРѕСЃС‚СѓРїР»РµРЅРёСЏРјРё
+    AddPayments: boolean;      // Р”РѕР±Р°РІР»РµРЅРёРµ РЅРѕРІС‹С… РїРѕСЃС‚СѓРїР»РµРЅРёР№
+    ViewInvoices: boolean;      // РџСЂРѕСЃРјРѕС‚СЂ СЃС‡РµС‚РѕРІ
+    AddInvoices: boolean;       // РЎРѕР·РґР°РЅРёРµ Рё РјРѕРґРёС„РёРєР°С†РёСЏ СЃС‡РµС‚Р°
+    DeleteInvoices: boolean;    // РЈРґР°Р»РµРЅРёРµ СЃС‡РµС‚Р°
+    ViewShipment: boolean;      // РџСЂРѕСЃРјРѕС‚СЂ РѕС‚РіСЂСѓР·РѕРє
+    AddShipment: boolean;       // РЎРѕР·РґР°РЅРёРµ Рё РјРѕРґРёС„РёРєР°С†РёСЏ РѕС‚РіСЂСѓР·РѕРє
+    DeleteShipment: boolean;    // РЈРґР°Р»РµРЅРёРµ РѕС‚РіСЂСѓР·РѕРє
+    ApproveShipment: boolean;    // Р Р°Р·СЂРµС€РµРЅРёРµ РѕС‚РіСЂСѓР·РѕРє
+    ApproveOrderMaterials: boolean;    // Р Р°Р·СЂРµС€РµРЅРёРµ Р·Р°РєСѓРїРєРё РјР°С‚РµСЂРёР°Р»РѕРІ
+    ViewMatRequests: boolean;   // РџСЂРѕСЃРјРѕС‚СЂ Р·Р°РєСѓРїРѕРє
+    UpdateMatPayDate: boolean;  // РР·РјРµРЅРµРЅРёРµ РґР°С‚С‹ РѕРїР»Р°С‚С‹
 
     WorkVisibleKinds: TIntArray;
     DraftVisibleKinds: TIntArray;
     HasProtectedKinds: boolean;
-    DescribeUnScheduleJob: boolean; // Должен объяснять почему снимается работа. Она при этом заменяется на специальную с пояснением.
-    ViewNotPlanned: boolean; // просмотр очереди незапланированных работ
-    ViewProduction: boolean; // просмотр загрузки оборудования с выборкой
-    ShowDelayedOrders: boolean; // всегда показывать просроченные заказы этого пользователя
-    SetPaymentStatus: boolean; // Изменять состояние оплаты
+    DescribeUnScheduleJob: boolean; // Р”РѕР»Р¶РµРЅ РѕР±СЉСЏСЃРЅСЏС‚СЊ РїРѕС‡РµРјСѓ СЃРЅРёРјР°РµС‚СЃСЏ СЂР°Р±РѕС‚Р°. РћРЅР° РїСЂРё СЌС‚РѕРј Р·Р°РјРµРЅСЏРµС‚СЃСЏ РЅР° СЃРїРµС†РёР°Р»СЊРЅСѓСЋ СЃ РїРѕСЏСЃРЅРµРЅРёРµРј.
+    ViewNotPlanned: boolean; // РїСЂРѕСЃРјРѕС‚СЂ РѕС‡РµСЂРµРґРё РЅРµР·Р°РїР»Р°РЅРёСЂРѕРІР°РЅРЅС‹С… СЂР°Р±РѕС‚
+    ViewProduction: boolean; // РїСЂРѕСЃРјРѕС‚СЂ Р·Р°РіСЂСѓР·РєРё РѕР±РѕСЂСѓРґРѕРІР°РЅРёСЏ СЃ РІС‹Р±РѕСЂРєРѕР№
+    ShowDelayedOrders: boolean; // РІСЃРµРіРґР° РїРѕРєР°Р·С‹РІР°С‚СЊ РїСЂРѕСЃСЂРѕС‡РµРЅРЅС‹Рµ Р·Р°РєР°Р·С‹ СЌС‚РѕРіРѕ РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ
+    SetPaymentStatus: boolean; // РР·РјРµРЅСЏС‚СЊ СЃРѕСЃС‚РѕСЏРЅРёРµ РѕРїР»Р°С‚С‹
 
-    // Всегда TRUE
-    CheckPlanFinishDate: boolean;  // Запретить указание даты сдачи "на вчера"
+    // Р’СЃРµРіРґР° TRUE
+    CheckPlanFinishDate: boolean;  // Р—Р°РїСЂРµС‚РёС‚СЊ СѓРєР°Р·Р°РЅРёРµ РґР°С‚С‹ СЃРґР°С‡Рё "РЅР° РІС‡РµСЂР°"
 
-    // Перенесено в глобальные настройки
-    //NeedPlanFinishDate: boolean;   // Ввод даты плановой сдачи заказа обязателен
-    //NeedCustInfoSource: boolean;   // Ввод источника информации для заказчика обязателен
+    // РџРµСЂРµРЅРµСЃРµРЅРѕ РІ РіР»РѕР±Р°Р»СЊРЅС‹Рµ РЅР°СЃС‚СЂРѕР№РєРё
+    //NeedPlanFinishDate: boolean;   // Р’РІРѕРґ РґР°С‚С‹ РїР»Р°РЅРѕРІРѕР№ СЃРґР°С‡Рё Р·Р°РєР°Р·Р° РѕР±СЏР·Р°С‚РµР»РµРЅ
+    //NeedCustInfoSource: boolean;   // Р’РІРѕРґ РёСЃС‚РѕС‡РЅРёРєР° РёРЅС„РѕСЂРјР°С†РёРё РґР»СЏ Р·Р°РєР°Р·С‡РёРєР° РѕР±СЏР·Р°С‚РµР»РµРЅ
   end;
 
   TKindPerm = record
     AccessKindID, KindID, UserID: integer;
-    WorkVisible, DraftVisible: boolean;     // право видимости в таблице
+    WorkVisible, DraftVisible: boolean;     // РїСЂР°РІРѕ РІРёРґРёРјРѕСЃС‚Рё РІ С‚Р°Р±Р»РёС†Рµ
     WorkCreate, DraftCreate: boolean;
     WorkUpdateOwn, DraftUpdateOwn: boolean;
     WorkUpdateOther, DraftUpdateOther: boolean;
@@ -78,8 +78,8 @@ type
     WorkCostView, DraftCostView: boolean;
     CheckOnSave, MakeWork, MakeDraft: boolean;
     PlanStartDate, FactStartDate: boolean;
-    PlanFinishDate: boolean; // УСТАРЕВШЕЕ
-    FactFinishDate: boolean; // УСТАРЕВШЕЕ
+    PlanFinishDate: boolean; // РЈРЎРўРђР Р•Р’РЁР•Р•
+    FactFinishDate: boolean; // РЈРЎРўРђР Р•Р’РЁР•Р•
     ShowProfitPreview: boolean;
     ShowProfitInside: boolean;
     ModifyProfit: boolean;
@@ -88,9 +88,9 @@ type
     ContentProtection: boolean;
     ChangeOrderOwner: boolean;
     UpdatePayConditions: boolean;
-    CancelMaterialRequest: boolean;  // удаление изменной заявки на материал
-    EditMaterialRequest: boolean; // Изменение заявок на материалы
-    FactCostView: boolean; // Просмотр фактических затрат
+    CancelMaterialRequest: boolean;  // СѓРґР°Р»РµРЅРёРµ РёР·РјРµРЅРЅРѕР№ Р·Р°СЏРІРєРё РЅР° РјР°С‚РµСЂРёР°Р»
+    EditMaterialRequest: boolean; // РР·РјРµРЅРµРЅРёРµ Р·Р°СЏРІРѕРє РЅР° РјР°С‚РµСЂРёР°Р»С‹
+    FactCostView: boolean; // РџСЂРѕСЃРјРѕС‚СЂ С„Р°РєС‚РёС‡РµСЃРєРёС… Р·Р°С‚СЂР°С‚
   end;
 
   TCurKindPerm = record
@@ -184,16 +184,17 @@ type
     procedure SetUserRights;
     function UserData: TClientDataSet;
     procedure RefreshUsers;
-    // Создает копию списка пользователей с полным именем и логином
+    // РЎРѕР·РґР°РµС‚ РєРѕРїРёСЋ СЃРїРёСЃРєР° РїРѕР»СЊР·РѕРІР°С‚РµР»РµР№ СЃ РїРѕР»РЅС‹Рј РёРјРµРЅРµРј Рё Р»РѕРіРёРЅРѕРј
     function GetUserNames: TStringList;
-    // Создает полную копию списка пользователей
+    // РЎРѕР·РґР°РµС‚ РїРѕР»РЅСѓСЋ РєРѕРїРёСЋ СЃРїРёСЃРєР° РїРѕР»СЊР·РѕРІР°С‚РµР»РµР№
     function GetUsersCopy: TStringList;
-    // Пароль текущего пользователя
+    // РџР°СЂРѕР»СЊ С‚РµРєСѓС‰РµРіРѕ РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ
     property CurUserPass: string read GetCurUserPass write SetCurUserPass;
-    // для отображения в виде "имя (логин)" или "логин"
+    // РґР»СЏ РѕС‚РѕР±СЂР°Р¶РµРЅРёСЏ РІ РІРёРґРµ "РёРјСЏ (Р»РѕРіРёРЅ)" РёР»Рё "Р»РѕРіРёРЅ"
     function FormatUserName(UserCode: integer): string; overload;
     function FormatUserName(UserLogin: string): string; overload;
     function FormatUserName(info: TUserInfo): string; overload;
+    function HasUserReportGroupAccess(ReportGroupId: integer): boolean;
   end;
 
 var
@@ -203,7 +204,7 @@ implementation
 
 uses Forms, RDBUtils, Variants, ExHandler, JvStrings, 
 
-  CalcSettings, AccessDM, PmConnect, ServData;
+  CalcSettings, AccessDM, PmConnect, ServData, PmConfigManager;
 
 constructor TAccessManager.Create;
 begin
@@ -219,9 +220,9 @@ end;
 
 procedure TAccessManager.Connected(Sender: TObject);
 begin
-  // Здесь сразу надо определить уровень пользователя, т.к. от этого может зависеть
-  // видимость элементов управления, полей и т.п.
-  Application.CreateForm(Tadm, adm);  // модуль прав пользователя
+  // Р—РґРµСЃСЊ СЃСЂР°Р·Сѓ РЅР°РґРѕ РѕРїСЂРµРґРµР»РёС‚СЊ СѓСЂРѕРІРµРЅСЊ РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ, С‚.Рє. РѕС‚ СЌС‚РѕРіРѕ РјРѕР¶РµС‚ Р·Р°РІРёСЃРµС‚СЊ
+  // РІРёРґРёРјРѕСЃС‚СЊ СЌР»РµРјРµРЅС‚РѕРІ СѓРїСЂР°РІР»РµРЅРёСЏ, РїРѕР»РµР№ Рё С‚.Рї.
+  Application.CreateForm(Tadm, adm);  // РјРѕРґСѓР»СЊ РїСЂР°РІ РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ
   adm.AfterOpenUsers := DoAfterOpenUsers;
   adm.OnDestroy := DoDataModuleDestroy;
   ReadUserPermTo(CurUser, TSettingsManager.Instance.CurUserLogin);
@@ -630,7 +631,7 @@ var
 begin
   cdAccessUser := adm.AllUsersData;
   cdAccessUser.Edit;
-  // Только права
+  // РўРѕР»СЊРєРѕ РїСЂР°РІР°
   SetAccessUser('EditUsers', Rec.EditUsers);
   SetAccessUser('EditDics', Rec.EditDics);
   SetAccessUser('EditProcesses', Rec.EditProcCfg);
@@ -694,13 +695,13 @@ begin
     Result := InternalWriteUserPermFrom(Rec);
 end;
 
-// с учетом черновик или нет
+// СЃ СѓС‡РµС‚РѕРј С‡РµСЂРЅРѕРІРёРє РёР»Рё РЅРµС‚
 function TAccessManager.ReadCurKindPerm(IsDraft: boolean; KindID, CreatorUserID: integer): boolean;
 begin
   Result := ReadCurKindPermTo(CurKindPerm, IsDraft, KindID, CreatorUserID);
 end;
 
-// Права текущего пользователя на указанный вид заказа
+// РџСЂР°РІР° С‚РµРєСѓС‰РµРіРѕ РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ РЅР° СѓРєР°Р·Р°РЅРЅС‹Р№ РІРёРґ Р·Р°РєР°Р·Р°
 function TAccessManager.ReadCurKindPermTo(var Rec: TCurKindPerm; IsDraft: boolean; KindID, CreatorUserID: integer): boolean;
 begin
   Result := ReadUserCurKindPermTo(Rec, IsDraft, KindID, CurUser.ID, CreatorUserID);
@@ -720,12 +721,12 @@ begin
     Rec.CreateNew := cdAccessKind[w + 'Create'];
     if CreatorUserID = UserID then
     begin
-      Rec.Update := cdAccessKind[w + 'UpdateOwn'];  // свой заказ
+      Rec.Update := cdAccessKind[w + 'UpdateOwn'];  // СЃРІРѕР№ Р·Р°РєР°Р·
       Rec.Delete := cdAccessKind[w + 'DeleteOwn'];
     end
     else
     begin
-      Rec.Update := cdAccessKind[w + 'UpdateOther'];  // чужой заказ
+      Rec.Update := cdAccessKind[w + 'UpdateOther'];  // С‡СѓР¶РѕР№ Р·Р°РєР°Р·
       Rec.Delete := cdAccessKind[w + 'DeleteOther'];
     end;
     Rec.Browse := cdAccessKind[w + 'Browse'];
@@ -751,15 +752,15 @@ begin
   end;
 end;
 
-// Создается и заполняется список пользователей
+// РЎРѕР·РґР°РµС‚СЃСЏ Рё Р·Р°РїРѕР»РЅСЏРµС‚СЃСЏ СЃРїРёСЃРѕРє РїРѕР»СЊР·РѕРІР°С‚РµР»РµР№
 procedure TAccessManager.UpdateUserList;
 var
   ui: TUserInfo;
   dq: TDataSet;
 begin
-  // Удаляем, если был
+  // РЈРґР°Р»СЏРµРј, РµСЃР»Рё Р±С‹Р»
   if (Users <> nil) and (Users.Count > 0) then DoneUserList;
-  // Создаем, если не было или удалили
+  // РЎРѕР·РґР°РµРј, РµСЃР»Рё РЅРµ Р±С‹Р»Рѕ РёР»Рё СѓРґР°Р»РёР»Рё
   if Users = nil then
     Users := TStringList.Create;
   dq := AllUsersData;
@@ -797,7 +798,7 @@ end;
 
 procedure TAccessManager.DoAfterOpenUsers(Sender: TObject);
 begin
-  UpdateUserList;  // обновляем список пользователей
+  UpdateUserList;  // РѕР±РЅРѕРІР»СЏРµРј СЃРїРёСЃРѕРє РїРѕР»СЊР·РѕРІР°С‚РµР»РµР№
 end;
 
 procedure TAccessManager.RefreshUsers;
@@ -811,7 +812,7 @@ begin
   if adm.cdAccessUser.Locate('Login', Login, [loCaseInsensitive]) then
     Result := adm.cdAccessUser['AccessUserID']
   else
-    Result := 0; // пользователь не найден
+    Result := 0; // РїРѕР»СЊР·РѕРІР°С‚РµР»СЊ РЅРµ РЅР°Р№РґРµРЅ
 end;
 
 function TAccessManager.GetUserLogin(UserID: integer): string;
@@ -819,7 +820,7 @@ begin
   if adm.cdAccessUser.Locate('AccessUserID', UserID, []) then
     Result := adm.cdAccessUser['Login']
   else
-    Result := ''; // пользователь не найден
+    Result := ''; // РїРѕР»СЊР·РѕРІР°С‚РµР»СЊ РЅРµ РЅР°Р№РґРµРЅ
 end;
 
 function TAccessManager.GetUserName(UserID: integer): string;
@@ -827,7 +828,7 @@ begin
   if adm.cdAccessUser.Locate('AccessUserID', UserID, []) then
     Result := adm.cdAccessUser['Name']
   else
-    Result := ''; // пользователь не найден
+    Result := ''; // РїРѕР»СЊР·РѕРІР°С‚РµР»СЊ РЅРµ РЅР°Р№РґРµРЅ
 end;
 
 procedure TAccessManager.SetUserRights;
@@ -863,7 +864,7 @@ end;
 
 procedure TAccessManager.UsersNullException;
 begin
-  raise Exception.Create('Не создан список пользователей');
+  raise Exception.Create('РќРµ СЃРѕР·РґР°РЅ СЃРїРёСЃРѕРє РїРѕР»СЊР·РѕРІР°С‚РµР»РµР№');
 end;
 
 procedure TAccessManager.ApplyUsers(DoOpen: boolean);
@@ -876,7 +877,7 @@ begin
   Result := adm.AllUsersData;
 end;
 
-// Создает копию списка пользователей с полным именем и логином
+// РЎРѕР·РґР°РµС‚ РєРѕРїРёСЋ СЃРїРёСЃРєР° РїРѕР»СЊР·РѕРІР°С‚РµР»РµР№ СЃ РїРѕР»РЅС‹Рј РёРјРµРЅРµРј Рё Р»РѕРіРёРЅРѕРј
 function TAccessManager.GetUserNames: TStringList;
 var
   UsersCopy: TStringList;
@@ -897,7 +898,7 @@ begin
   Result := UsersCopy;
 end;
 
-// Создает полную копию списка пользователей
+// РЎРѕР·РґР°РµС‚ РїРѕР»РЅСѓСЋ РєРѕРїРёСЋ СЃРїРёСЃРєР° РїРѕР»СЊР·РѕРІР°С‚РµР»РµР№
 function TAccessManager.GetUsersCopy: TStringList;
 var
   UsersCopy: TStringList;
@@ -928,7 +929,7 @@ begin
   Result := UsersCopy;
 end;
 
-// Возвращает пароль текущего пользователя
+// Р’РѕР·РІСЂР°С‰Р°РµС‚ РїР°СЂРѕР»СЊ С‚РµРєСѓС‰РµРіРѕ РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ
 function TAccessManager.GetCurUserPass: string;
 begin
   if FCurUserPass = '' then
@@ -963,13 +964,35 @@ begin
   if Options.ShowUserLogin then
   begin
     if info.Name <> info.Login then
-      // если полное имя и логин совпадают, то отобр. только один
+      // РµСЃР»Рё РїРѕР»РЅРѕРµ РёРјСЏ Рё Р»РѕРіРёРЅ СЃРѕРІРїР°РґР°СЋС‚, С‚Рѕ РѕС‚РѕР±СЂ. С‚РѕР»СЊРєРѕ РѕРґРёРЅ
       Result := info.Name + ' (' + info.Login + ')'
     else
       Result := info.Name;
   end
   else
     Result := info.Name;
+end;
+
+function TAccessManager.HasUserReportGroupAccess(ReportGroupId: integer): boolean;
+
+  function FindUserReportGroupPermission(UserLogin: string; Access: boolean): boolean;
+  var
+    ds: TDataSet;
+  begin
+    ds:= TConfigManager.Instance.StandardDics.deReportUserPermissions.DicItems;
+    if UserLogin = '' then
+      ds.Filter := 'A1=' + IntToStr(ReportGroupId) + ' and (Name = '''' or Name is null) and Visible'
+    else
+      ds.Filter := 'A1=' + IntToStr(ReportGroupId) + ' and Name = ''' + UserLogin + ''' and Visible';
+    ds.FilterOptions := [foCaseInsensitive];
+    ds.Filtered := true;
+    Result := (ds.RecordCount > 0) and not VarIsNull(ds['A2']) and (Access = ds['A2']);
+    ds.Filtered := false;
+  end;
+
+begin
+  Result := (FindUserReportGroupPermission(TSettingsManager.Instance.CurUserLogin, true) or FindUserReportGroupPermission('', true))
+    and (not FindUserReportGroupPermission('', false) or not FindUserReportGroupPermission(TSettingsManager.Instance.CurUserLogin, false));
 end;
 
 initialization

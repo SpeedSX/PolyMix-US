@@ -120,6 +120,7 @@ object EditCustomReportsForm: TEditCustomReportsForm
       AllowedSelections = [gstRecordBookmarks]
       AutoFitColWidths = True
       ColumnDefValues.Layout = tlCenter
+      DataGrouping.GroupLevels = <>
       DataSource = dsCustomReports
       Flat = True
       FooterColor = clWindow
@@ -129,7 +130,8 @@ object EditCustomReportsForm: TEditCustomReportsForm
       FooterFont.Name = 'Tahoma'
       FooterFont.Style = []
       Options = [dgColumnResize, dgTabs, dgRowSelect, dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit]
-      OptionsEh = [dghHighlightFocus, dghClearSelection, dghDialogFind]
+      OptionsEh = [dghHighlightFocus, dghClearSelection, dghDialogFind, dghColumnResize, dghColumnMove]
+      RowDetailPanel.Color = clBtnFace
       RowHeight = 17
       TabOrder = 0
       TitleFont.Charset = DEFAULT_CHARSET
@@ -145,6 +147,8 @@ object EditCustomReportsForm: TEditCustomReportsForm
           ReadOnly = True
           Width = 198
         end>
+      object RowDetailData: TRowDetailPanelControlEh
+      end
     end
   end
   object dsCustomReports: TDataSource

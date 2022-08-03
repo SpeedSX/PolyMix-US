@@ -18,11 +18,11 @@ uses Windows, SysUtils, Classes, Graphics, Forms, Controls, StdCtrls,
   GridsEh, MyDBGridEh,
   PmDatabase, PmOrder, XPMan, PmOrderController, PmDraftController, PmWorkController,
   PmReportData, PmReportController
-  // -- все перечисленные ниже - для документов использующих ReportBuilder Designer!
+  // -- РІСЃРµ РїРµСЂРµС‡РёСЃР»РµРЅРЅС‹Рµ РЅРёР¶Рµ - РґР»СЏ РґРѕРєСѓРјРµРЅС‚РѕРІ РёСЃРїРѕР»СЊР·СѓСЋС‰РёС… ReportBuilder Designer!
 {  , ppEndUsr,
   ppDB, ppDBPipe, ppBands, ppCache, ppClass, ppComm, ppRelatv,
   ppProd, ppReport }
-  // -- для сообщений
+  // -- РґР»СЏ СЃРѕРѕР±С‰РµРЅРёР№
 {$IFNDEF NoNet}
 //  , Psock, NMMSG
 {$ENDIF}
@@ -32,16 +32,16 @@ uses Windows, SysUtils, Classes, Graphics, Forms, Controls, StdCtrls,
   ;
 
 const
-  ProgramVersion = 020752;    // Текущая версия программы. Не используется
+  ProgramVersion = 020752;    // РўРµРєСѓС‰Р°СЏ РІРµСЂСЃРёСЏ РїСЂРѕРіСЂР°РјРјС‹. РќРµ РёСЃРїРѕР»СЊР·СѓРµС‚СЃСЏ
 
 {const
   forNew  = 0;
   forEdit = 1;}
 
 var
-  // К сожалению, из нижеперечисленных переменных используется только CourseNotifIgnore.
-  // В сети с несколькими пользователями они могут сильно уменьшить
-  // количество лишних обновлений.
+  // Рљ СЃРѕР¶Р°Р»РµРЅРёСЋ, РёР· РЅРёР¶РµРїРµСЂРµС‡РёСЃР»РµРЅРЅС‹С… РїРµСЂРµРјРµРЅРЅС‹С… РёСЃРїРѕР»СЊР·СѓРµС‚СЃСЏ С‚РѕР»СЊРєРѕ CourseNotifIgnore.
+  // Р’ СЃРµС‚Рё СЃ РЅРµСЃРєРѕР»СЊРєРёРјРё РїРѕР»СЊР·РѕРІР°С‚РµР»СЏРјРё РѕРЅРё РјРѕРіСѓС‚ СЃРёР»СЊРЅРѕ СѓРјРµРЅСЊС€РёС‚СЊ
+  // РєРѕР»РёС‡РµСЃС‚РІРѕ Р»РёС€РЅРёС… РѕР±РЅРѕРІР»РµРЅРёР№.
 //  ContrNotifIgnore, CalcNotifIgnore, WorkNotifIgnore, PricesNotifIgnore,
   CourseNotifIgnore: boolean;
 
@@ -364,7 +364,7 @@ type
     procedure SetCurrentView(const Value: TEntityController);
     //procedure WideOrderListChanged;
     //function GetGridOwner(Grid: TOrderGridClass): TOrder;
-    function GetLastCourse: extended;  // Получение курса с сервера
+    function GetLastCourse: extended;  // РџРѕР»СѓС‡РµРЅРёРµ РєСѓСЂСЃР° СЃ СЃРµСЂРІРµСЂР°
     function GetCurrentData: TDataSet;
     //procedure OrderAfterOpen(Sender: TObject);
     function CreateController(E: TEntity): TEntityController;
@@ -413,12 +413,12 @@ type
     //procedure FreeViews;
     procedure SaveViewSettings;
     procedure LoadViewSettings;
-    procedure ShowWorkOrderView;  // делает активной страницу с заказами
-    // открывает автоматически закрывающийся редактор заказа
+    procedure ShowWorkOrderView;  // РґРµР»Р°РµС‚ Р°РєС‚РёРІРЅРѕР№ СЃС‚СЂР°РЅРёС†Сѓ СЃ Р·Р°РєР°Р·Р°РјРё
+    // РѕС‚РєСЂС‹РІР°РµС‚ Р°РІС‚РѕРјР°С‚РёС‡РµСЃРєРё Р·Р°РєСЂС‹РІР°СЋС‰РёР№СЃСЏ СЂРµРґР°РєС‚РѕСЂ Р·Р°РєР°Р·Р°
     function OpenWorkOrderView: TWorkController;
     function OpenOrderView(Order: TOrder): TOrderController;
-    // возвращает активный элемент со списком заказов или список заказов,
-    // если оба неактивные или ноль если списка заказов нету
+    // РІРѕР·РІСЂР°С‰Р°РµС‚ Р°РєС‚РёРІРЅС‹Р№ СЌР»РµРјРµРЅС‚ СЃРѕ СЃРїРёСЃРєРѕРј Р·Р°РєР°Р·РѕРІ РёР»Рё СЃРїРёСЃРѕРє Р·Р°РєР°Р·РѕРІ,
+    // РµСЃР»Рё РѕР±Р° РЅРµР°РєС‚РёРІРЅС‹Рµ РёР»Рё РЅРѕР»СЊ РµСЃР»Рё СЃРїРёСЃРєР° Р·Р°РєР°Р·РѕРІ РЅРµС‚Сѓ
     function CurrentOrderView: TOrderController;
     function FindController(ViewClass: TEntityControllerClass): TEntityController;
     procedure MakeDraftOrder(DraftParamsProvider: IMakeDraftParamsProvider); overload;
@@ -430,7 +430,7 @@ type
     procedure OpenCustomReportView(ReportData: TReportData; ReportID: integer; SourceView: TEntityController);
     procedure CloseCurrentView;
     function OpenShipment: boolean;
-    // расходные накладные
+    // СЂР°СЃС…РѕРґРЅС‹Рµ РЅР°РєР»Р°РґРЅС‹Рµ
     function OpenSaleDocs: boolean;
     function OpenMaterialRequests: boolean;
     function OpenStock: boolean;
@@ -448,7 +448,7 @@ type
   TPageControlClass = TPageControl;
 
 const
-  MaxGrids = 2;   // максимальное количество таблиц на одной странице
+  MaxGrids = 2;   // РјР°РєСЃРёРјР°Р»СЊРЅРѕРµ РєРѕР»РёС‡РµСЃС‚РІРѕ С‚Р°Р±Р»РёС† РЅР° РѕРґРЅРѕР№ СЃС‚СЂР°РЅРёС†Рµ
 
 var
   MForm: TMForm;
@@ -520,7 +520,7 @@ begin
       FToolbar.Wallpaper.Bitmap.ReleaseHandle;
       FToolbar.Wallpaper.Bitmap.LoadFromFile(fnBack);
     except
-      RusMessageDlg('Не могу открыть файл изображения для панели инструментов', mtError, [mbOk], 0)
+      RusMessageDlg('РќРµ РјРѕРіСѓ РѕС‚РєСЂС‹С‚СЊ С„Р°Р№Р» РёР·РѕР±СЂР°Р¶РµРЅРёСЏ РґР»СЏ РїР°РЅРµР»Рё РёРЅСЃС‚СЂСѓРјРµРЅС‚РѕРІ', mtError, [mbOk], 0)
     end
     else
       FToolbar.Wallpaper.Bitmap.Handle := LoadBitmap(hInstance, 'BACKGROUND');
@@ -540,7 +540,7 @@ var
 begin
   //FreeViews;
   // !!!!!!!!!!!!!!!!!!!!!!!!!
-  // TODO: Здесь надо настраивать интерфейс - создавать страницы, фреймы и т.д.
+  // TODO: Р—РґРµСЃСЊ РЅР°РґРѕ РЅР°СЃС‚СЂР°РёРІР°С‚СЊ РёРЅС‚РµСЂС„РµР№СЃ - СЃРѕР·РґР°РІР°С‚СЊ СЃС‚СЂР°РЅРёС†С‹, С„СЂРµР№РјС‹ Рё С‚.Рґ.
   FViews := TList.Create;
   for i := 0 to Entities.Count - 1 do
   begin
@@ -551,7 +551,7 @@ begin
     FCurrentController := FViews[0];
 end;
 
-// Создает вид для сущности, возвращает nil если нет прав на просмотр
+// РЎРѕР·РґР°РµС‚ РІРёРґ РґР»СЏ СЃСѓС‰РЅРѕСЃС‚Рё, РІРѕР·РІСЂР°С‰Р°РµС‚ nil РµСЃР»Рё РЅРµС‚ РїСЂР°РІ РЅР° РїСЂРѕСЃРјРѕС‚СЂ
 function TMForm.CreateController(E: TEntity): TEntityController;
 var
   View: TEntityController;
@@ -560,7 +560,7 @@ var
 begin
   View := AppController.CreateEntityView(E);
   //View.MainStorage := MainFormStorage;
-  // Добавляем только видимые
+  // Р”РѕР±Р°РІР»СЏРµРј С‚РѕР»СЊРєРѕ РІРёРґРёРјС‹Рµ
   if View.Visible then
   begin
     FViews.Add(View);
@@ -571,7 +571,7 @@ begin
       (View as TOrderController).OnRightToLeft := DoOnRightToLeft;
       //(View as TOrderView).OnEnterOrder := DoOnEnterOrder;
     end;
-    // Создаем страничку для этого view
+    // РЎРѕР·РґР°РµРј СЃС‚СЂР°РЅРёС‡РєСѓ РґР»СЏ СЌС‚РѕРіРѕ view
     ts := TTabSheet.Create(Self);
     ts.PageControl := pcCalcOrder;
     ts.Caption := View.Caption;
@@ -638,7 +638,7 @@ var
   i: integer;
   EView: TEntityController;
 begin
-  // могут быть еще не инициализированы (при первом вызове при загрузке настроек)
+  // РјРѕРіСѓС‚ Р±С‹С‚СЊ РµС‰Рµ РЅРµ РёРЅРёС†РёР°Р»РёР·РёСЂРѕРІР°РЅС‹ (РїСЂРё РїРµСЂРІРѕРј РІС‹Р·РѕРІРµ РїСЂРё Р·Р°РіСЂСѓР·РєРµ РЅР°СЃС‚СЂРѕРµРє)
   if FViews <> nil then begin
     {MForm.AllNotifIgnore := true;
     try}
@@ -670,7 +670,7 @@ begin
   else if not Options.FlatBtn and (sbFlatBtns in MForm.Toolbar.Options) then
     FToolbar.Options := FToolbar.Options - [sbFlatBtns];
 
-  LoadToolbarPic; // картинки
+  LoadToolbarPic; // РєР°СЂС‚РёРЅРєРё
 end;}
 
 procedure TMForm.OnSettingsChanged(Sender: TObject);
@@ -711,14 +711,14 @@ begin
 
   TOrderController.UpdateKindLists;
 
-  // Прячем пункт меню с поставщиками, если они объединены с подрядчиками
+  // РџСЂСЏС‡РµРј РїСѓРЅРєС‚ РјРµРЅСЋ СЃ РїРѕСЃС‚Р°РІС‰РёРєР°РјРё, РµСЃР»Рё РѕРЅРё РѕР±СЉРµРґРёРЅРµРЅС‹ СЃ РїРѕРґСЂСЏРґС‡РёРєР°РјРё
   if EntSettings.AllContractors then
   begin
-    miContractors.Caption := 'Поставщики и подрядчики...';
+    miContractors.Caption := 'РџРѕСЃС‚Р°РІС‰РёРєРё Рё РїРѕРґСЂСЏРґС‡РёРєРё...';
     acSuppliers.Visible := false;
   end;
 
-  TMainActions.Actions := alMain;  // интересно, зачем второй раз?
+  TMainActions.Actions := alMain;  // РёРЅС‚РµСЂРµСЃРЅРѕ, Р·Р°С‡РµРј РІС‚РѕСЂРѕР№ СЂР°Р·?
 
   OnSettingsChanged(Self);
 
@@ -776,9 +776,9 @@ begin
   DoneApplication;
 end;
 
-(*procedure TMForm.acNewOrderExecute(Sender: TObject);   // Новый расчет
+(*procedure TMForm.acNewOrderExecute(Sender: TObject);   // РќРѕРІС‹Р№ СЂР°СЃС‡РµС‚
 begin
-  OrderBeforeScroll;  // Для режима автоматического открытия
+  OrderBeforeScroll;  // Р”Р»СЏ СЂРµР¶РёРјР° Р°РІС‚РѕРјР°С‚РёС‡РµСЃРєРѕРіРѕ РѕС‚РєСЂС‹С‚РёСЏ
   {$IFNDEF NoDocs}
   if InDocs and (DocFrame <> nil) then DocFrame.NewDoc
   else
@@ -795,13 +795,13 @@ var
   CView: TEntityController;
 begin
   if Options.ConfirmQuit then
-    CanClose := RusMessageDlg('Вы действительно хотите выйти из программы?', mtConfirmation, mbYesNo, 0) = mrYes
+    CanClose := RusMessageDlg('Р’С‹ РґРµР№СЃС‚РІРёС‚РµР»СЊРЅРѕ С…РѕС‚РёС‚Рµ РІС‹Р№С‚Рё РёР· РїСЂРѕРіСЂР°РјРјС‹?', mtConfirmation, mbYesNo, 0) = mrYes
   else
     CanClose := true;
 
   if (FViews <> nil) and CanClose then
   begin
-    // Закрываем все страницы
+    // Р—Р°РєСЂС‹РІР°РµРј РІСЃРµ СЃС‚СЂР°РЅРёС†С‹
     for I := 0 to FViews.Count - 1 do
     begin
       //pcCalcOrder.ActivePageIndex := I;
@@ -824,9 +824,9 @@ begin
 
   if CanClose then
   begin
-    // Вырубаем все таймеры...
+    // Р’С‹СЂСѓР±Р°РµРј РІСЃРµ С‚Р°Р№РјРµСЂС‹...
     Timer.Enabled := false;
-    MessageTimer.Enabled := false; // таймер сообщений
+    MessageTimer.Enabled := false; // С‚Р°Р№РјРµСЂ СЃРѕРѕР±С‰РµРЅРёР№
   end;
 
 end;
@@ -863,7 +863,7 @@ begin
     if not (CurrentController as TInvoiceController).Invoices.IsEmpty then
       Result := (CurrentController as TInvoiceController).Invoices.CustomerID;
   end;
-    //ExceptionHandler.Raise_('Неправильный контекст вызова GetCurrentCustomer: ' + CurrentView.ClassName);
+    //ExceptionHandler.Raise_('РќРµРїСЂР°РІРёР»СЊРЅС‹Р№ РєРѕРЅС‚РµРєСЃС‚ РІС‹Р·РѕРІР° GetCurrentCustomer: ' + CurrentView.ClassName);
 end;
 
 procedure TMForm.OpenCustomerPayments;
@@ -874,7 +874,7 @@ var
   View: TCustomerPaymentsController;
   CustomerID: integer;
 begin
-  // ищем не открыта ли уже эта закладка
+  // РёС‰РµРј РЅРµ РѕС‚РєСЂС‹С‚Р° Р»Рё СѓР¶Рµ СЌС‚Р° Р·Р°РєР»Р°РґРєР°
   if FViews <> nil then
   begin
     for k := 0 to FViews.Count - 1 do
@@ -885,9 +885,9 @@ begin
         ts := View.Frame.Parent as TTabSheet;
         pcCalcOrder.ActivePage := ts;
         //for i := 0 to pcCalcOrder.Pages.Count - 1 do
-        // Вызываем событие изменения текущей страницы
+        // Р’С‹Р·С‹РІР°РµРј СЃРѕР±С‹С‚РёРµ РёР·РјРµРЅРµРЅРёСЏ С‚РµРєСѓС‰РµР№ СЃС‚СЂР°РЅРёС†С‹
         pcCalcOrderChange(pcCalcOrder);
-        // переключаем на текущего заказчика
+        // РїРµСЂРµРєР»СЋС‡Р°РµРј РЅР° С‚РµРєСѓС‰РµРіРѕ Р·Р°РєР°Р·С‡РёРєР°
         if CustomerID > 0 then
         begin
           View.CustomerID := CustomerID;
@@ -895,10 +895,10 @@ begin
         end;
         Exit;
       end;
-    // Если не открыта, открываем
+    // Р•СЃР»Рё РЅРµ РѕС‚РєСЂС‹С‚Р°, РѕС‚РєСЂС‹РІР°РµРј
     E := AppController.CustomersWithIncome;
     View := CreateController(E) as TCustomerPaymentsController;
-    if View <> nil then  // может не быть прав(?)
+    if View <> nil then  // РјРѕР¶РµС‚ РЅРµ Р±С‹С‚СЊ РїСЂР°РІ(?)
     begin
 
       View.AfterRefresh := View_AfterRefresh;
@@ -914,7 +914,7 @@ begin
       ts := View.Frame.Parent as TTabSheet;
       pcCalcOrder.ActivePage := ts;
     end;
-    // Вызываем событие изменения текущей страницы
+    // Р’С‹Р·С‹РІР°РµРј СЃРѕР±С‹С‚РёРµ РёР·РјРµРЅРµРЅРёСЏ С‚РµРєСѓС‰РµР№ СЃС‚СЂР°РЅРёС†С‹
     pcCalcOrderChange(pcCalcOrder);
   end;
 end;
@@ -953,7 +953,7 @@ begin
   ReloadView(CurrentController);
 end;
 
-procedure TMForm.acReloadExecute(Sender: TObject);  // Обновляет текущую таблицу
+procedure TMForm.acReloadExecute(Sender: TObject);  // РћР±РЅРѕРІР»СЏРµС‚ С‚РµРєСѓС‰СѓСЋ С‚Р°Р±Р»РёС†Сѓ
 begin
   ReloadCurrent;
 end;
@@ -963,7 +963,7 @@ procedure TMForm.ReloadView(ev: TEntityController);
   c: boolean;}
 begin
   {AllNotifIgnore := true;
-  c := CalcTimer.Enabled;            // Сохраняем состояние таймера
+  c := CalcTimer.Enabled;            // РЎРѕС…СЂР°РЅСЏРµРј СЃРѕСЃС‚РѕСЏРЅРёРµ С‚Р°Р№РјРµСЂР°
   CalcTimer.Enabled := false;
   try}
     ev.RefreshData;
@@ -973,10 +973,10 @@ begin
   end;}
 end;
 
-// Создание копии заказа
+// РЎРѕР·РґР°РЅРёРµ РєРѕРїРёРё Р·Р°РєР°Р·Р°
 (*procedure TMForm.acCopyOrderExecute(Sender: TObject);
 begin
-  OrderBeforeScroll;  // Для режима автоматического открытия
+  OrderBeforeScroll;  // Р”Р»СЏ СЂРµР¶РёРјР° Р°РІС‚РѕРјР°С‚РёС‡РµСЃРєРѕРіРѕ РѕС‚РєСЂС‹С‚РёСЏ
   AllNotifIgnore := true;
   try
    {$IFNDEF NoDocs}
@@ -1028,7 +1028,7 @@ begin
     begin
       FCurrentController := FViews[0];
       //FilterFrame.Entity := FCurrentView.Entity as TOrder;
-      //FilterFrame.Activate;  // активизируем панель фильтра
+      //FilterFrame.Activate;  // Р°РєС‚РёРІРёР·РёСЂСѓРµРј РїР°РЅРµР»СЊ С„РёР»СЊС‚СЂР°
     end;
     acUsers.Enabled := AccessManager.CurUser.EditUsers;
     acEditConfig.Enabled := AccessManager.CurUser.EditDics;
@@ -1036,30 +1036,30 @@ begin
     acCustomReports.Enabled := AccessManager.CurUser.EditCustomReports;
     acCustomerPayments.Enabled := AccessManager.CurUser.ViewPayments;
     acDisplayInfo.Enabled := AccessManager.CurUser.EditModules;
-    // Пока сервисные функции по тем же правам что и настройки справочников
+    // РџРѕРєР° СЃРµСЂРІРёСЃРЅС‹Рµ С„СѓРЅРєС†РёРё РїРѕ С‚РµРј Р¶Рµ РїСЂР°РІР°Рј С‡С‚Рѕ Рё РЅР°СЃС‚СЂРѕР№РєРё СЃРїСЂР°РІРѕС‡РЅРёРєРѕРІ
     miService.Enabled := AccessManager.CurUser.EditDics;
-    // Пока инфопанель, настройки предприятия
-    // по тем же правам что и сценарии.
+    // РџРѕРєР° РёРЅС„РѕРїР°РЅРµР»СЊ, РЅР°СЃС‚СЂРѕР№РєРё РїСЂРµРґРїСЂРёСЏС‚РёСЏ
+    // РїРѕ С‚РµРј Р¶Рµ РїСЂР°РІР°Рј С‡С‚Рѕ Рё СЃС†РµРЅР°СЂРёРё.
     acEntSettings.Enabled := AccessManager.CurUser.EditModules;
     acUpdateCfg.Enabled := AccessManager.CurUser.EditModules;
     acShowAll.Enabled := EntSettings.PermitFilterOff;
-    // взаиморасчеты
+    // РІР·Р°РёРјРѕСЂР°СЃС‡РµС‚С‹
     acCustomerPayments.Enabled := AccessManager.CurUser.ViewPayments;
     acPayInvoice.Enabled := AccessManager.CurUser.AddPayments;
-    // счета
+    // СЃС‡РµС‚Р°
     acInvoices.Enabled := AccessManager.CurUser.ViewInvoices;
     acNewInvoice.Enabled := AccessManager.CurUser.AddInvoices;
     acEditInvoice.Enabled := acNewInvoice.Enabled;
     acDeleteInvoice.Enabled := AccessManager.CurUser.DeleteInvoices;
     acMakeInvoice.Enabled := acNewInvoice.Enabled;
     acEditOrderInvoice.Enabled := acInvoices.Enabled;
-    // отгрузка
+    // РѕС‚РіСЂСѓР·РєР°
     acShowShipment.Enabled := AccessManager.CurUser.ViewShipment;
     acShipmentReport.Enabled := acShowShipment.Enabled;
     acNewShipment.Enabled := AccessManager.CurUser.AddShipment;
     acEditShipment.Enabled := acNewShipment.Enabled;
     acDeleteShipment.Enabled := AccessManager.CurUser.DeleteShipment;
-    // закупки
+    // Р·Р°РєСѓРїРєРё
     acMaterialRequests.Enabled := AccessManager.CurUser.ViewMatRequests;
     {$IFDEF Manager}
     acCust.Enabled := false;
@@ -1094,7 +1094,7 @@ var
   E: TEntity;
   View: TIncomingInvoiceView;
 begin
-  // ищем не открыта ли уже эта закладка
+  // РёС‰РµРј РЅРµ РѕС‚РєСЂС‹С‚Р° Р»Рё СѓР¶Рµ СЌС‚Р° Р·Р°РєР»Р°РґРєР°
   if FViews <> nil then
   begin
     for k := 0 to FViews.Count - 1 do
@@ -1103,14 +1103,14 @@ begin
         ts := TIncomingInvoiceView(FViews[k]).Frame.Parent as TTabSheet;
         pcCalcOrder.ActivePage := ts;
         //for i := 0 to pcCalcOrder.Pages.Count - 1 do
-        // Вызываем событие изменения текущей страницы
+        // Р’С‹Р·С‹РІР°РµРј СЃРѕР±С‹С‚РёРµ РёР·РјРµРЅРµРЅРёСЏ С‚РµРєСѓС‰РµР№ СЃС‚СЂР°РЅРёС†С‹
         pcCalcOrderChange(pcCalcOrder);
         Exit;
       end;
-    // Если не открыта, открываем
+    // Р•СЃР»Рё РЅРµ РѕС‚РєСЂС‹С‚Р°, РѕС‚РєСЂС‹РІР°РµРј
     E := AppController.IncomingInvoices;
     View := CreateController(E) as TIncomingInvoiceView;
-    if View <> nil then  // может не быть прав(?)
+    if View <> nil then  // РјРѕР¶РµС‚ РЅРµ Р±С‹С‚СЊ РїСЂР°РІ(?)
     begin
 
       View.AfterRefresh := View_AfterRefresh;
@@ -1119,7 +1119,7 @@ begin
       ts := View.Frame.Parent as TTabSheet;
       pcCalcOrder.ActivePage := ts;
     end;
-    // Вызываем событие изменения текущей страницы
+    // Р’С‹Р·С‹РІР°РµРј СЃРѕР±С‹С‚РёРµ РёР·РјРµРЅРµРЅРёСЏ С‚РµРєСѓС‰РµР№ СЃС‚СЂР°РЅРёС†С‹
     pcCalcOrderChange(pcCalcOrder);
   end;
 end;
@@ -1136,11 +1136,11 @@ var
   E: TEntity;
   View: TInvoiceController;
 begin
-  // ищем не открыта ли уже эта закладка
+  // РёС‰РµРј РЅРµ РѕС‚РєСЂС‹С‚Р° Р»Рё СѓР¶Рµ СЌС‚Р° Р·Р°РєР»Р°РґРєР°
   if FViews <> nil then
   begin
     Result := true;
-    // если редактируется заказ то закрываем его
+    // РµСЃР»Рё СЂРµРґР°РєС‚РёСЂСѓРµС‚СЃСЏ Р·Р°РєР°Р· С‚Рѕ Р·Р°РєСЂС‹РІР°РµРј РµРіРѕ
     {if (CurrentView is TOrderView)
       and ((FCurrentView as TOrderView).ViewMode <> vmLeft) then
     begin
@@ -1149,7 +1149,7 @@ begin
       else
         CancelCurrent;
     end;}
-    // Если заказ был закрыт успешно
+    // Р•СЃР»Рё Р·Р°РєР°Р· Р±С‹Р» Р·Р°РєСЂС‹С‚ СѓСЃРїРµС€РЅРѕ
     if Result then
     begin
       for k := 0 to FViews.Count - 1 do
@@ -1158,26 +1158,26 @@ begin
           ts := TInvoiceController(FViews[k]).Frame.Parent as TTabSheet;
           pcCalcOrder.ActivePage := ts;
           //for i := 0 to pcCalcOrder.Pages.Count - 1 do
-          // Вызываем событие изменения текущей страницы
+          // Р’С‹Р·С‹РІР°РµРј СЃРѕР±С‹С‚РёРµ РёР·РјРµРЅРµРЅРёСЏ С‚РµРєСѓС‰РµР№ СЃС‚СЂР°РЅРёС†С‹
           pcCalcOrderChange(pcCalcOrder);
           Exit;
         end;
-      // Если не открыта, открываем
+      // Р•СЃР»Рё РЅРµ РѕС‚РєСЂС‹С‚Р°, РѕС‚РєСЂС‹РІР°РµРј
       E := AppController.Invoices;
       View := CreateController(E) as TInvoiceController;
-      if View <> nil then  // может не быть прав(?)
+      if View <> nil then  // РјРѕР¶РµС‚ РЅРµ Р±С‹С‚СЊ РїСЂР°РІ(?)
       begin
 
         View.AfterRefresh := View_AfterRefresh;
         View.LoadSettings;
-        // TODO: это должно быть перенесено в TInvoicesFrame
+        // TODO: СЌС‚Рѕ РґРѕР»Р¶РЅРѕ Р±С‹С‚СЊ РїРµСЂРµРЅРµСЃРµРЅРѕ РІ TInvoicesFrame
         View.AfterScrollID2 := View.Entity.AfterScrollNotifier.RegisterHandler(InvoicesAfterScroll);
         View.OpenID := View.Entity.OpenNotifier.RegisterHandler(InvoicesAfterScroll);
 
         ts := View.Frame.Parent as TTabSheet;
         pcCalcOrder.ActivePage := ts;
       end;
-      // Вызываем событие изменения текущей страницы
+      // Р’С‹Р·С‹РІР°РµРј СЃРѕР±С‹С‚РёРµ РёР·РјРµРЅРµРЅРёСЏ С‚РµРєСѓС‰РµР№ СЃС‚СЂР°РЅРёС†С‹
       pcCalcOrderChange(pcCalcOrder);
     end;
   end;
@@ -1208,17 +1208,17 @@ end;
 
 procedure ServerShutdownWarning;
 begin
-  RusMessageDlg('Через 5 минут произойдет перезагрузка сервера! Сохраните данные и закройте программу!',
+  RusMessageDlg('Р§РµСЂРµР· 5 РјРёРЅСѓС‚ РїСЂРѕРёР·РѕР№РґРµС‚ РїРµСЂРµР·Р°РіСЂСѓР·РєР° СЃРµСЂРІРµСЂР°! РЎРѕС…СЂР°РЅРёС‚Рµ РґР°РЅРЅС‹Рµ Рё Р·Р°РєСЂРѕР№С‚Рµ РїСЂРѕРіСЂР°РјРјСѓ!',
      mtWarning, [mbOk], 0);
 end;
 
-procedure TMForm.TimerTimer(Sender: TObject);    // Просмотр/обработка очереди сообщений
+procedure TMForm.TimerTimer(Sender: TObject);    // РџСЂРѕСЃРјРѕС‚СЂ/РѕР±СЂР°Р±РѕС‚РєР° РѕС‡РµСЂРµРґРё СЃРѕРѕР±С‰РµРЅРёР№
 begin
   {$IFNDEF NoNet}
   if NotifLock or (NotifQue = nil) or (NotifQue.Count = 0) then Exit;
-  // Обработка выключения сервера производится в любом случае
+  // РћР±СЂР°Р±РѕС‚РєР° РІС‹РєР»СЋС‡РµРЅРёСЏ СЃРµСЂРІРµСЂР° РїСЂРѕРёР·РІРѕРґРёС‚СЃСЏ РІ Р»СЋР±РѕРј СЃР»СѓС‡Р°Рµ
   try
-    // блокируем очередь
+    // Р±Р»РѕРєРёСЂСѓРµРј РѕС‡РµСЂРµРґСЊ
     NotifLock := true;
     if NotifQue.IndexOf(ServerShutdownNotif) <> -1 then
     begin
@@ -1227,49 +1227,49 @@ begin
       Exit;
     end;
   finally
-    NotifLock := false;  // разблокируем очередь
+    NotifLock := false;  // СЂР°Р·Р±Р»РѕРєРёСЂСѓРµРј РѕС‡РµСЂРµРґСЊ
   end;
   if AllNotifIgnore then Exit;
   NotifLock := true;
-  Timer.Enabled := false;         // Отключаемся, чтобы не вызвали еще раз
+  Timer.Enabled := false;         // РћС‚РєР»СЋС‡Р°РµРјСЃСЏ, С‡С‚РѕР±С‹ РЅРµ РІС‹Р·РІР°Р»Рё РµС‰Рµ СЂР°Р·
   try
     if not CalcNotifIgnore and (NotifQue.IndexOf(CalcNotif) <> -1) then begin
-      ReloadQuery(qiCalc);               // Перечитывание калькуляций
+      ReloadQuery(qiCalc);               // РџРµСЂРµС‡РёС‚С‹РІР°РЅРёРµ РєР°Р»СЊРєСѓР»СЏС†РёР№
       NotifQue.Delete(NotifQue.IndexOf(CalcNotif));
     end else
     if not CourseNotifIgnore and (NotifQue.IndexOf(CourseNotif) <> -1) then begin
-      SetCourse(GetLastCourse);   // Перечитывание курса доллара
+      SetCourse(GetLastCourse);   // РџРµСЂРµС‡РёС‚С‹РІР°РЅРёРµ РєСѓСЂСЃР° РґРѕР»Р»Р°СЂР°
       NotifQue.Delete(NotifQue.IndexOf(CourseNotif));
     end else
     if not WorkNotifIgnore and (NotifQue.IndexOf(WorkOrderNotif) <> -1) then begin
       if PermitWork then
-        ReloadQuery(qiWork);   // Перечитывание заказов
+        ReloadQuery(qiWork);   // РџРµСЂРµС‡РёС‚С‹РІР°РЅРёРµ Р·Р°РєР°Р·РѕРІ
       NotifQue.Delete(NotifQue.IndexOf(WorkOrderNotif));
     end else
     if not PricesNotifIgnore and (NotifQue.IndexOf(PricesNotif) <> -1) then begin
-{      DestroyPrices;   // Перечитывание цен - НЕ РАБОТАЕТ !!!!!!!!!!!!!!!!!!!!!!!!
+{      DestroyPrices;   // РџРµСЂРµС‡РёС‚С‹РІР°РЅРёРµ С†РµРЅ - РќР• Р РђР‘РћРўРђР•Рў !!!!!!!!!!!!!!!!!!!!!!!!
       LoadDBPrices;}
       //if State = vmRight then sm.CalcAllCost;
       NotifQue.Delete(NotifQue.IndexOf(PricesNotif));
     end else
     if not ContrNotifIgnore and (NotifQue.IndexOf(ContractNotif) <> -1) then begin
       if AllowContract then
-        ReloadQuery(qiContract);   // Перечитывание документов
+        ReloadQuery(qiContract);   // РџРµСЂРµС‡РёС‚С‹РІР°РЅРёРµ РґРѕРєСѓРјРµРЅС‚РѕРІ
       NotifQue.Delete(NotifQue.IndexOf(ContractNotif));
     end;
   finally
-    NotifLock := false;           // Включаемся
+    NotifLock := false;           // Р’РєР»СЋС‡Р°РµРјСЃСЏ
     Timer.Enabled := true;
   end;
   {$ENDIF}
 end;
 
-// Обработчик приема сообщения
+// РћР±СЂР°Р±РѕС‚С‡РёРє РїСЂРёРµРјР° СЃРѕРѕР±С‰РµРЅРёСЏ
 procedure TMForm.NotifServMSG(Sender: TComponent; const sFrom, sMsg: String);
 begin
   {$IFNDEF NoNet}
-  if CompareText(CurUser.Login, sFrom) = 0 then Exit;  // Сообщение от себя самого
-  if (sMsg = CalcNotif) and ResCalc then AddNotif(sMsg)   // Ставим его в очередь
+  if CompareText(CurUser.Login, sFrom) = 0 then Exit;  // РЎРѕРѕР±С‰РµРЅРёРµ РѕС‚ СЃРµР±СЏ СЃР°РјРѕРіРѕ
+  if (sMsg = CalcNotif) and ResCalc then AddNotif(sMsg)   // РЎС‚Р°РІРёРј РµРіРѕ РІ РѕС‡РµСЂРµРґСЊ
   else if (sMsg = CourseNotif) and ResCourse then AddNotif(sMsg)
   else if (sMsg = PricesNotif) and ResPrices then AddNotif(sMsg)
   else if (sMsg = WorkOrderNotif) and ResOrd then AddNotif(sMsg)
@@ -1291,7 +1291,7 @@ begin
     TSettingsManager.Instance.AppCourse := NewCourse
   else
   begin
-    // TODO: БРЕД какой-то, но иначе пока не получилось
+    // TODO: Р‘Р Р•Р” РєР°РєРѕР№-С‚Рѕ, РЅРѕ РёРЅР°С‡Рµ РїРѕРєР° РЅРµ РїРѕР»СѓС‡РёР»РѕСЃСЊ
     {if (FCurrentView is TOrderView) then
     begin
       if FCurrentView is TWorkView then
@@ -1326,13 +1326,13 @@ begin
   end;
 end;
 
-// Переключение табчиков
+// РџРµСЂРµРєР»СЋС‡РµРЅРёРµ С‚Р°Р±С‡РёРєРѕРІ
 procedure TMForm.pcCalcOrderChange(Sender: TObject);
 var
   SaveParent: TWinControl;
   IsOrderOrInvoice{, IsOrder}: boolean;
 begin
-  // Если нет видимых элементов, то выходим сразу
+  // Р•СЃР»Рё РЅРµС‚ РІРёРґРёРјС‹С… СЌР»РµРјРµРЅС‚РѕРІ, С‚Рѕ РІС‹С…РѕРґРёРј СЃСЂР°Р·Сѓ
   if (FViews = nil) or (FViews.Count = 0) then Exit;
 
   try
@@ -1411,7 +1411,7 @@ begin
   end;
 end;
 
-// Преобразование расчета в заказ
+// РџСЂРµРѕР±СЂР°Р·РѕРІР°РЅРёРµ СЂР°СЃС‡РµС‚Р° РІ Р·Р°РєР°Р·
 procedure TMForm.MakeWorkOrder(FDraftView: TDraftController; FWorkView: TWorkController;
   WorkParamsProvider: IMakeOrderParamsProvider);
 var
@@ -1422,22 +1422,22 @@ begin
   if not KP.MakeWork then Exit;
   if FDraftView.MakeOrder(WorkParamsProvider, NewId) then
   begin
-    // обновляем заказы
+    // РѕР±РЅРѕРІР»СЏРµРј Р·Р°РєР°Р·С‹
     FWorkView.Entity.ReloadLocate(NewId);
 
-    // отменяем изменения, возможно, сделанные в параметрах расчета
+    // РѕС‚РјРµРЅСЏРµРј РёР·РјРµРЅРµРЅРёСЏ, РІРѕР·РјРѕР¶РЅРѕ, СЃРґРµР»Р°РЅРЅС‹Рµ РІ РїР°СЂР°РјРµС‚СЂР°С… СЂР°СЃС‡РµС‚Р°
     FDraftView.Entity.CancelUpdates;
-    //ReloadMain(qiWork);  перечитывать не надо, это уже сделано
+    //ReloadMain(qiWork);  РїРµСЂРµС‡РёС‚С‹РІР°С‚СЊ РЅРµ РЅР°РґРѕ, СЌС‚Рѕ СѓР¶Рµ СЃРґРµР»Р°РЅРѕ
     if not WorkParamsProvider.CopyToWork then
     begin
       FDraftView.Entity.Reload;
       //NotifyModification;
     end;
-    pcCalcOrder.ActivePageIndex := FViews.IndexOf(FWorkView);     // Переключаем на заказы
+    pcCalcOrder.ActivePageIndex := FViews.IndexOf(FWorkView);     // РџРµСЂРµРєР»СЋС‡Р°РµРј РЅР° Р·Р°РєР°Р·С‹
     pcCalcOrderChange(nil);
   end
   else
-    // отменяем изменения, возможно, сделанные в параметрах расчета
+    // РѕС‚РјРµРЅСЏРµРј РёР·РјРµРЅРµРЅРёСЏ, РІРѕР·РјРѕР¶РЅРѕ, СЃРґРµР»Р°РЅРЅС‹Рµ РІ РїР°СЂР°РјРµС‚СЂР°С… СЂР°СЃС‡РµС‚Р°
     FDraftView.Entity.CancelUpdates;
 end;
 
@@ -1459,7 +1459,7 @@ begin
   end;
 end;
 
-// Преобразование заказа в расчет
+// РџСЂРµРѕР±СЂР°Р·РѕРІР°РЅРёРµ Р·Р°РєР°Р·Р° РІ СЂР°СЃС‡РµС‚
 procedure TMForm.MakeDraftOrder(FWorkView: TWorkController; FDraftView: TDraftController;
   DraftParamsProvider: IMakeDraftParamsProvider);
 var
@@ -1468,22 +1468,22 @@ var
 begin
   if FWorkView.MakeDraft(DraftParamsProvider, NewId) then
   begin
-    // обновляем расчеты
+    // РѕР±РЅРѕРІР»СЏРµРј СЂР°СЃС‡РµС‚С‹
     FDraftView.Entity.ReloadLocate(NewId);
 
-    // отменяем изменения, возможно, сделанные в параметрах заказа
+    // РѕС‚РјРµРЅСЏРµРј РёР·РјРµРЅРµРЅРёСЏ, РІРѕР·РјРѕР¶РЅРѕ, СЃРґРµР»Р°РЅРЅС‹Рµ РІ РїР°СЂР°РјРµС‚СЂР°С… Р·Р°РєР°Р·Р°
     FWorkView.Entity.CancelUpdates;
 
     if not DraftParamsProvider.CopyToDraft then
-    begin    // Если изменение статуса без копирования
+    begin    // Р•СЃР»Рё РёР·РјРµРЅРµРЅРёРµ СЃС‚Р°С‚СѓСЃР° Р±РµР· РєРѕРїРёСЂРѕРІР°РЅРёСЏ
       FWorkView.Entity.Reload;
       //NotifyModification;
     end;
-    pcCalcOrder.ActivePageIndex := FViews.IndexOf(FDraftView);;     // Переключаем на расчеты
+    pcCalcOrder.ActivePageIndex := FViews.IndexOf(FDraftView);;     // РџРµСЂРµРєР»СЋС‡Р°РµРј РЅР° СЂР°СЃС‡РµС‚С‹
     pcCalcOrderChange(nil);
   end
   else
-    // отменяем изменения, возможно, сделанные в параметрах расчета
+    // РѕС‚РјРµРЅСЏРµРј РёР·РјРµРЅРµРЅРёСЏ, РІРѕР·РјРѕР¶РЅРѕ, СЃРґРµР»Р°РЅРЅС‹Рµ РІ РїР°СЂР°РјРµС‚СЂР°С… СЂР°СЃС‡РµС‚Р°
     FWorkView.Entity.CancelUpdates;
 end;
 
@@ -1601,7 +1601,7 @@ procedure TMForm.pmPayAccClick(Sender: TObject);
 begin
 {  s := deAccounts.ItemName[(Sender as TMenuItem).Tag];
   try
-    if Pos('Нал', s) <> 0 then begin
+    if Pos('РќР°Р»', s) <> 0 then begin
       dm.cdOrderPayDet.Edit;
       dm.cdOrderPayDet['PayKind'] := 1;
       dm.cdOrderPayDet.Edit;
@@ -1628,20 +1628,20 @@ begin
   //try
     {$IFDEF NoFinance}
     try
-      ps := InputBox('Идентификация пользователя', 'Пароль', '');
+      ps := InputBox('РРґРµРЅС‚РёС„РёРєР°С†РёСЏ РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ', 'РџР°СЂРѕР»СЊ', '');
       if (Length(ps) = 0) or (Q_StrToCodes(ps) <> DicPsw) then Exit;
     except Exit; end;
     {$ENDIF}
-      // true если все успешно (ок и отмена не играют роли)
+      // true РµСЃР»Рё РІСЃРµ СѓСЃРїРµС€РЅРѕ (РѕРє Рё РѕС‚РјРµРЅР° РЅРµ РёРіСЂР°СЋС‚ СЂРѕР»Рё)
       if ExecDicEditForm(InsideOrder, TSettingsManager.Instance.Storage) then
       begin
         if not InsideOrder then
         begin
-          //BeforeDeleteServices;    // создаются заново странички
+          //BeforeDeleteServices;    // СЃРѕР·РґР°СЋС‚СЃСЏ Р·Р°РЅРѕРІРѕ СЃС‚СЂР°РЅРёС‡РєРё
           SetupServices;
         end;
        {$IFNDEF NoNet}
-        if SendPrices then SendNotif(PricesNotif); // Посылаем всем сообщение, что надо перечитать цены
+        if SendPrices then SendNotif(PricesNotif); // РџРѕСЃС‹Р»Р°РµРј РІСЃРµРј СЃРѕРѕР±С‰РµРЅРёРµ, С‡С‚Рѕ РЅР°РґРѕ РїРµСЂРµС‡РёС‚Р°С‚СЊ С†РµРЅС‹
        {$ENDIF}
       end;
   //finally
@@ -1659,7 +1659,7 @@ procedure TMForm.FormDestroy(Sender: TObject);
 begin
   //FreeOrderInvPayFrame;
   DoneColorItems;
-  // могла уже сработать финализация поэтому проверяем
+  // РјРѕРіР»Р° СѓР¶Рµ СЃСЂР°Р±РѕС‚Р°С‚СЊ С„РёРЅР°Р»РёР·Р°С†РёСЏ РїРѕСЌС‚РѕРјСѓ РїСЂРѕРІРµСЂСЏРµРј
   if TSettingsManager.Instance.SettingsChanged <> nil then
     TSettingsManager.Instance.SettingsChanged.UnregisterHandler(SettingsChangedHandlerID);
 end;
@@ -1711,10 +1711,10 @@ begin
   else
   begin
     ReportKey := (Sender as TMenuItem).Tag;
-    // Пункты меню отчетов, запрещенных к запуску внутри заказа,
-    // остаются активными в режиме автооткрытия заказов, поэтому проверочка
+    // РџСѓРЅРєС‚С‹ РјРµРЅСЋ РѕС‚С‡РµС‚РѕРІ, Р·Р°РїСЂРµС‰РµРЅРЅС‹С… Рє Р·Р°РїСѓСЃРєСѓ РІРЅСѓС‚СЂРё Р·Р°РєР°Р·Р°,
+    // РѕСЃС‚Р°СЋС‚СЃСЏ Р°РєС‚РёРІРЅС‹РјРё РІ СЂРµР¶РёРјРµ Р°РІС‚РѕРѕС‚РєСЂС‹С‚РёСЏ Р·Р°РєР°Р·РѕРІ, РїРѕСЌС‚РѕРјСѓ РїСЂРѕРІРµСЂРѕС‡РєР°
     if ReportKey > InsideTag then
-      CurrentController.PrintReport(ReportKey - InsideTag, true) // Значит, разрешено запускать в режиме редактирования
+      CurrentController.PrintReport(ReportKey - InsideTag, true) // Р—РЅР°С‡РёС‚, СЂР°Р·СЂРµС€РµРЅРѕ Р·Р°РїСѓСЃРєР°С‚СЊ РІ СЂРµР¶РёРјРµ СЂРµРґР°РєС‚РёСЂРѕРІР°РЅРёСЏ
     else
       CurrentController.PrintReport(ReportKey, false);
   end;
@@ -1728,7 +1728,7 @@ var
   View: TReportController;
   EquipGroupCode: integer;
 begin
-  // ищем, не открыт ли уже этот отчет и закрываем его
+  // РёС‰РµРј, РЅРµ РѕС‚РєСЂС‹С‚ Р»Рё СѓР¶Рµ СЌС‚РѕС‚ РѕС‚С‡РµС‚ Рё Р·Р°РєСЂС‹РІР°РµРј РµРіРѕ
   if FViews <> nil then
   begin
     for k := 0 to FViews.Count - 1 do
@@ -1736,13 +1736,13 @@ begin
       begin
         ts := TReportController(FViews[k]).Frame.Parent as TTabSheet;
         pcCalcOrder.ActivePage := ts;
-        // Вызываем событие изменения текущей страницы
+        // Р’С‹Р·С‹РІР°РµРј СЃРѕР±С‹С‚РёРµ РёР·РјРµРЅРµРЅРёСЏ С‚РµРєСѓС‰РµР№ СЃС‚СЂР°РЅРёС†С‹
         pcCalcOrderChange(pcCalcOrder);
         CloseCurrentView;
       end;
-    // Открываем новую
+    // РћС‚РєСЂС‹РІР°РµРј РЅРѕРІСѓСЋ
     View := CreateController(ReportData) as TReportController;
-    if View <> nil then  // может не быть прав(?)
+    if View <> nil then  // РјРѕР¶РµС‚ РЅРµ Р±С‹С‚СЊ РїСЂР°РІ(?)
     begin
       View.ReportID := ReportID;
       View.SourceFilterPhrase := SourceView.GetFilterPhrase;
@@ -1750,7 +1750,7 @@ begin
       ts := View.Frame.Parent as TTabSheet;
       pcCalcOrder.ActivePage := ts;
     end;
-    // Вызываем событие изменения текущей страницы
+    // Р’С‹Р·С‹РІР°РµРј СЃРѕР±С‹С‚РёРµ РёР·РјРµРЅРµРЅРёСЏ С‚РµРєСѓС‰РµР№ СЃС‚СЂР°РЅРёС†С‹
     pcCalcOrderChange(pcCalcOrder);
   end;
 end;
@@ -1767,14 +1767,14 @@ var
 begin
   if CurrentController is TOrderController then
   begin
-    t := - (Sender as TMenuItem).Tag; // там отрицательные значения тэгов
+    t := - (Sender as TMenuItem).Tag; // С‚Р°Рј РѕС‚СЂРёС†Р°С‚РµР»СЊРЅС‹Рµ Р·РЅР°С‡РµРЅРёСЏ С‚СЌРіРѕРІ
     ReportData := (CurrentController as TOrderController).BuildCustomReport(t);
     if ReportData <> nil then
       OpenCustomReportView(ReportData, t, CurrentController);
   end;
 end;
 
-// Расставляет Enabled для пунктов меню, в зав-сти от того, раб. ли он при откр. заказе
+// Р Р°СЃСЃС‚Р°РІР»СЏРµС‚ Enabled РґР»СЏ РїСѓРЅРєС‚РѕРІ РјРµРЅСЋ, РІ Р·Р°РІ-СЃС‚Рё РѕС‚ С‚РѕРіРѕ, СЂР°Р±. Р»Рё РѕРЅ РїСЂРё РѕС‚РєСЂ. Р·Р°РєР°Р·Рµ
 procedure TMForm.UpdateRepMenuEnabled;
 
   procedure DoUpdate(miItems: TMenuItem);
@@ -1788,7 +1788,7 @@ procedure TMForm.UpdateRepMenuEnabled;
       if mi.Tag > 0 then
       begin
         if mi.Tag > InsideTag then
-          // означает, что скрипт может работать при открытом заказе
+          // РѕР·РЅР°С‡Р°РµС‚, С‡С‚Рѕ СЃРєСЂРёРїС‚ РјРѕР¶РµС‚ СЂР°Р±РѕС‚Р°С‚СЊ РїСЂРё РѕС‚РєСЂС‹С‚РѕРј Р·Р°РєР°Р·Рµ
           mi.Enabled := true
         else
           mi.Enabled := Options.AutoOpen or not InsideOrder;
@@ -1805,12 +1805,12 @@ begin
     DoUpdate(miReports);
     DoUpdate(pmReports.Items);
     acPrint.Enabled := (TSettingsManager.Instance.DefaultReportID <> -1) and
-      (TSettingsManager.Instance.DefaultAllowInside and InsideOrder) or  // TODO: кажись бред
+      (TSettingsManager.Instance.DefaultAllowInside and InsideOrder) or  // TODO: РєР°Р¶РёСЃСЊ Р±СЂРµРґ
        not InsideOrder;
   end;
 end;
 
-// Заполнение меню отчетов отчетами
+// Р—Р°РїРѕР»РЅРµРЅРёРµ РјРµРЅСЋ РѕС‚С‡РµС‚РѕРІ РѕС‚С‡РµС‚Р°РјРё
 procedure TMForm.UpdateReportsMenu;
 
   function CreateMenuItem: TMenuItem;
@@ -1831,8 +1831,8 @@ procedure TMForm.UpdateReportsMenu;
 var
   mi: TMenuItem;
 begin
-  // Сначала удаляем то, что было...
-  // ПОКА УБРАЛ : сохраняем подменю пользовательских отчетов, временно удаляя его
+  // РЎРЅР°С‡Р°Р»Р° СѓРґР°Р»СЏРµРј С‚Рѕ, С‡С‚Рѕ Р±С‹Р»Рѕ...
+  // РџРћРљРђ РЈР‘Р РђР› : СЃРѕС…СЂР°РЅСЏРµРј РїРѕРґРјРµРЅСЋ РїРѕР»СЊР·РѕРІР°С‚РµР»СЊСЃРєРёС… РѕС‚С‡РµС‚РѕРІ, РІСЂРµРјРµРЅРЅРѕ СѓРґР°Р»СЏСЏ РµРіРѕ
   //if miCustomReportsMainMenu <> nil then
   //  pmReports.Items.Remove(pmReports.Items.IndexOf(miCustomReportsMainMenu));
   //if miCustomReportsToolbar <> nil then
@@ -1841,13 +1841,13 @@ begin
   miCustomReportsMainMenu := nil;
   miReports.Clear;
   pmReports.Items.Clear;
-  // Вставляем отчеты, описанные сценариями
+  // Р’СЃС‚Р°РІР»СЏРµРј РѕС‚С‡РµС‚С‹, РѕРїРёСЃР°РЅРЅС‹Рµ СЃС†РµРЅР°СЂРёСЏРјРё
   rdm.OpenReports;
   rdm.cdReports.First;
   TSettingsManager.Instance.DefaultReportID := -1;
   while not rdm.cdReports.eof do
   try
-    // пропускаем модули.
+    // РїСЂРѕРїСѓСЃРєР°РµРј РјРѕРґСѓР»Рё.
     if not VarIsNull(rdm.cdReports['IsUnit']) and not rdm.cdReports['IsUnit'] then
     begin
       mi := CreateMenuItem;
@@ -1867,7 +1867,7 @@ begin
     rdm.cdReports.Next;
   end;
   UpdateRepMenuEnabled;
-  // Вставляем подменю пользовательских отчетов
+  // Р’СЃС‚Р°РІР»СЏРµРј РїРѕРґРјРµРЅСЋ РїРѕР»СЊР·РѕРІР°С‚РµР»СЊСЃРєРёС… РѕС‚С‡РµС‚РѕРІ
   UpdateCustomReportsMenu;
 end;
 
@@ -1879,7 +1879,7 @@ procedure TMForm.UpdateCustomReportsMenu;
   begin
     mi := TMenuItem.Create(Self);
     mi.Caption := CustomReports.DataSet['ReportName'];
-    // отрицательные значения тэгов!
+    // РѕС‚СЂРёС†Р°С‚РµР»СЊРЅС‹Рµ Р·РЅР°С‡РµРЅРёСЏ С‚СЌРіРѕРІ!
     mi.Tag := - CustomReports.DataSet['ReportID'];
     mi.OnClick := miCustomReportClick;
     mi.ImageIndex := 5;
@@ -1892,7 +1892,7 @@ begin
   if miCustomReportsMainMenu = nil then
   begin
     miCustomReportsMainMenu := TMenuItem.Create(Self);
-    miCustomReportsMainMenu.Caption := 'Другие отчеты';
+    miCustomReportsMainMenu.Caption := 'Р”СЂСѓРіРёРµ РѕС‚С‡РµС‚С‹';
     miReports.Add(miCustomReportsMainMenu);
     if XPMenuPainter.Active then XPMenuPainter.ActivateMenuItem(miCustomReportsMainMenu, true);
   end else
@@ -1901,7 +1901,7 @@ begin
   if miCustomReportsToolbar = nil then
   begin
     miCustomReportsToolbar := TMenuItem.Create(Self);
-    miCustomReportsToolbar.Caption := 'Другие отчеты';
+    miCustomReportsToolbar.Caption := 'Р”СЂСѓРіРёРµ РѕС‚С‡РµС‚С‹';
     pmReports.Items.Add(miCustomReportsToolbar);
     if XPMenuPainter.Active then XPMenuPainter.ActivateMenuItem(miCustomReportsToolbar, true);
   end else
@@ -1911,13 +1911,17 @@ begin
   CustomReports.DataSet.First;
   while not CustomReports.DataSet.Eof do
   begin
-    mi := CreateMenuItem;
-    if XPMenuPainter.Active then XPMenuPainter.ActivateMenuItem(mi, true);
-    miCustomReportsMainMenu.Add(mi);
+    if VarIsNull(CustomReports.DataSet['ReportGroupId']) or
+       AccessManager.HasUserReportGroupAccess(CustomReports.DataSet['ReportGroupId']) then
+    begin
+      mi := CreateMenuItem;
+      if XPMenuPainter.Active then XPMenuPainter.ActivateMenuItem(mi, true);
+      miCustomReportsMainMenu.Add(mi);
 
-    mi := CreateMenuItem;
-    if XPMenuPainter.Active then XPMenuPainter.ActivateMenuItem(mi, true);
-    miCustomReportsToolbar.Add(mi);
+      mi := CreateMenuItem;
+      if XPMenuPainter.Active then XPMenuPainter.ActivateMenuItem(mi, true);
+      miCustomReportsToolbar.Add(mi);
+    end;
 
     CustomReports.DataSet.Next;
   end;
@@ -1930,10 +1934,10 @@ var
   de: TDictionary;
 begin
   miPlan.Clear;
-  // Проверяем права доступа
+  // РџСЂРѕРІРµСЂСЏРµРј РїСЂР°РІР° РґРѕСЃС‚СѓРїР°
   if AccessManager.CurUser.PermitPlanView or AccessManager.CurUser.ViewProduction then
   begin
-    // Выбираем группы оборудования
+    // Р’С‹Р±РёСЂР°РµРј РіСЂСѓРїРїС‹ РѕР±РѕСЂСѓРґРѕРІР°РЅРёСЏ
     de := TConfigManager.Instance.StandardDics.deEquipGroup;
     ds := de.DicItems;
     ds.First;
@@ -1941,7 +1945,7 @@ begin
     begin
       if AccessManager.CurUser.PermitPlanView then
       begin
-        // План
+        // РџР»Р°РЅ
         mi := TMenuItem.Create(Self);
         mi.Caption := de.CurrentName;
         mi.Tag := de.CurrentCode;
@@ -1952,7 +1956,7 @@ begin
 
       if AccessManager.CurUser.ViewProduction then
       begin
-        // В работе
+        // Р’ СЂР°Р±РѕС‚Рµ
         mi := TMenuItem.Create(Self);
         mi.Caption := de.CurrentName;
         mi.Tag := de.CurrentCode;
@@ -1978,7 +1982,7 @@ var
 begin
   //_Process := sm.ServiceByID((Sender as TMenuItem).Tag, false);
   EquipGroupCode := (Sender as TMenuItem).Tag;
-  // ищем не открыт ли уже этот план
+  // РёС‰РµРј РЅРµ РѕС‚РєСЂС‹С‚ Р»Рё СѓР¶Рµ СЌС‚РѕС‚ РїР»Р°РЅ
   if FViews <> nil then
   begin
     Found := false;
@@ -1991,17 +1995,17 @@ begin
       end;
     if not Found then
     begin
-      // Если не открыт, открываем
+      // Р•СЃР»Рё РЅРµ РѕС‚РєСЂС‹С‚, РѕС‚РєСЂС‹РІР°РµРј
       E := AppController.CreatePlan(EquipGroupCode);
       View := CreateController(E) as TPlanController;
-      if View <> nil then  // может не быть прав(?)
+      if View <> nil then  // РјРѕР¶РµС‚ РЅРµ Р±С‹С‚СЊ РїСЂР°РІ(?)
       begin
         View.LoadSettings;
         ts := View.PlanFrame.Parent as TTabSheet;
         pcCalcOrder.ActivePage := ts;
       end;
     end;
-    // Вызываем событие изменения текущей страницы
+    // Р’С‹Р·С‹РІР°РµРј СЃРѕР±С‹С‚РёРµ РёР·РјРµРЅРµРЅРёСЏ С‚РµРєСѓС‰РµР№ СЃС‚СЂР°РЅРёС†С‹
     pcCalcOrderChange(pcCalcOrder);
   end;
 end;
@@ -2017,7 +2021,7 @@ var
   Found: boolean;
 begin
   EquipGroupCode := (Sender as TMenuItem).Tag;
-  // ищем не открыт ли уже этот вид
+  // РёС‰РµРј РЅРµ РѕС‚РєСЂС‹С‚ Р»Рё СѓР¶Рµ СЌС‚РѕС‚ РІРёРґ
   if FViews <> nil then
   begin
     Found := false;
@@ -2031,17 +2035,17 @@ begin
       end;
     if not Found then
     begin
-      // Если не открыт, открываем
+      // Р•СЃР»Рё РЅРµ РѕС‚РєСЂС‹С‚, РѕС‚РєСЂС‹РІР°РµРј
       E := AppController.CreateProduction(EquipGroupCode);
       View := CreateController(E) as TProductionController;
-      if View <> nil then  // может не быть прав(?)
+      if View <> nil then  // РјРѕР¶РµС‚ РЅРµ Р±С‹С‚СЊ РїСЂР°РІ(?)
       begin
         View.LoadSettings;
         ts := View.ProdFrame.Parent as TTabSheet;
         pcCalcOrder.ActivePage := ts;
       end;
     end;
-    // Вызываем событие изменения текущей страницы
+    // Р’С‹Р·С‹РІР°РµРј СЃРѕР±С‹С‚РёРµ РёР·РјРµРЅРµРЅРёСЏ С‚РµРєСѓС‰РµР№ СЃС‚СЂР°РЅРёС†С‹
     pcCalcOrderChange(pcCalcOrder);
   end;
 end;
@@ -2063,7 +2067,7 @@ var
   View: TEntityController;
   Found: boolean;
 begin
-  // ищем не открыт ли уже этот вид
+  // РёС‰РµРј РЅРµ РѕС‚РєСЂС‹С‚ Р»Рё СѓР¶Рµ СЌС‚РѕС‚ РІРёРґ
   if FViews <> nil then
   begin
     Found := false;
@@ -2076,23 +2080,23 @@ begin
       end;
     if not Found then
     begin
-      // Если не открыт, открываем
+      // Р•СЃР»Рё РЅРµ РѕС‚РєСЂС‹С‚, РѕС‚РєСЂС‹РІР°РµРј
       E := AppController.CreateConfigTree;
       View := CreateController(E);
-      if View <> nil then  // может не быть прав(?)
+      if View <> nil then  // РјРѕР¶РµС‚ РЅРµ Р±С‹С‚СЊ РїСЂР°РІ(?)
       begin
         View.LoadSettings;
         ts := View.Frame.Parent as TTabSheet;
         pcCalcOrder.ActivePage := ts;
       end;
     end;
-    // Вызываем событие изменения текущей страницы
+    // Р’С‹Р·С‹РІР°РµРј СЃРѕР±С‹С‚РёРµ РёР·РјРµРЅРµРЅРёСЏ С‚РµРєСѓС‰РµР№ СЃС‚СЂР°РЅРёС†С‹
     pcCalcOrderChange(pcCalcOrder);
   end;
 end;
 
-(*procedure TMForm.CalcTimerTimer(Sender: TObject);  // Таймер для открытия расчета-заказа
-begin                                             // с задержкой
+(*procedure TMForm.CalcTimerTimer(Sender: TObject);  // РўР°Р№РјРµСЂ РґР»СЏ РѕС‚РєСЂС‹С‚РёСЏ СЂР°СЃС‡РµС‚Р°-Р·Р°РєР°Р·Р°
+begin                                             // СЃ Р·Р°РґРµСЂР¶РєРѕР№
   if not Options.AutoOpen then
   begin
     CalcTimer.Enabled := false;
@@ -2141,8 +2145,8 @@ begin
   if r = mrOk then SetCourse(TSettingsManager.Instance.AppCourse);
   if (r = mrOk) and InsideOrder then
     SetCourse(OrdCourse);
-  if (r = mrYes) and (RusMessageDlg('Курс на сервере будет установлен в ' +
-    FloatToStrF(TSettingsManager.Instance.AppCourse, ffFixed, 5, 2) + ' грн. Вы уверены?', mtConfirmation, [mbYes, mbNo], 0) = mrYes)
+  if (r = mrYes) and (RusMessageDlg('РљСѓСЂСЃ РЅР° СЃРµСЂРІРµСЂРµ Р±СѓРґРµС‚ СѓСЃС‚Р°РЅРѕРІР»РµРЅ РІ ' +
+    FloatToStrF(TSettingsManager.Instance.AppCourse, ffFixed, 5, 2) + ' РіСЂРЅ. Р’С‹ СѓРІРµСЂРµРЅС‹?', mtConfirmation, [mbYes, mbNo], 0) = mrYes)
     and dm.SetSrvCourse(TSettingsManager.Instance.AppCourse) then begin
       SetCourse(GetLastCourse);
      {$IFNDEF NoNet}
@@ -2155,8 +2159,8 @@ procedure TMForm.UpdateRecordCount;
 var n: integer;
 begin
   n := FCurrentController.Entity.TotalRecordCount;
-  if n <= 0 then lbRecCount.Caption := 'Нет записей'
-  else lbRecCount.Caption := 'Записей: ' + IntToStr(n);
+  if n <= 0 then lbRecCount.Caption := 'РќРµС‚ Р·Р°РїРёСЃРµР№'
+  else lbRecCount.Caption := 'Р—Р°РїРёСЃРµР№: ' + IntToStr(n);
 end;
 
 procedure TMForm.UpdateCaption;
@@ -2269,7 +2273,7 @@ end;
 
 procedure TMForm.ShowFilterChanged;
 begin
-  // TODO: перенсти в TOrderViewFrame
+  // TODO: РїРµСЂРµРЅСЃС‚Рё РІ TOrderViewFrame
   //if (CurrentView is TOrderView) then
   //begin
     //if not InsideOrder then
@@ -2287,7 +2291,7 @@ end;
 
 procedure TMForm.acCustomReportsExecute(Sender: TObject);
 begin
-  // обновить перед редактированием
+  // РѕР±РЅРѕРІРёС‚СЊ РїРµСЂРµРґ СЂРµРґР°РєС‚РёСЂРѕРІР°РЅРёРµРј
   CustomReports.Close;
   CustomReports.Open;
   if ExecCustomReportEditor(CustomReports, CurrentOrderView.Order) then
@@ -2358,7 +2362,7 @@ begin
   end;
 end;*)
 
-function TMForm.GetLastCourse: extended;  // Получение курса с сервера
+function TMForm.GetLastCourse: extended;  // РџРѕР»СѓС‡РµРЅРёРµ РєСѓСЂСЃР° СЃ СЃРµСЂРІРµСЂР°
 begin
   CourseNotifIgnore := true;
   try
@@ -2366,7 +2370,7 @@ begin
   except
     on E: Exception do
     begin
-      ExceptionHandler.Raise_(E, 'Не могу получить с сервера значение курса расчетной единицы',
+      ExceptionHandler.Raise_(E, 'РќРµ РјРѕРіСѓ РїРѕР»СѓС‡РёС‚СЊ СЃ СЃРµСЂРІРµСЂР° Р·РЅР°С‡РµРЅРёРµ РєСѓСЂСЃР° СЂР°СЃС‡РµС‚РЅРѕР№ РµРґРёРЅРёС†С‹',
         'GetLastCourse');
       Result := 0;
     end;
@@ -2414,7 +2418,7 @@ var
   View: TBaseRecycleBinView;
   Found: boolean;
 begin
-  // ищем не открыта ли уже корзина
+  // РёС‰РµРј РЅРµ РѕС‚РєСЂС‹С‚Р° Р»Рё СѓР¶Рµ РєРѕСЂР·РёРЅР°
   if FViews <> nil then
   begin
     Found := false;
@@ -2423,16 +2427,16 @@ begin
       begin
         ts := TBaseRecycleBinView(FViews[k]).Frame.Parent as TTabSheet;
         pcCalcOrder.ActivePage := ts;
-        // Вызываем событие изменения текущей страницы
+        // Р’С‹Р·С‹РІР°РµРј СЃРѕР±С‹С‚РёРµ РёР·РјРµРЅРµРЅРёСЏ С‚РµРєСѓС‰РµР№ СЃС‚СЂР°РЅРёС†С‹
         pcCalcOrderChange(pcCalcOrder);
         Found := true;
       end;
     if not Found then
     begin
-      // Если не открыта, открываем
+      // Р•СЃР»Рё РЅРµ РѕС‚РєСЂС‹С‚Р°, РѕС‚РєСЂС‹РІР°РµРј
       E := AppController.CreateRecycleBin(ObjectType);
       View := CreateController(E) as TBaseRecycleBinView;
-      if View <> nil then  // может не быть прав(?)
+      if View <> nil then  // РјРѕР¶РµС‚ РЅРµ Р±С‹С‚СЊ РїСЂР°РІ(?)
       begin
         View.AfterRefresh := View_AfterRefresh;
         View.LoadSettings;
@@ -2440,12 +2444,12 @@ begin
         pcCalcOrder.ActivePage := ts;
       end;
     end;
-    // Вызываем событие изменения текущей страницы
+    // Р’С‹Р·С‹РІР°РµРј СЃРѕР±С‹С‚РёРµ РёР·РјРµРЅРµРЅРёСЏ С‚РµРєСѓС‰РµР№ СЃС‚СЂР°РЅРёС†С‹
     pcCalcOrderChange(pcCalcOrder);
   end;
 end;
 
-// создает автоматически закрывающийся редактор заказа
+// СЃРѕР·РґР°РµС‚ Р°РІС‚РѕРјР°С‚РёС‡РµСЃРєРё Р·Р°РєСЂС‹РІР°СЋС‰РёР№СЃСЏ СЂРµРґР°РєС‚РѕСЂ Р·Р°РєР°Р·Р°
 function TMForm.OpenWorkOrderView: TWorkController;
 var
   Order: TWorkOrder;
@@ -2453,7 +2457,7 @@ begin
   Order := AppController.CreateWorkOrder;
   Result := OpenOrderView(Order) as TWorkController;
   Result.AutoClose := true;
-  // Вызываем событие изменения текущей страницы
+  // Р’С‹Р·С‹РІР°РµРј СЃРѕР±С‹С‚РёРµ РёР·РјРµРЅРµРЅРёСЏ С‚РµРєСѓС‰РµР№ СЃС‚СЂР°РЅРёС†С‹
   pcCalcOrderChange(pcCalcOrder);
 end;
 
@@ -2462,9 +2466,9 @@ var
   ts: TTabSheet;
   View: TOrderController;
 begin
-  // Если не открыта, открываем
+  // Р•СЃР»Рё РЅРµ РѕС‚РєСЂС‹С‚Р°, РѕС‚РєСЂС‹РІР°РµРј
   View := CreateController(Order) as TOrderController;
-  if View <> nil then  // может не быть прав(?)
+  if View <> nil then  // РјРѕР¶РµС‚ РЅРµ Р±С‹С‚СЊ РїСЂР°РІ(?)
   begin
     View.AfterRefresh := View_AfterRefresh;
     View.LoadSettings;
@@ -2482,7 +2486,7 @@ var
   View: TWorkController;
   Found: boolean;
 begin
-  // ищем закладку
+  // РёС‰РµРј Р·Р°РєР»Р°РґРєСѓ
   if FViews <> nil then
   begin
     Found := false;
@@ -2491,7 +2495,7 @@ begin
       begin
         ts := TWorkController(FViews[k]).Frame.Parent as TTabSheet;
         pcCalcOrder.ActivePage := ts;
-        // Вызываем событие изменения текущей страницы
+        // Р’С‹Р·С‹РІР°РµРј СЃРѕР±С‹С‚РёРµ РёР·РјРµРЅРµРЅРёСЏ С‚РµРєСѓС‰РµР№ СЃС‚СЂР°РЅРёС†С‹
         pcCalcOrderChange(pcCalcOrder);
         Found := true;
       end;
@@ -2514,16 +2518,16 @@ begin
 end;
 
 (*
-// ЭТО ХАК! Исправляет необъяснимое поведение контролов после переключения на корзину
-// и обратно, и изменение размеров окна. Не проверял в Delphi 2007
+// Р­РўРћ РҐРђРљ! РСЃРїСЂР°РІР»СЏРµС‚ РЅРµРѕР±СЉСЏСЃРЅРёРјРѕРµ РїРѕРІРµРґРµРЅРёРµ РєРѕРЅС‚СЂРѕР»РѕРІ РїРѕСЃР»Рµ РїРµСЂРµРєР»СЋС‡РµРЅРёСЏ РЅР° РєРѕСЂР·РёРЅСѓ
+// Рё РѕР±СЂР°С‚РЅРѕ, Рё РёР·РјРµРЅРµРЅРёРµ СЂР°Р·РјРµСЂРѕРІ РѕРєРЅР°. РќРµ РїСЂРѕРІРµСЂСЏР» РІ Delphi 2007
 procedure TMForm.tsCalcResize(Sender: TObject);
 begin
     if (dgCalcOrder <> nil) and (pcCalcOrder.Width > tsCalc.Width + 8) then
       tsCalc.Width := pcCalcOrder.Width - 8;
 end;
 
-// ЭТО ХАК! Исправляет необъяснимое поведение контролов после переключения на корзину
-// и обратно, и изменение размеров окна. Не проверял в Delphi 2007
+// Р­РўРћ РҐРђРљ! РСЃРїСЂР°РІР»СЏРµС‚ РЅРµРѕР±СЉСЏСЃРЅРёРјРѕРµ РїРѕРІРµРґРµРЅРёРµ РєРѕРЅС‚СЂРѕР»РѕРІ РїРѕСЃР»Рµ РїРµСЂРµРєР»СЋС‡РµРЅРёСЏ РЅР° РєРѕСЂР·РёРЅСѓ
+// Рё РѕР±СЂР°С‚РЅРѕ, Рё РёР·РјРµРЅРµРЅРёРµ СЂР°Р·РјРµСЂРѕРІ РѕРєРЅР°. РќРµ РїСЂРѕРІРµСЂСЏР» РІ Delphi 2007
 procedure TMForm.tsWorkResize(Sender: TObject);
 begin
     if (dgWorkOrder <> nil) and (pcCalcOrder.Width > tsWork.Width + 8) then
@@ -2556,7 +2560,7 @@ begin
   end;
 end;*)
 
-// Оплачиваем текущую счет-фактуру
+// РћРїР»Р°С‡РёРІР°РµРј С‚РµРєСѓС‰СѓСЋ СЃС‡РµС‚-С„Р°РєС‚СѓСЂСѓ
 procedure TMForm.acPayInvoiceExecute(Sender: TObject);
 var
   InvoiceItemID, InvoiceID: variant;
@@ -2567,16 +2571,16 @@ var
 begin
   if (CurrentController is TWorkController) then
   begin
-    // Оплачивается ЗАКАЗ
+    // РћРїР»Р°С‡РёРІР°РµС‚СЃСЏ Р—РђРљРђР—
     WView := CurrentController as TWorkController;
     InvoiceItemID := WView.InvoiceItemID;
     if NvlInteger(InvoiceItemID) <> 0 then
     begin
       CurrentCustomerID := WView.Order.CustomerID;
-      // открываем страничку оплат
+      // РѕС‚РєСЂС‹РІР°РµРј СЃС‚СЂР°РЅРёС‡РєСѓ РѕРїР»Р°С‚
       //OpenCustomerPayments;
       //PView := CurrentView as TCustomerPaymentsView;
-      // нужен именно заказчик, а не плательщик, иначе не найдет заказ
+      // РЅСѓР¶РµРЅ РёРјРµРЅРЅРѕ Р·Р°РєР°Р·С‡РёРє, Р° РЅРµ РїР»Р°С‚РµР»СЊС‰РёРє, РёРЅР°С‡Рµ РЅРµ РЅР°Р№РґРµС‚ Р·Р°РєР°Р·
       TCustomerPaymentsController.PayInvoiceItem(InvoiceItemID, CurrentCustomerID);
       WView.OrderInvoiceItems.Reload;
       WView.OrderPayments.Reload;
@@ -2584,23 +2588,23 @@ begin
   end
   else if (CurrentController is TInvoiceController) then
   begin
-    // Оплачивается СЧЕТ
+    // РћРїР»Р°С‡РёРІР°РµС‚СЃСЏ РЎР§Р•Рў
     InvView := CurrentController as TInvoiceController;
     InvoiceID := InvView.Invoices.KeyValue;
     if NvlInteger(InvoiceID) <> 0 then
     begin
       //CurrentCustomerID := (CurrentView as TInvoiceView).OrderCustomerID;
-      // открываем страничку оплат
+      // РѕС‚РєСЂС‹РІР°РµРј СЃС‚СЂР°РЅРёС‡РєСѓ РѕРїР»Р°С‚
       //OpenCustomerPayments;
       //PView := CurrentView as TCustomerPaymentsView;
-      // нужен именно заказчик, а не плательщик, иначе не найдет заказ
+      // РЅСѓР¶РµРЅ РёРјРµРЅРЅРѕ Р·Р°РєР°Р·С‡РёРє, Р° РЅРµ РїР»Р°С‚РµР»СЊС‰РёРє, РёРЅР°С‡Рµ РЅРµ РЅР°Р№РґРµС‚ Р·Р°РєР°Р·
       TCustomerPaymentsController.PayInvoice(InvoiceID);
       InvView.Invoices.Reload;
     end;
   end;
 end;
 
-// Меняем строчку оплаты текущей счет-фактуры
+// РњРµРЅСЏРµРј СЃС‚СЂРѕС‡РєСѓ РѕРїР»Р°С‚С‹ С‚РµРєСѓС‰РµР№ СЃС‡РµС‚-С„Р°РєС‚СѓСЂС‹
 procedure TMForm.acEditPayInvoiceExecute(Sender: TObject);
 var
   PayItemID: variant;
@@ -2611,16 +2615,16 @@ begin
 {
   if (CurrentController is TWorkController) then
   begin
-    // Оплачивается ЗАКАЗ
+    // РћРїР»Р°С‡РёРІР°РµС‚СЃСЏ Р—РђРљРђР—
     WView := CurrentController as TWorkController;
     InvoiceItemID := WView.InvoiceItemID;
     if NvlInteger(InvoiceItemID) <> 0 then
     begin
       CurrentCustomerID := WView.Order.CustomerID;
-      // открываем страничку оплат
+      // РѕС‚РєСЂС‹РІР°РµРј СЃС‚СЂР°РЅРёС‡РєСѓ РѕРїР»Р°С‚
       //OpenCustomerPayments;
       //PView := CurrentView as TCustomerPaymentsView;
-      // нужен именно заказчик, а не плательщик, иначе не найдет заказ
+      // РЅСѓР¶РµРЅ РёРјРµРЅРЅРѕ Р·Р°РєР°Р·С‡РёРє, Р° РЅРµ РїР»Р°С‚РµР»СЊС‰РёРє, РёРЅР°С‡Рµ РЅРµ РЅР°Р№РґРµС‚ Р·Р°РєР°Р·
       TCustomerPaymentsController.PayInvoiceItem(InvoiceItemID, CurrentCustomerID);
       WView.OrderInvoiceItems.Reload;
       WView.OrderPayments.Reload;
@@ -2628,16 +2632,16 @@ begin
   end
   else if (CurrentController is TInvoiceController) then
   begin
-    // Оплачивается СЧЕТ
+    // РћРїР»Р°С‡РёРІР°РµС‚СЃСЏ РЎР§Р•Рў
     InvView := CurrentController as TInvoiceController;
     InvoiceID := InvView.Invoices.KeyValue;
     if NvlInteger(InvoiceID) <> 0 then
     begin
       //CurrentCustomerID := (CurrentView as TInvoiceView).OrderCustomerID;
-      // открываем страничку оплат
+      // РѕС‚РєСЂС‹РІР°РµРј СЃС‚СЂР°РЅРёС‡РєСѓ РѕРїР»Р°С‚
       //OpenCustomerPayments;
       //PView := CurrentView as TCustomerPaymentsView;
-      // нужен именно заказчик, а не плательщик, иначе не найдет заказ
+      // РЅСѓР¶РµРЅ РёРјРµРЅРЅРѕ Р·Р°РєР°Р·С‡РёРє, Р° РЅРµ РїР»Р°С‚РµР»СЊС‰РёРє, РёРЅР°С‡Рµ РЅРµ РЅР°Р№РґРµС‚ Р·Р°РєР°Р·
       TCustomerPaymentsController.PayInvoice(InvoiceID);
       InvView.Invoices.Reload;
     end;
@@ -2675,7 +2679,7 @@ end;
 
 procedure TMForm.ViewCloseError(E: Exception);
 begin
-  RusMessageDlg('Ошибка при закрытии вкладки. Возможно, изменения не сохранены. ' + E.Message, mtError, [mbOk], 0);
+  RusMessageDlg('РћС€РёР±РєР° РїСЂРё Р·Р°РєСЂС‹С‚РёРё РІРєР»Р°РґРєРё. Р’РѕР·РјРѕР¶РЅРѕ, РёР·РјРµРЅРµРЅРёСЏ РЅРµ СЃРѕС…СЂР°РЅРµРЅС‹. ' + E.Message, mtError, [mbOk], 0);
 end;
 
 procedure TMForm.acShowShipmentExecute(Sender: TObject);
@@ -2691,7 +2695,7 @@ var
   VC: TEntityControllerClass;
   _Frame: TFrame;
 begin
-  // ищем не открыта ли уже эта закладка
+  // РёС‰РµРј РЅРµ РѕС‚РєСЂС‹С‚Р° Р»Рё СѓР¶Рµ СЌС‚Р° Р·Р°РєР»Р°РґРєР°
   if FViews <> nil then
   begin
     Result := true;
@@ -2700,25 +2704,25 @@ begin
       if (TObject(FViews[k]) is VC) then
       begin
         _Frame := TEntityController(FViews[k]).Frame;
-        if _Frame <> nil then  // аварийная ситуация м.б.
+        if _Frame <> nil then  // Р°РІР°СЂРёР№РЅР°СЏ СЃРёС‚СѓР°С†РёСЏ Рј.Р±.
         begin
           ts := _Frame.Parent as TTabSheet;
           pcCalcOrder.ActivePage := ts;
-          // Вызываем событие изменения текущей страницы
+          // Р’С‹Р·С‹РІР°РµРј СЃРѕР±С‹С‚РёРµ РёР·РјРµРЅРµРЅРёСЏ С‚РµРєСѓС‰РµР№ СЃС‚СЂР°РЅРёС†С‹
           pcCalcOrderChange(pcCalcOrder);
         end;
         Exit;
       end;
-    // Если не открыта, открываем
+    // Р•СЃР»Рё РЅРµ РѕС‚РєСЂС‹С‚Р°, РѕС‚РєСЂС‹РІР°РµРј
     View := CreateController(Entity);
-    if View <> nil then  // может не быть прав(?)
+    if View <> nil then  // РјРѕР¶РµС‚ РЅРµ Р±С‹С‚СЊ РїСЂР°РІ(?)
     begin
       View.AfterRefresh := View_AfterRefresh;
       View.LoadSettings;
       ts := View.Frame.Parent as TTabSheet;
       pcCalcOrder.ActivePage := ts;
     end;
-    // Вызываем событие изменения текущей страницы
+    // Р’С‹Р·С‹РІР°РµРј СЃРѕР±С‹С‚РёРµ РёР·РјРµРЅРµРЅРёСЏ С‚РµРєСѓС‰РµР№ СЃС‚СЂР°РЅРёС†С‹
     pcCalcOrderChange(pcCalcOrder);
   end
   else

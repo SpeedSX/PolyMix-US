@@ -7,7 +7,7 @@ uses Classes, Db, DbClient, Variants, MemTableEh,
   CalcUtils, DicObj, NotifyEvent, CalcSettings, PmDictionaryList;
 
 const
-  // поля справочника состояний
+  // РїРѕР»СЏ СЃРїСЂР°РІРѕС‡РЅРёРєР° СЃРѕСЃС‚РѕСЏРЅРёР№
   DicStateColorIndex = 1;
   DicStateImageIndex = 2;
   DicStateFileIndex = 3;
@@ -20,7 +20,7 @@ const
   partNoBinding = 1002;
 
 function DicCodesToArray(de: TDictionary): TIntArray;
-function StateListToArray(sl: TStringList): TIntArray; // пока не используется
+function StateListToArray(sl: TStringList): TIntArray; // РїРѕРєР° РЅРµ РёСЃРїРѕР»СЊР·СѓРµС‚СЃСЏ
 
 function GetPayStateFilter(PayState: variant): string;
 
@@ -39,55 +39,57 @@ type
       //dePayer,
       //dePaper,
       deParts,
-      dePayKind,     // вид оплаты
+      dePayKind,     // РІРёРґ РѕРїР»Р°С‚С‹
       deOrderState,
       deProcessExecState,
       dePayState,
       deInfoSource,
       deEquip,
       deEquipGroup,
-      deSpecialJob,  // специальные работы, добавляемые в план
-      deEquipTime,   // смены работы оборудования
-      deEquipGroupTime,   // смены работы оборудования по группам
+      deSpecialJob,  // СЃРїРµС†РёР°Р»СЊРЅС‹Рµ СЂР°Р±РѕС‚С‹, РґРѕР±Р°РІР»СЏРµРјС‹Рµ РІ РїР»Р°РЅ
+      deEquipTime,   // СЃРјРµРЅС‹ СЂР°Р±РѕС‚С‹ РѕР±РѕСЂСѓРґРѕРІР°РЅРёСЏ
+      deEquipGroupTime,   // СЃРјРµРЅС‹ СЂР°Р±РѕС‚С‹ РѕР±РѕСЂСѓРґРѕРІР°РЅРёСЏ РїРѕ РіСЂСѓРїРїР°Рј
 
-      // В этом списке хранятся счета для использования в "Состоянии оплаты".
-      // Он может меняться при работе и НЕ сохраняется в справочнике.
-      // НE создается при загрузке справочника.
+      // Р’ СЌС‚РѕРј СЃРїРёСЃРєРµ С…СЂР°РЅСЏС‚СЃСЏ СЃС‡РµС‚Р° РґР»СЏ РёСЃРїРѕР»СЊР·РѕРІР°РЅРёСЏ РІ "РЎРѕСЃС‚РѕСЏРЅРёРё РѕРїР»Р°С‚С‹".
+      // РћРЅ РјРѕР¶РµС‚ РјРµРЅСЏС‚СЊСЃСЏ РїСЂРё СЂР°Р±РѕС‚Рµ Рё РќР• СЃРѕС…СЂР°РЅСЏРµС‚СЃСЏ РІ СЃРїСЂР°РІРѕС‡РЅРёРєРµ.
+      // РќE СЃРѕР·РґР°РµС‚СЃСЏ РїСЂРё Р·Р°РіСЂСѓР·РєРµ СЃРїСЂР°РІРѕС‡РЅРёРєР°.
       deAccounts,
-      deProfessions,  // специальности
-      deEmployees,    // сотрудники
-      deDepartments,  // подразделения
-      deOperators,    // операторы оборудования
-      deTSColors, deTSKind, deTSChar,  // Справочники для компонентов расширенного шифра заказа (оригинальная идея "Таких Справ")
-      deExternalMaterials,   // импортированные номенклатуры материалов
-      deExternalProducts,    // импортированные номенклатуры продукции
-      deContragentType,      // вид контрагента
-      deContragentStatus,    // категория контрагента
-      deContragentActivity,  // вид деятельности контрагента
-      deMatCats,             // категории материалов
-      deMatUnits,            // единицы измерения материалов
-      deMatGroups,           // группы материалов
-      dePersonType,          // вид контакта
-      deWarehouse,            // склад
+      deProfessions,  // СЃРїРµС†РёР°Р»СЊРЅРѕСЃС‚Рё
+      deEmployees,    // СЃРѕС‚СЂСѓРґРЅРёРєРё
+      deDepartments,  // РїРѕРґСЂР°Р·РґРµР»РµРЅРёСЏ
+      deOperators,    // РѕРїРµСЂР°С‚РѕСЂС‹ РѕР±РѕСЂСѓРґРѕРІР°РЅРёСЏ
+      deTSColors, deTSKind, deTSChar,  // РЎРїСЂР°РІРѕС‡РЅРёРєРё РґР»СЏ РєРѕРјРїРѕРЅРµРЅС‚РѕРІ СЂР°СЃС€РёСЂРµРЅРЅРѕРіРѕ С€РёС„СЂР° Р·Р°РєР°Р·Р° (РѕСЂРёРіРёРЅР°Р»СЊРЅР°СЏ РёРґРµСЏ "РўР°РєРёС… РЎРїСЂР°РІ")
+      deExternalMaterials,   // РёРјРїРѕСЂС‚РёСЂРѕРІР°РЅРЅС‹Рµ РЅРѕРјРµРЅРєР»Р°С‚СѓСЂС‹ РјР°С‚РµСЂРёР°Р»РѕРІ
+      deExternalProducts,    // РёРјРїРѕСЂС‚РёСЂРѕРІР°РЅРЅС‹Рµ РЅРѕРјРµРЅРєР»Р°С‚СѓСЂС‹ РїСЂРѕРґСѓРєС†РёРё
+      deContragentType,      // РІРёРґ РєРѕРЅС‚СЂР°РіРµРЅС‚Р°
+      deContragentStatus,    // РєР°С‚РµРіРѕСЂРёСЏ РєРѕРЅС‚СЂР°РіРµРЅС‚Р°
+      deContragentActivity,  // РІРёРґ РґРµСЏС‚РµР»СЊРЅРѕСЃС‚Рё РєРѕРЅС‚СЂР°РіРµРЅС‚Р°
+      deMatCats,             // РєР°С‚РµРіРѕСЂРёРё РјР°С‚РµСЂРёР°Р»РѕРІ
+      deMatUnits,            // РµРґРёРЅРёС†С‹ РёР·РјРµСЂРµРЅРёСЏ РјР°С‚РµСЂРёР°Р»РѕРІ
+      deMatGroups,           // РіСЂСѓРїРїС‹ РјР°С‚РµСЂРёР°Р»РѕРІ
+      dePersonType,          // РІРёРґ РєРѕРЅС‚Р°РєС‚Р°
+      deWarehouse,            // СЃРєР»Р°Рґ
       deParam1,
       deParam2,
       deParam3,
-      deContragentAttrPerm    // УкрСіч - доступ до зміни параметра 'Неіснуючий'
+      deContragentAttrPerm,    // РЈРєСЂРЎС–С‡ - РґРѕСЃС‚СѓРї РґРѕ Р·РјС–РЅРё РїР°СЂР°РјРµС‚СЂР° 'РќРµС–СЃРЅСѓСЋС‡РёР№'
+      deReportGroups,          // РЈРєСЂРЎС–С‡ - РіСЂСѓРїРё Р·РІС–С‚С–РІ
+      deReportUserPermissions  // РЈРєСЂРЎС–С‡ - РґРѕСЃС‚СѓРї РґРѕ РіСЂСѓРї Р·РІС–С‚С–РІ
       : TDictionary;
 
-      OrderStates: TStringList;  // В этот список считывается содержимое справочника OrderState
-                                 // для ускорения работы. Список заполняется кодами справочника
-                                 // и объектами типа TOrderState
-      ProcessExecStates: TStringList;  // В этот список считывается содержимое справочника ServiceState
-                                    // ..... (см. выше)
-      PayStates: TStringList;  // В этот список считывается содержимое справочника PayState
-                                  // ..... (см. выше)
-    // Справочник основных состояний оплаты. Получается фильтрацией справочника всех состояний
-    // Вызывающий метод отвечает за освобождение памяти.
+      OrderStates: TStringList;  // Р’ СЌС‚РѕС‚ СЃРїРёСЃРѕРє СЃС‡РёС‚С‹РІР°РµС‚СЃСЏ СЃРѕРґРµСЂР¶РёРјРѕРµ СЃРїСЂР°РІРѕС‡РЅРёРєР° OrderState
+                                 // РґР»СЏ СѓСЃРєРѕСЂРµРЅРёСЏ СЂР°Р±РѕС‚С‹. РЎРїРёСЃРѕРє Р·Р°РїРѕР»РЅСЏРµС‚СЃСЏ РєРѕРґР°РјРё СЃРїСЂР°РІРѕС‡РЅРёРєР°
+                                 // Рё РѕР±СЉРµРєС‚Р°РјРё С‚РёРїР° TOrderState
+      ProcessExecStates: TStringList;  // Р’ СЌС‚РѕС‚ СЃРїРёСЃРѕРє СЃС‡РёС‚С‹РІР°РµС‚СЃСЏ СЃРѕРґРµСЂР¶РёРјРѕРµ СЃРїСЂР°РІРѕС‡РЅРёРєР° ServiceState
+                                    // ..... (СЃРј. РІС‹С€Рµ)
+      PayStates: TStringList;  // Р’ СЌС‚РѕС‚ СЃРїРёСЃРѕРє СЃС‡РёС‚С‹РІР°РµС‚СЃСЏ СЃРѕРґРµСЂР¶РёРјРѕРµ СЃРїСЂР°РІРѕС‡РЅРёРєР° PayState
+                                  // ..... (СЃРј. РІС‹С€Рµ)
+    // РЎРїСЂР°РІРѕС‡РЅРёРє РѕСЃРЅРѕРІРЅС‹С… СЃРѕСЃС‚РѕСЏРЅРёР№ РѕРїР»Р°С‚С‹. РџРѕР»СѓС‡Р°РµС‚СЃСЏ С„РёР»СЊС‚СЂР°С†РёРµР№ СЃРїСЂР°РІРѕС‡РЅРёРєР° РІСЃРµС… СЃРѕСЃС‚РѕСЏРЅРёР№
+    // Р’С‹Р·С‹РІР°СЋС‰РёР№ РјРµС‚РѕРґ РѕС‚РІРµС‡Р°РµС‚ Р·Р° РѕСЃРІРѕР±РѕР¶РґРµРЅРёРµ РїР°РјСЏС‚Рё.
     function CreateAutoPayStateData(Owner: TComponent): TDataSet;
 
-    // Справочник случаев оплаты. Получается фильтрацией справочника всех состояний
-    // Вызывающий метод отвечает за освобождение памяти.
+    // РЎРїСЂР°РІРѕС‡РЅРёРє СЃР»СѓС‡Р°РµРІ РѕРїР»Р°С‚С‹. РџРѕР»СѓС‡Р°РµС‚СЃСЏ С„РёР»СЊС‚СЂР°С†РёРµР№ СЃРїСЂР°РІРѕС‡РЅРёРєР° РІСЃРµС… СЃРѕСЃС‚РѕСЏРЅРёР№
+    // Р’С‹Р·С‹РІР°СЋС‰РёР№ РјРµС‚РѕРґ РѕС‚РІРµС‡Р°РµС‚ Р·Р° РѕСЃРІРѕР±РѕР¶РґРµРЅРёРµ РїР°РјСЏС‚Рё.
     function CreateManualPayStateData(Owner: TComponent): TDataSet;
 
     constructor Create;
@@ -136,6 +138,8 @@ const
   deParam2Name = 'MatParam2';
   deParam3Name = 'MatParam3';
   deContragentAttrPermName = 'ContragentAttrPermissions';
+  deReportGroupsName = 'ReportPermissionGroups';
+  deReportUserPermissionsName = 'ReportUserPermissions';
 
 function DicCodesToArray(de: TDictionary): TIntArray;
 var
@@ -165,8 +169,8 @@ begin
     Result[i] := StrToInt(sl[i])}
 end;
 
-// Справочник основных состояний оплаты. Получается фильтрацией справочника всех состояний
-// Вызывающий метод отвечает за освобождение памяти.
+// РЎРїСЂР°РІРѕС‡РЅРёРє РѕСЃРЅРѕРІРЅС‹С… СЃРѕСЃС‚РѕСЏРЅРёР№ РѕРїР»Р°С‚С‹. РџРѕР»СѓС‡Р°РµС‚СЃСЏ С„РёР»СЊС‚СЂР°С†РёРµР№ СЃРїСЂР°РІРѕС‡РЅРёРєР° РІСЃРµС… СЃРѕСЃС‚РѕСЏРЅРёР№
+// Р’С‹Р·С‹РІР°СЋС‰РёР№ РјРµС‚РѕРґ РѕС‚РІРµС‡Р°РµС‚ Р·Р° РѕСЃРІРѕР±РѕР¶РґРµРЅРёРµ РїР°РјСЏС‚Рё.
 function TStandardDics.CreateAutoPayStateData(Owner: TComponent): TDataSet;
 var
   //cdAutoPayState: TClientDataSet;
@@ -181,8 +185,8 @@ begin
   Result := cdAutoPayState;
 end;
 
-// Справочник случаев оплаты. Получается фильтрацией справочника всех состояний
-// Вызывающий метод отвечает за освобождение памяти.
+// РЎРїСЂР°РІРѕС‡РЅРёРє СЃР»СѓС‡Р°РµРІ РѕРїР»Р°С‚С‹. РџРѕР»СѓС‡Р°РµС‚СЃСЏ С„РёР»СЊС‚СЂР°С†РёРµР№ СЃРїСЂР°РІРѕС‡РЅРёРєР° РІСЃРµС… СЃРѕСЃС‚РѕСЏРЅРёР№
+// Р’С‹Р·С‹РІР°СЋС‰РёР№ РјРµС‚РѕРґ РѕС‚РІРµС‡Р°РµС‚ Р·Р° РѕСЃРІРѕР±РѕР¶РґРµРЅРёРµ РїР°РјСЏС‚Рё.
 function TStandardDics.CreateManualPayStateData(Owner: TComponent): TDataSet;
 var
   //cdSubPayState: TClientDataSet;
@@ -211,7 +215,7 @@ procedure TStandardDics.Update(Sender: TObject);
 var
   DictionaryList: TDictionaryList;
 begin
-  // Создаем списки для состояний заказа и процессов
+  // РЎРѕР·РґР°РµРј СЃРїРёСЃРєРё РґР»СЏ СЃРѕСЃС‚РѕСЏРЅРёР№ Р·Р°РєР°Р·Р° Рё РїСЂРѕС†РµСЃСЃРѕРІ
   //CreateAllOrderStates;
   //DoneAllOrderStates;
   UpdateAllOrderStates;
@@ -245,6 +249,8 @@ begin
   deParam2 := DictionaryList[deParam2Name];
   deParam3 := DictionaryList[deParam3Name];
   deContragentAttrPerm := DictionaryList[deContragentAttrPermName];
+  deReportGroups := DictionaryList[deReportGroupsName];
+  deReportUserPermissions := DictionaryList[deReportUserPermissionsName];
 
   FStdDicsChanged.Notify(Self);
 end;
@@ -299,7 +305,7 @@ var
   de: TDictionary;
   PayType: integer;
 begin
-  // Ищем вид оплаты по умолчанию
+  // РС‰РµРј РІРёРґ РѕРїР»Р°С‚С‹ РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ
   de := dePayKind;
   PayType := 0;
   de.DicItems.First;

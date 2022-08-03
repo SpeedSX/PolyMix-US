@@ -6,7 +6,8 @@ uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
   StdCtrls, DBCtrls, JvDBControls, JvDBCombobox, ExtCtrls, ComCtrls, CodeEdit,
   DB, JvComponent, JvFormPlacement, DBGridEh, MyDBGridEh, JvExStdCtrls,
-  JvComponentBase, GridsEh;
+  JvComponentBase, GridsEh, DBGridEhGrouping, JvCombobox, Mask, DBCtrlsEh,
+  DBLookupEh;
 
 type
   TReportsForm = class(TForm)
@@ -37,6 +38,9 @@ type
     ReportStorage: TJvFormStorage;
     dgReports: TMyDBGridEh;
     DBCheckBox2: TDBCheckBox;
+    Label1: TLabel;
+    dsReportGroups: TDataSource;
+    cbReportGroup: TDBLookupComboboxEh;
     procedure btEditClick(Sender: TObject);
     procedure btAddClick(Sender: TObject);
     procedure btDeleteClick(Sender: TObject);
@@ -68,14 +72,14 @@ var
 function ExecReportsForm: integer;
 
 const
-  InsideTag = 1000;  // Признак MenuItem, что отчет работает при открытом заказе.
+  InsideTag = 1000;  // РџСЂРёР·РЅР°Рє MenuItem, С‡С‚Рѕ РѕС‚С‡РµС‚ СЂР°Р±РѕС‚Р°РµС‚ РїСЂРё РѕС‚РєСЂС‹С‚РѕРј Р·Р°РєР°Р·Рµ.
 
 implementation
 
 {$R *.DFM}
 
 uses RepData, EScrFrm, ShortCt, ServData, RDBUtils, PmProcess, RDialogs,
-  Variants, CalcSettings;
+  Variants, CalcSettings, PmConfigManager;
 
 function ExecReportsForm: integer;
 begin
@@ -138,12 +142,12 @@ begin
   if pgGlobal.ActivePage = tsGlobal then
   else if pgGlobal.ActivePage = tsReports then begin
     if rdm.cdReports.Active and not rdm.cdReports.IsEmpty and
-      (RusMessageDlg('Вы действительно хотите удалить отчет?',
+      (RusMessageDlg('Р’С‹ РґРµР№СЃС‚РІРёС‚РµР»СЊРЅРѕ С…РѕС‚РёС‚Рµ СѓРґР°Р»РёС‚СЊ РѕС‚С‡РµС‚?',
         mtConfirmation, mbYesNoCancel, 0) = mrYes) then
       rdm.cdReports.Delete;
   end else if pgGlobal.ActivePage = tsForms then begin
     if rdm.cdForms.Active and not rdm.cdForms.IsEmpty and
-      (RusMessageDlg('Вы действительно хотите удалить форму?',
+      (RusMessageDlg('Р’С‹ РґРµР№СЃС‚РІРёС‚РµР»СЊРЅРѕ С…РѕС‚РёС‚Рµ СѓРґР°Р»РёС‚СЊ С„РѕСЂРјСѓ?',
         mtConfirmation, mbYesNoCancel, 0) = mrYes) then
       rdm.cdForms.Delete;
   end;
@@ -158,12 +162,13 @@ end;
 procedure TReportsForm.FormCreate(Sender: TObject);
 begin
   GetShortCuts(GetShortCutProc);
+  dsReportGroups.DataSet := TConfigManager.Instance.StandardDics.deReportGroups.DicItems;
   UpdateButtons;
 end;
 
-{// -------------- Обработчики редактора скриптов формы ----------------
-  Все формы - модули, поэтому у них только один скрипт, так что это все пока убрано
-  и обработчкки назначены другие.
+{// -------------- РћР±СЂР°Р±РѕС‚С‡РёРєРё СЂРµРґР°РєС‚РѕСЂР° СЃРєСЂРёРїС‚РѕРІ С„РѕСЂРјС‹ ----------------
+  Р’СЃРµ С„РѕСЂРјС‹ - РјРѕРґСѓР»Рё, РїРѕСЌС‚РѕРјСѓ Сѓ РЅРёС… С‚РѕР»СЊРєРѕ РѕРґРёРЅ СЃРєСЂРёРїС‚, С‚Р°Рє С‡С‚Рѕ СЌС‚Рѕ РІСЃРµ РїРѕРєР° СѓР±СЂР°РЅРѕ
+  Рё РѕР±СЂР°Р±РѕС‚С‡РєРєРё РЅР°Р·РЅР°С‡РµРЅС‹ РґСЂСѓРіРёРµ.
 
 function TReportsForm.CodeEditGetCaption(Sender: TObject): string;
 begin
@@ -217,12 +222,12 @@ end;
 
 procedure TReportsForm.btOkClick(Sender: TObject);
 var
-  HasDefault: boolean;  // Означает, что отчет по умолчанию назначен
+  HasDefault: boolean;  // РћР·РЅР°С‡Р°РµС‚, С‡С‚Рѕ РѕС‚С‡РµС‚ РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ РЅР°Р·РЅР°С‡РµРЅ
 begin
   SavePosition(rdm.cdReports, 'ReportScriptID', F_ScriptName);
   SavePosition(rdm.cdOrdScripts, 'OrderScriptID', F_ScriptName);
   SavePosition(rdm.cdForms, 'FormScriptID', FormNameField);
-  // Ищется отчет по умолчанию, если не находится, то не даем закрыть
+  // РС‰РµС‚СЃСЏ РѕС‚С‡РµС‚ РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ, РµСЃР»Рё РЅРµ РЅР°С…РѕРґРёС‚СЃСЏ, С‚Рѕ РЅРµ РґР°РµРј Р·Р°РєСЂС‹С‚СЊ
   if rdm.cdReports.Active and not rdm.cdReports.IsEmpty then begin
     rdm.cdReports.DisableControls;
     try
@@ -232,11 +237,11 @@ begin
       try
         if not VarIsNull(rdm.cdReports['IsDefault']) and rdm.cdReports['IsDefault'] then begin
           if not VarIsNull(rdm.cdReports['IsUnit']) and rdm.cdReports['IsUnit'] then begin
-            RusMessageDlg('Отчетом по умолчанию не может быть назначен вспомогательный модуль', mtError, [mbOk], 0);
+            RusMessageDlg('РћС‚С‡РµС‚РѕРј РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ РЅРµ РјРѕР¶РµС‚ Р±С‹С‚СЊ РЅР°Р·РЅР°С‡РµРЅ РІСЃРїРѕРјРѕРіР°С‚РµР»СЊРЅС‹Р№ РјРѕРґСѓР»СЊ', mtError, [mbOk], 0);
             ModalResult := mrNone;
             break;
           end else if HasDefault then begin
-            RusMessageDlg('Отчет по умолчанию может быть только один', mtError, [mbOk], 0);
+            RusMessageDlg('РћС‚С‡РµС‚ РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ РјРѕР¶РµС‚ Р±С‹С‚СЊ С‚РѕР»СЊРєРѕ РѕРґРёРЅ', mtError, [mbOk], 0);
             ModalResult := mrNone;
             break;
           end else HasDefault := true;
@@ -358,9 +363,9 @@ begin
       pgGlobal.ActivePage := tsForms
     else
       pgGlobal.ActivePage := tsReports;
-    GetCurData(cd, s, ss);  // т.к. страница могла поменяться
+    GetCurData(cd, s, ss);  // С‚.Рє. СЃС‚СЂР°РЅРёС†Р° РјРѕРіР»Р° РїРѕРјРµРЅСЏС‚СЊСЃСЏ
     if cd.Locate(s, NameOnly, [loCaseInsensitive]) then begin
-      if RusMessageDlg('Сценарий "' + NameOnly + '" уже существует. Заменить?',
+      if RusMessageDlg('РЎС†РµРЅР°СЂРёР№ "' + NameOnly + '" СѓР¶Рµ СЃСѓС‰РµСЃС‚РІСѓРµС‚. Р—Р°РјРµРЅРёС‚СЊ?',
                      mtConfirmation, mbYesNoCancel, 0) <> mrYes then Exit
       else cd.Edit;
     end else begin

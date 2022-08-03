@@ -1,10 +1,9 @@
 object ReportsForm: TReportsForm
   Left = 236
   Top = 234
-  BorderStyle = bsDialog
   Caption = #1060#1086#1088#1084#1099' '#1080' '#1089#1094#1077#1085#1072#1088#1080#1080
-  ClientHeight = 396
-  ClientWidth = 676
+  ClientHeight = 416
+  ClientWidth = 674
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -15,13 +14,17 @@ object ReportsForm: TReportsForm
   Position = poScreenCenter
   OnCreate = FormCreate
   OnShow = FormShow
+  DesignSize = (
+    674
+    416)
   PixelsPerInch = 96
   TextHeight = 13
   object btOk: TButton
     Left = 546
-    Top = 324
+    Top = 354
     Width = 122
     Height = 25
+    Anchors = [akRight, akBottom]
     Caption = #1057#1086#1093#1088#1072#1085#1080#1090#1100
     ModalResult = 1
     TabOrder = 0
@@ -29,9 +32,10 @@ object ReportsForm: TReportsForm
   end
   object btCancel: TButton
     Left = 546
-    Top = 356
+    Top = 385
     Width = 122
     Height = 25
+    Anchors = [akRight, akBottom]
     Cancel = True
     Caption = #1054#1090#1084#1077#1085#1072
     ModalResult = 2
@@ -42,6 +46,7 @@ object ReportsForm: TReportsForm
     Top = 28
     Width = 122
     Height = 25
+    Anchors = [akTop, akRight]
     Caption = #1057#1094#1077#1085#1072#1088#1080#1081'...'
     Default = True
     TabOrder = 2
@@ -52,6 +57,7 @@ object ReportsForm: TReportsForm
     Top = 92
     Width = 122
     Height = 25
+    Anchors = [akTop, akRight]
     Caption = #1059#1076#1072#1083#1080#1090#1100'...'
     TabOrder = 3
     OnClick = btDeleteClick
@@ -61,6 +67,7 @@ object ReportsForm: TReportsForm
     Top = 60
     Width = 122
     Height = 25
+    Anchors = [akTop, akRight]
     Caption = #1044#1086#1073#1072#1074#1080#1090#1100
     TabOrder = 4
     OnClick = btAddClick
@@ -69,19 +76,22 @@ object ReportsForm: TReportsForm
     Left = 8
     Top = 8
     Width = 529
-    Height = 373
+    Height = 402
     ActivePage = tsReports
+    Anchors = [akLeft, akTop, akRight, akBottom]
     TabOrder = 5
     OnChange = pgGlobalChange
     object tsGlobal: TTabSheet
       Caption = #1057#1086#1073#1099#1090#1080#1103
       ImageIndex = 1
+      ExplicitHeight = 345
       object dgOrdScripts: TMyDBGridEh
         Left = 0
         Top = 0
         Width = 521
-        Height = 345
+        Height = 374
         Align = alClient
+        DataGrouping.GroupLevels = <>
         DataSource = rdm.dsOrdScripts
         Flat = True
         FooterColor = clWindow
@@ -91,7 +101,8 @@ object ReportsForm: TReportsForm
         FooterFont.Name = 'Tahoma'
         FooterFont.Style = []
         Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgConfirmDelete, dgCancelOnExit]
-        OptionsEh = [dghHighlightFocus, dghClearSelection, dghAutoSortMarking, dghEnterAsTab, dghRowHighlight, dghDblClickOptimizeColWidth, dghDialogFind]
+        OptionsEh = [dghHighlightFocus, dghClearSelection, dghAutoSortMarking, dghEnterAsTab, dghRowHighlight, dghDblClickOptimizeColWidth, dghDialogFind, dghColumnResize, dghColumnMove]
+        RowDetailPanel.Color = clBtnFace
         RowHeight = 17
         SortLocal = True
         TabOrder = 0
@@ -125,19 +136,23 @@ object ReportsForm: TReportsForm
             Title.Caption = #1044#1072#1090#1072' '#1080#1079#1084#1077#1085#1077#1085#1080#1103
             Width = 94
           end>
+        object RowDetailData: TRowDetailPanelControlEh
+        end
       end
     end
     object tsReports: TTabSheet
       Caption = #1054#1090#1095#1077#1090#1099
+      ExplicitHeight = 345
       object Panel1: TPanel
         Left = 0
-        Top = 276
+        Top = 277
         Width = 521
-        Height = 69
+        Height = 97
         Align = alBottom
         BevelOuter = bvNone
         Caption = ' '
         TabOrder = 0
+        ExplicitTop = 248
         object Label2: TLabel
           Left = 4
           Top = 11
@@ -145,18 +160,30 @@ object ReportsForm: TReportsForm
           Height = 13
           Caption = #1050#1083#1072#1074#1080#1096#1072
         end
+        object Label1: TLabel
+          Left = 5
+          Top = 47
+          Width = 36
+          Height = 13
+          Caption = #1043#1088#1091#1087#1087#1072
+        end
         object cbShortCut: TJvDBComboBox
           Left = 56
           Top = 8
-          Width = 133
+          Width = 161
           Height = 21
           DataField = 'ShortCut'
           DataSource = rdm.dsReports
           ItemHeight = 13
           TabOrder = 0
+          ListSettings.OutfilteredValueFont.Charset = DEFAULT_CHARSET
+          ListSettings.OutfilteredValueFont.Color = clRed
+          ListSettings.OutfilteredValueFont.Height = -11
+          ListSettings.OutfilteredValueFont.Name = 'Tahoma'
+          ListSettings.OutfilteredValueFont.Style = []
         end
         object DBCheckBox1: TDBCheckBox
-          Left = 208
+          Left = 240
           Top = 8
           Width = 189
           Height = 17
@@ -168,11 +195,11 @@ object ReportsForm: TReportsForm
           ValueUnchecked = 'False'
         end
         object DBCheckBox3: TDBCheckBox
-          Left = 208
+          Left = 240
           Top = 28
-          Width = 181
+          Width = 269
           Height = 17
-          Caption = #1042#1089#1087#1086#1084#1086#1075#1072#1090#1077#1083#1100#1085#1099#1081' '#1084#1086#1076#1091#1083#1100
+          Caption = #1057#1083#1091#1078#1077#1073#1085#1099#1081' '#1084#1086#1076#1091#1083#1100' ('#1085#1077' '#1087#1086#1082#1072#1079#1099#1074#1072#1090#1100' '#1074' '#1089#1087#1080#1089#1082#1077')'
           DataField = 'IsUnit'
           DataSource = rdm.dsReports
           TabOrder = 2
@@ -180,7 +207,7 @@ object ReportsForm: TReportsForm
           ValueUnchecked = 'False'
         end
         object dbcDefault: TDBCheckBox
-          Left = 208
+          Left = 240
           Top = 48
           Width = 201
           Height = 17
@@ -192,8 +219,8 @@ object ReportsForm: TReportsForm
           ValueUnchecked = 'False'
         end
         object DBCheckBox2: TDBCheckBox
-          Left = 4
-          Top = 48
+          Left = 240
+          Top = 68
           Width = 173
           Height = 17
           Caption = #1055#1086#1082#1072#1079#1099#1074#1072#1090#1100' '#1082#1085#1086#1087#1082#1091' '#1086#1090#1084#1077#1085#1099
@@ -203,13 +230,30 @@ object ReportsForm: TReportsForm
           ValueChecked = 'True'
           ValueUnchecked = 'False'
         end
+        object cbReportGroup: TDBLookupComboboxEh
+          Left = 56
+          Top = 44
+          Width = 161
+          Height = 21
+          DataField = 'ReportGroupId'
+          DataSource = rdm.dsReports
+          DropDownBox.ListSource = dsReportGroups
+          DropDownBox.Options = []
+          EditButtons = <>
+          KeyField = 'Code'
+          ListField = 'Name'
+          ListSource = dsReportGroups
+          TabOrder = 5
+          Visible = True
+        end
       end
       object dgReports: TMyDBGridEh
         Left = 0
         Top = 0
         Width = 521
-        Height = 276
+        Height = 277
         Align = alClient
+        DataGrouping.GroupLevels = <>
         DataSource = rdm.dsReports
         Flat = True
         FooterColor = clWindow
@@ -218,7 +262,8 @@ object ReportsForm: TReportsForm
         FooterFont.Height = -11
         FooterFont.Name = 'Tahoma'
         FooterFont.Style = []
-        OptionsEh = [dghHighlightFocus, dghClearSelection, dghAutoSortMarking, dghEnterAsTab, dghRowHighlight, dghDblClickOptimizeColWidth, dghDialogFind]
+        OptionsEh = [dghHighlightFocus, dghClearSelection, dghAutoSortMarking, dghEnterAsTab, dghRowHighlight, dghDblClickOptimizeColWidth, dghDialogFind, dghColumnResize, dghColumnMove]
+        RowDetailPanel.Color = clBtnFace
         RowHeight = 17
         SortLocal = True
         TabOrder = 1
@@ -270,17 +315,21 @@ object ReportsForm: TReportsForm
             Title.Caption = #1044#1072#1090#1072' '#1080#1079#1084#1077#1085#1077#1085#1080#1103
             Title.TitleButton = True
           end>
+        object RowDetailData: TRowDetailPanelControlEh
+        end
       end
     end
     object tsForms: TTabSheet
       Caption = #1060#1086#1088#1084#1099
       ImageIndex = 2
+      ExplicitHeight = 345
       object dgForms: TMyDBGridEh
         Left = 0
         Top = 0
         Width = 521
-        Height = 312
+        Height = 341
         Align = alClient
+        DataGrouping.GroupLevels = <>
         DataSource = rdm.dsForms
         Flat = True
         FooterColor = clWindow
@@ -289,7 +338,8 @@ object ReportsForm: TReportsForm
         FooterFont.Height = -11
         FooterFont.Name = 'Tahoma'
         FooterFont.Style = []
-        OptionsEh = [dghHighlightFocus, dghClearSelection, dghAutoSortMarking, dghEnterAsTab, dghRowHighlight, dghDblClickOptimizeColWidth, dghDialogFind]
+        OptionsEh = [dghHighlightFocus, dghClearSelection, dghAutoSortMarking, dghEnterAsTab, dghRowHighlight, dghDblClickOptimizeColWidth, dghDialogFind, dghColumnResize, dghColumnMove]
+        RowDetailPanel.Color = clBtnFace
         RowHeight = 17
         SortLocal = True
         TabOrder = 0
@@ -323,16 +373,19 @@ object ReportsForm: TReportsForm
             Title.Caption = #1044#1072#1090#1072' '#1080#1079#1084#1077#1085#1077#1085#1080#1103
             Width = 94
           end>
+        object RowDetailData: TRowDetailPanelControlEh
+        end
       end
       object Panel2: TPanel
         Left = 0
-        Top = 312
+        Top = 341
         Width = 521
         Height = 33
         Align = alBottom
         BevelOuter = bvNone
         Caption = ' '
         TabOrder = 1
+        ExplicitTop = 312
         object btEditDfm: TButton
           Left = 224
           Top = 5
@@ -350,6 +403,7 @@ object ReportsForm: TReportsForm
     Top = 136
     Width = 122
     Height = 25
+    Anchors = [akTop, akRight]
     Caption = #1057#1086#1093#1088#1072#1085#1080#1090#1100' '#1074' '#1092#1072#1081#1083'...'
     TabOrder = 6
     OnClick = btSaveClick
@@ -359,6 +413,7 @@ object ReportsForm: TReportsForm
     Top = 168
     Width = 122
     Height = 25
+    Anchors = [akTop, akRight]
     Caption = #1047#1072#1075#1088#1091#1079#1080#1090#1100' '#1080#1079' '#1092#1072#1081#1083#1072'...'
     TabOrder = 7
     OnClick = btLoadClick
@@ -368,6 +423,7 @@ object ReportsForm: TReportsForm
     Top = 200
     Width = 122
     Height = 25
+    Anchors = [akTop, akRight]
     Caption = #1044#1086#1073#1072#1074#1080#1090#1100'/'#1086#1073#1085#1086#1074#1080#1090#1100'...'
     TabOrder = 8
     OnClick = btUpdateClick
@@ -390,5 +446,9 @@ object ReportsForm: TReportsForm
     StoredValues = <>
     Left = 616
     Top = 248
+  end
+  object dsReportGroups: TDataSource
+    Left = 80
+    Top = 348
   end
 end
