@@ -352,6 +352,7 @@ type
     //function GetPageControl(GrpID: integer): TPageControl;
     procedure UpdateRepMenuEnabled;
     procedure UpdateReportsMenu;
+    function IsReportVisible: boolean;
     procedure UpdateCustomReportsMenu;
     procedure UpdatePlanMenu;
     procedure DependsAction(Show: boolean);
@@ -1847,8 +1848,7 @@ begin
   TSettingsManager.Instance.DefaultReportID := -1;
   while not rdm.cdReports.eof do
   try
-    // пропускаем модули.
-    if not VarIsNull(rdm.cdReports['IsUnit']) and not rdm.cdReports['IsUnit'] then
+    if IsReportVisible then
     begin
       mi := CreateMenuItem;
       if XPMenuPainter.Active then XPMenuPainter.ActivateMenuItem(mi, true);
@@ -1869,6 +1869,13 @@ begin
   UpdateRepMenuEnabled;
   // Вставляем подменю пользовательских отчетов
   UpdateCustomReportsMenu;
+end;
+
+function TMForm.IsReportVisible: boolean;
+begin
+  Result := not VarIsNull(rdm.cdReports['IsUnit']) and not rdm.cdReports['IsUnit']
+    and (VarIsNull(rdm.cdReports['ReportGroupId']) or
+         AccessManager.HasUserReportGroupAccess(rdm.cdReports['ReportGroupId']));
 end;
 
 procedure TMForm.UpdateCustomReportsMenu;

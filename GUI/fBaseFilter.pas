@@ -355,8 +355,8 @@ begin
   boxState.Clear;
   ImList.Clear;
   DisImList.Clear;
-  // Заполняем список именами справочника состояний заказа, давая каждому
-  // в качестве объекта его код.
+  // Р—Р°РїРѕР»РЅСЏРµРј СЃРїРёСЃРѕРє РёРјРµРЅР°РјРё СЃРїСЂР°РІРѕС‡РЅРёРєР° СЃРѕСЃС‚РѕСЏРЅРёР№ Р·Р°РєР°Р·Р°, РґР°РІР°СЏ РєР°Р¶РґРѕРјСѓ
+  // РІ РєР°С‡РµСЃС‚РІРµ РѕР±СЉРµРєС‚Р° РµРіРѕ РєРѕРґ.
   if (de <> nil) and (de.ItemCount > 0) then
   begin
     de.DicItems.First;
@@ -374,7 +374,7 @@ begin
           Bmp := TBitmap.Create;
           de.LoadImage(Bmp, DicStateDisabledImageIndex);
           DisImList.Add(Bmp, nil);
-          // Проверяет, есть ли в списке сохраненных отмеченных состояний данное состояние
+          // РџСЂРѕРІРµСЂСЏРµС‚, РµСЃС‚СЊ Р»Рё РІ СЃРїРёСЃРєРµ СЃРѕС…СЂР°РЅРµРЅРЅС‹С… РѕС‚РјРµС‡РµРЅРЅС‹С… СЃРѕСЃС‚РѕСЏРЅРёР№ РґР°РЅРЅРѕРµ СЃРѕСЃС‚РѕСЏРЅРёРµ
           if IntInArray(de.CurrentCode, StateValues) then
             boxState.Checked[i] := true;
         //end;
@@ -402,20 +402,20 @@ begin
   cd := sdm.cdOrderKind;
   KindValues := FFilterObj.GetCheckedOrderKindValues(Entity);
   AllKindValues := FFilterObj.GetAllOrderKindValues(Entity);
-  // Заполняем список именами видов заказа, давая каждому
-  // в качестве объекта его ключ.
+  // Р—Р°РїРѕР»РЅСЏРµРј СЃРїРёСЃРѕРє РёРјРµРЅР°РјРё РІРёРґРѕРІ Р·Р°РєР°Р·Р°, РґР°РІР°СЏ РєР°Р¶РґРѕРјСѓ
+  // РІ РєР°С‡РµСЃС‚РІРµ РѕР±СЉРµРєС‚Р° РµРіРѕ РєР»СЋС‡.
   if (cd <> nil) and (cd.RecordCount > 0) then
   begin
     cd.First;
     i := 0;
     while not cd.eof do
     try
-      // берем только разрешенные
+      // Р±РµСЂРµРј С‚РѕР»СЊРєРѕ СЂР°Р·СЂРµС€РµРЅРЅС‹Рµ
       if IntInArray(cd[TOrder.F_KindID], AllKindValues) then
       begin
         boxOrderKind.Items.AddObject(cd[OrderKindDescField],
           TObject(cd.FieldByName(TOrder.F_KindID).AsInteger));
-        // ставим галочки
+        // СЃС‚Р°РІРёРј РіР°Р»РѕС‡РєРё
         if IntInArray(cd[TOrder.F_KindID], KindValues) then
           boxOrderKind.Checked[i] := true;
         Inc(i);
@@ -473,7 +473,7 @@ begin
         //udNumGT.Position := udNumGTPosition;
         edNumGT.Text := IntToStr(udNumGTPosition);
       except on e: Exception do
-        // НЕПОНЯТНАЯ ОШИБКА AV ПОЯВИЛАСЬ. ПРОСТО ЛОВИМ ПОКА.  01.12.2005
+        // РќР•РџРћРќРЇРўРќРђРЇ РћРЁРР‘РљРђ AV РџРћРЇР’РР›РђРЎР¬. РџР РћРЎРўРћ Р›РћР’РРњ РџРћРљРђ.  01.12.2005
         ExceptionHandler.Log_(e);
       end;
 
@@ -495,8 +495,17 @@ begin
       rbDateRange.Checked := rbDateRangeChecked;
       rbCurYear.Checked := rbCurYearChecked;
       cbRangeEnd.Checked := cbRangeEndChecked;
-      deRangeStart.Value := RangeStartDate;
-      deRangeEnd.Value := RangeEndDate;
+      if RangeStartDate = 0 then
+        deRangeStart.Value := null
+      else
+        deRangeStart.Value := RangeStartDate;
+      if RangeEndDate = 0 then
+      begin
+        deRangeEnd.Value := null;
+        cbRangeEnd.Checked := false;
+      end
+      else
+        deRangeEnd.Value := RangeEndDate;
       rbOneDay.Checked := rbOneDayChecked;
       deOneDay.Value := DateValue;
 
@@ -558,8 +567,15 @@ begin
         end;
       end;
       edEventText.Text := EventText;
-      deRangeStart.Value := EventStartDate;
-      deRangeEnd.Value := EventEndDate;
+      if EventStartDate > 0 then
+        deEventStart.Value := EventStartDate
+      else
+        deEventStart.Value := null;
+
+      if EventEndDate > 0 then
+        deEventEnd.Value := EventEndDate
+      else
+        deEventEnd.Value := null;
 
       FillProcessBox;
       SetProcessIndex(FilterProcessID);
@@ -585,7 +601,7 @@ procedure TBaseFilterFrame.Activate;
 begin
   FilterActive := true;
 
-  // Создаем копию списка пользователей с полным именем и логином для комбобокса
+  // РЎРѕР·РґР°РµРј РєРѕРїРёСЋ СЃРїРёСЃРєР° РїРѕР»СЊР·РѕРІР°С‚РµР»РµР№ СЃ РїРѕР»РЅС‹Рј РёРјРµРЅРµРј Рё Р»РѕРіРёРЅРѕРј РґР»СЏ РєРѕРјР±РѕР±РѕРєСЃР°
   if UsersCopy <> nil then UsersCopy.Free;
   UsersCopy := AccessManager.GetUsersCopy;
 
@@ -787,7 +803,7 @@ begin
   try
     i := ExecContragentSelect(Customers, {CurCustomer} c, {SelectMode=} true);
   except end;
-  // custNoName надо обрабатывать иначе ?
+  // custNoName РЅР°РґРѕ РѕР±СЂР°Р±Р°С‚С‹РІР°С‚СЊ РёРЅР°С‡Рµ ?
   if (i <> custError) and (i <> custNoName) and (i <> custCancel) then
     lcCust.KeyValue := i;
 end;
@@ -919,8 +935,14 @@ begin
     try YearValue := StrToInt(ceYear.Text);
     except end;
     rbDateRangeChecked := rbDateRange.Checked;
-    RangeStartDate := deRangeStart.Value;
-    RangeEndDate := deRangeEnd.Value;
+    if not VarIsNull(deRangeStart.Value) then
+      RangeStartDate := deRangeStart.Value
+    else
+      RangeStartDate := 0;
+    if not VarIsNull(deRangeEnd.Value) then
+      RangeEndDate := deRangeEnd.Value
+    else
+      RangeEndDate := 0;
     cbRangeEndChecked := cbRangeEnd.Checked;
     rbOneDayChecked := rbOneDay.Checked;
     DateValue := deOneDay.Value;
@@ -993,8 +1015,8 @@ end;
 
 {procedure TFilterForm.btShowAllClick(Sender: TObject);
 begin
-  DisableOrderFilter;  // обязательно сначала это
-  SaveControls;        // потом это
+  DisableOrderFilter;  // РѕР±СЏР·Р°С‚РµР»СЊРЅРѕ СЃРЅР°С‡Р°Р»Р° СЌС‚Рѕ
+  SaveControls;        // РїРѕС‚РѕРј СЌС‚Рѕ
 end;
 }
 
@@ -1323,11 +1345,11 @@ var
   i: integer;
   Found: boolean;
 begin
-  // При изменении конфигурации заполняем новыми процессами
+  // РџСЂРё РёР·РјРµРЅРµРЅРёРё РєРѕРЅС„РёРіСѓСЂР°С†РёРё Р·Р°РїРѕР»РЅСЏРµРј РЅРѕРІС‹РјРё РїСЂРѕС†РµСЃСЃР°РјРё
   FillProcessBox;
   if FFilterObj.FilterProcessID <> -1 then
   begin
-    // Ищем, жив ли тот процесс, который был раньше
+    // РС‰РµРј, Р¶РёРІ Р»Рё С‚РѕС‚ РїСЂРѕС†РµСЃСЃ, РєРѕС‚РѕСЂС‹Р№ Р±С‹Р» СЂР°РЅСЊС€Рµ
     Found := false;
     for i := 0 to FProcessList.Count - 1 do
       if (FProcessList.Objects[i] as TPolyProcessCfg).SrvID = FFilterObj.FilterProcessID then

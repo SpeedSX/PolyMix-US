@@ -2,7 +2,7 @@ object BaseFilterFrame: TBaseFilterFrame
   Left = 0
   Top = 0
   Width = 184
-  Height = 300
+  Height = 643
   HorzScrollBar.Visible = False
   Align = alRight
   TabOrder = 0
@@ -11,7 +11,7 @@ object BaseFilterFrame: TBaseFilterFrame
     Left = 0
     Top = 0
     Width = 4
-    Height = 300
+    Height = 643
     Align = alLeft
     Shape = bsLeftLine
     Visible = False
@@ -22,7 +22,7 @@ object BaseFilterFrame: TBaseFilterFrame
     Left = 4
     Top = 0
     Width = 180
-    Height = 300
+    Height = 643
     HorzScrollBar.Visible = False
     Align = alClient
     BevelInner = bvNone
