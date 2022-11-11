@@ -44,7 +44,7 @@ type
     procedure UpdateActionState; override;
     function DoAfterUpdateOrder: boolean; override;
     procedure BeforeCloseProcessItems; override;
-    // Отображает список просроченных заказов, если активирована настройка для пользовтеля
+    // РћС‚РѕР±СЂР°Р¶Р°РµС‚ СЃРїРёСЃРѕРє РїСЂРѕСЃСЂРѕС‡РµРЅРЅС‹С… Р·Р°РєР°Р·РѕРІ, РµСЃР»Рё Р°РєС‚РёРІРёСЂРѕРІР°РЅР° РЅР°СЃС‚СЂРѕР№РєР° РґР»СЏ РїРѕР»СЊР·РѕРІС‚РµР»СЏ
     procedure CheckDelayedOrders;
     procedure DoEditDelayedOrderProps(Sender: TObject);
     procedure CopyMaterialItems;
@@ -58,7 +58,7 @@ type
     function Visible: boolean; override;
     function MakeDraft(ParamsProvider: IMakeDraftParamsProvider; var NewId: integer): boolean;
     function CreateFrame(Owner: TComponent): TBaseFrame; override;
-    // определяет, является ли заказ срочным
+    // РѕРїСЂРµРґРµР»СЏРµС‚, СЏРІР»СЏРµС‚СЃСЏ Р»Рё Р·Р°РєР°Р· СЃСЂРѕС‡РЅС‹Рј
     //function IsUrgentOrder(UrgentHours: integer): boolean;
     function GetToolbar: TjvSpeedbar; override;
     procedure Activate; override;
@@ -132,7 +132,7 @@ end;
 
 procedure TWorkController.DoBeforeEditEntityProperties;
 begin
-  // на самом деле это вроде не используется
+  // РЅР° СЃР°РјРѕРј РґРµР»Рµ СЌС‚Рѕ РІСЂРѕРґРµ РЅРµ РёСЃРїРѕР»СЊР·СѓРµС‚СЃСЏ
   OldIncludeAdv := NvlBoolean(FEntity.DataSet['IncludeAdv']);
 end;
 
@@ -144,7 +144,7 @@ var
   NewTotalGrn: extended;
   NewIncludeAdv: boolean;
 begin
-  // Для заказов - Обрабатываем зависимые документы...
+  // Р”Р»СЏ Р·Р°РєР°Р·РѕРІ - РћР±СЂР°Р±Р°С‚С‹РІР°РµРј Р·Р°РІРёСЃРёРјС‹Рµ РґРѕРєСѓРјРµРЅС‚С‹...
   ReOrderID := Order.NewOrderKey;
   ReOrderCode := FEntity.DataSet['ID'];
   ReKind := chSumChanged;
@@ -157,7 +157,7 @@ begin
   Result := not VarIsNull(Order.KindID) and IntInArray(Order.KindID, AllWorkCostViewKindValues);
 end;
 
-// Создание нового расчета из заказа. Возвращает ключ нового заказа
+// РЎРѕР·РґР°РЅРёРµ РЅРѕРІРѕРіРѕ СЂР°СЃС‡РµС‚Р° РёР· Р·Р°РєР°Р·Р°. Р’РѕР·РІСЂР°С‰Р°РµС‚ РєР»СЋС‡ РЅРѕРІРѕРіРѕ Р·Р°РєР°Р·Р°
 function TWorkController.MakeDraft(ParamsProvider: IMakeDraftParamsProvider; var NewId: integer): boolean;
 var
   Res: integer;
@@ -173,7 +173,7 @@ begin
     begin
       dm.aspChangeOrderStatus.Parameters.ParamByName('@Src').Value := Order.KeyValue;
       dm.aspChangeOrderStatus.Parameters.ParamByName('@RowColor').Value := ParamsProvider.RowColor;
-      // берем параметры из CalcOrder, потом изменения будут отменены
+      // Р±РµСЂРµРј РїР°СЂР°РјРµС‚СЂС‹ РёР· CalcOrder, РїРѕС‚РѕРј РёР·РјРµРЅРµРЅРёСЏ Р±СѓРґСѓС‚ РѕС‚РјРµРЅРµРЅС‹
       dm.aspChangeOrderStatus.Parameters.ParamByName('@ID_Kind').Value := Order.DataSet['ID_Kind'];
       dm.aspChangeOrderStatus.Parameters.ParamByName('@ID_Char').Value := Order.DataSet['ID_Char'];
       dm.aspChangeOrderStatus.Parameters.ParamByName('@ID_Color').Value := Order.DataSet['ID_Color'];
@@ -189,7 +189,7 @@ begin
         if NewId < 0 then
         begin
           Database.RollbackTrans;
-          dm.ShowProcErrorMessage(NewId);       // Не получилось
+          dm.ShowProcErrorMessage(NewId);       // РќРµ РїРѕР»СѓС‡РёР»РѕСЃСЊ
           Exit;
         end
         else
@@ -208,7 +208,7 @@ begin
         on EConvertError do
         begin
           Database.RollbackTrans;
-          RusMessageDlg('Неправильно введены данные', mtError, [mbOk], 0);
+          RusMessageDlg('РќРµРїСЂР°РІРёР»СЊРЅРѕ РІРІРµРґРµРЅС‹ РґР°РЅРЅС‹Рµ', mtError, [mbOk], 0);
           Exit;
         end;
       end;
@@ -222,7 +222,7 @@ begin
   FMaterialsCopy := Order.OrderItems.Materials.CopyData(true);
 end;
 
-// Если Msgs = nil, то помечаем как измененные, иначе добавляем сообщение
+// Р•СЃР»Рё Msgs = nil, С‚Рѕ РїРѕРјРµС‡Р°РµРј РєР°Рє РёР·РјРµРЅРµРЅРЅС‹Рµ, РёРЅР°С‡Рµ РґРѕР±Р°РІР»СЏРµРј СЃРѕРѕР±С‰РµРЅРёРµ
 procedure TWorkController.CheckRequestsModified(Msgs: TCollection);
 var
   Mat: TMaterials;
@@ -241,7 +241,7 @@ begin
         or (NvlString(FMaterialsCopy[TMaterials.F_MatUnitName]) <> Mat.MatUnitName)
         or (NvlString(FMaterialsCopy[TMaterials.F_MatTypeName]) <> Mat.MatTypeName)
         or (NvlString(FMaterialsCopy[TMaterials.F_MatDesc]) <> Mat.MatDesc)
-        or ((Abs(NvlFloat(FMaterialsCopy[TMaterials.F_MatCost]) - Mat.MatCost) >= 0.01)   // изменилась стоимость и она меньше фактической
+        or ((Abs(NvlFloat(FMaterialsCopy[TMaterials.F_MatCost]) - Mat.MatCost) >= 0.01)   // РёР·РјРµРЅРёР»Р°СЃСЊ СЃС‚РѕРёРјРѕСЃС‚СЊ Рё РѕРЅР° РјРµРЅСЊС€Рµ С„Р°РєС‚РёС‡РµСЃРєРѕР№
           and (NvlFloat(FMaterialsCopy[TMaterials.F_MatCost]) < NvlFloat(Mat.FactMatCost)))) then
       begin
         if Msgs <> nil then
@@ -251,22 +251,22 @@ begin
           if (NvlString(FMaterialsCopy[TMaterials.F_MatDesc]) <> Mat.MatDesc)
               or (NvlString(FMaterialsCopy[TMaterials.F_MatUnitName]) <> Mat.MatUnitName)
               or (NvlString(FMaterialsCopy[TMaterials.F_MatTypeName]) <> Mat.MatTypeName) then
-            NewMsg.Msg := 'Изменились параметры материала с отметками снабжения: '
+            NewMsg.Msg := 'РР·РјРµРЅРёР»РёСЃСЊ РїР°СЂР°РјРµС‚СЂС‹ РјР°С‚РµСЂРёР°Р»Р° СЃ РѕС‚РјРµС‚РєР°РјРё СЃРЅР°Р±Р¶РµРЅРёСЏ: '
               + NvlString(FMaterialsCopy[TMaterials.F_MatDesc]) + ' -> ' + Mat.MatDesc
           else
           if NvlFloat(FMaterialsCopy[TMaterials.F_MatAmount]) <> Mat.MatAmount then
-            NewMsg.Msg := 'Изменилось количество материала с отметками снабжения: '
+            NewMsg.Msg := 'РР·РјРµРЅРёР»РѕСЃСЊ РєРѕР»РёС‡РµСЃС‚РІРѕ РјР°С‚РµСЂРёР°Р»Р° СЃ РѕС‚РјРµС‚РєР°РјРё СЃРЅР°Р±Р¶РµРЅРёСЏ: '
               + VarToStr(FMaterialsCopy[TMaterials.F_MatAmount]) + ' -> ' + VarToStr(Mat.MatAmount)
           else
-          if (Abs(NvlFloat(FMaterialsCopy[TMaterials.F_MatCost]) - Mat.MatCost) >= 0.01)   // изменилась стоимость и она меньше фактической
+          if (Abs(NvlFloat(FMaterialsCopy[TMaterials.F_MatCost]) - Mat.MatCost) >= 0.01)   // РёР·РјРµРЅРёР»Р°СЃСЊ СЃС‚РѕРёРјРѕСЃС‚СЊ Рё РѕРЅР° РјРµРЅСЊС€Рµ С„Р°РєС‚РёС‡РµСЃРєРѕР№
              and (NvlFloat(FMaterialsCopy[TMaterials.F_MatCost]) < NvlFloat(Mat.FactMatCost)) then
-            NewMsg.Msg := 'Изменилась стоимость материала с отметками снабжения: '
+            NewMsg.Msg := 'РР·РјРµРЅРёР»Р°СЃСЊ СЃС‚РѕРёРјРѕСЃС‚СЊ РјР°С‚РµСЂРёР°Р»Р° СЃ РѕС‚РјРµС‚РєР°РјРё СЃРЅР°Р±Р¶РµРЅРёСЏ: '
               + VarToStr(FMaterialsCopy[TMaterials.F_MatCost]) + ' -> ' + VarToStr(Mat.MatCost);
           NewMsg.MsgType := mtWarning;
         end
         else
         begin
-          // сохраняем параметры
+          // СЃРѕС…СЂР°РЅСЏРµРј РїР°СЂР°РјРµС‚СЂС‹
           MatCost := Mat.MatCost;
           MatAmount := Mat.MatAmount;
           MatUnitName := Mat.MatUnitName;
@@ -275,9 +275,9 @@ begin
           Param1 := Mat.Param1;
           Param2 := Mat.Param2;
           Param3 := Mat.Param3;
-          // запись помечаем как измененную
+          // Р·Р°РїРёСЃСЊ РїРѕРјРµС‡Р°РµРј РєР°Рє РёР·РјРµРЅРµРЅРЅСѓСЋ
           Mat.RequestModified := true;
-          // возвращаем старое количество и параметры
+          // РІРѕР·РІСЂР°С‰Р°РµРј СЃС‚Р°СЂРѕРµ РєРѕР»РёС‡РµСЃС‚РІРѕ Рё РїР°СЂР°РјРµС‚СЂС‹
           Mat.MatAmount := NvlFloat(FMaterialsCopy[TMaterials.F_MatAmount]);
           Mat.MatDesc := NvlString(FMaterialsCopy[TMaterials.F_MatDesc]);
           Mat.Param1 := NvlString(FMaterialsCopy[TMaterials.F_Param1]);
@@ -285,9 +285,9 @@ begin
           Mat.Param3 := NvlString(FMaterialsCopy[TMaterials.F_Param3]);
           Mat.MatUnitName := NvlString(FMaterialsCopy[TMaterials.F_MatUnitName]);
           Mat.MatTypeName := NvlString(FMaterialsCopy[TMaterials.F_MatTypeName]);
-          //Mat.MatCost := NvlFloat(FMaterialsCopy[TMaterials.F_MatCost]);  чтобы не суммировалось
+          //Mat.MatCost := NvlFloat(FMaterialsCopy[TMaterials.F_MatCost]);  С‡С‚РѕР±С‹ РЅРµ СЃСѓРјРјРёСЂРѕРІР°Р»РѕСЃСЊ
 
-          // добавляем новый расходный материал с новыми параметрами
+          // РґРѕР±Р°РІР»СЏРµРј РЅРѕРІС‹Р№ СЂР°СЃС…РѕРґРЅС‹Р№ РјР°С‚РµСЂРёР°Р» СЃ РЅРѕРІС‹РјРё РїР°СЂР°РјРµС‚СЂР°РјРё
           {Mat.DataSet.Append;
           Mat.ItemID := FMaterialsCopy[PmProcess.F_ItemID];
           Mat.MatAmount := MatAmount;
@@ -300,7 +300,7 @@ begin
           Mat.MatCost := MatCost;
           Mat.DataSet.Post;}
 
-          // добавляем новый расходный материал с новыми параметрами и стоимостью
+          // РґРѕР±Р°РІР»СЏРµРј РЅРѕРІС‹Р№ СЂР°СЃС…РѕРґРЅС‹Р№ РјР°С‚РµСЂРёР°Р» СЃ РЅРѕРІС‹РјРё РїР°СЂР°РјРµС‚СЂР°РјРё Рё СЃС‚РѕРёРјРѕСЃС‚СЊСЋ
           Mat.SetMaterialEx(Mat.ItemID, MatTypeName, MatDesc, Param1, Param2, Param3,
             MatAmount, MatUnitName, MatCost, false, nil);
         end;
@@ -321,12 +321,12 @@ procedure TWorkController.AfterOpenProcessItems;
 begin
   inherited;
   if not FReadOnly and (ViewMode = vmRight) then
-    CopyMaterialItems;   // создаем копию записей о материалах
+    CopyMaterialItems;   // СЃРѕР·РґР°РµРј РєРѕРїРёСЋ Р·Р°РїРёСЃРµР№ Рѕ РјР°С‚РµСЂРёР°Р»Р°С…
   try
     OpenInvoicesPayments;
   except on E: Exception do
     begin
-      MessageDlg('Не удалось открыть данные о счетах или оплатах', mtError, [mbOk], 0);
+      MessageDlg('РќРµ СѓРґР°Р»РѕСЃСЊ РѕС‚РєСЂС‹С‚СЊ РґР°РЅРЅС‹Рµ Рѕ СЃС‡РµС‚Р°С… РёР»Рё РѕРїР»Р°С‚Р°С…', mtError, [mbOk], 0);
       ExceptionHandler.Log_(E.Message);
     end;
   end;
@@ -334,7 +334,7 @@ begin
     OpenShipment;
   except on E: Exception do
     begin
-      MessageDlg('Не удалось открыть данные об отгрузках', mtError, [mbOk], 0);
+      MessageDlg('РќРµ СѓРґР°Р»РѕСЃСЊ РѕС‚РєСЂС‹С‚СЊ РґР°РЅРЅС‹Рµ РѕР± РѕС‚РіСЂСѓР·РєР°С…', mtError, [mbOk], 0);
       ExceptionHandler.Log_(E.Message);
     end;
   end;
@@ -422,7 +422,7 @@ end;
 
 procedure TWorkController.UpdateUSDCourse;
 begin
-  // тут вообще-то непонятно
+  // С‚СѓС‚ РІРѕРѕР±С‰Рµ-С‚Рѕ РЅРµРїРѕРЅСЏС‚РЅРѕ
   if (FFrame <> nil) and (ViewMode = vmRight) then
     Order.Processes.USDCourse := Order.USDCourse //TSettingsManager.Instance.NewOrderCourse;
   else
@@ -432,11 +432,11 @@ end;
 procedure TWorkController.BeforeCloseProcessItems;
 begin
   inherited;
-  // Должен быть корректный курс, иначе стоимость материалов в нац. валюте не посчитается
+  // Р”РѕР»Р¶РµРЅ Р±С‹С‚СЊ РєРѕСЂСЂРµРєС‚РЅС‹Р№ РєСѓСЂСЃ, РёРЅР°С‡Рµ СЃС‚РѕРёРјРѕСЃС‚СЊ РјР°С‚РµСЂРёР°Р»РѕРІ РІ РЅР°С†. РІР°Р»СЋС‚Рµ РЅРµ РїРѕСЃС‡РёС‚Р°РµС‚СЃСЏ
   Order.Processes.USDCourse := Order.USDCourse;
 end;
 
-// Отображает список просроченных заказов, если активирована настройка для пользовтеля
+// РћС‚РѕР±СЂР°Р¶Р°РµС‚ СЃРїРёСЃРѕРє РїСЂРѕСЃСЂРѕС‡РµРЅРЅС‹С… Р·Р°РєР°Р·РѕРІ, РµСЃР»Рё Р°РєС‚РёРІРёСЂРѕРІР°РЅР° РЅР°СЃС‚СЂРѕР№РєР° РґР»СЏ РїРѕР»СЊР·РѕРІС‚РµР»СЏ
 procedure TWorkController.CheckDelayedOrders;
 begin
   if Order.Active and AccessManager.CurUser.ShowDelayedOrders then
@@ -469,8 +469,14 @@ begin
 end;
 
 function TWorkController.DoAfterUpdateOrder: boolean;
+var Success: boolean;
 begin
-  Result := inherited DoAfterUpdateOrder and FOrderShipment.ApplyUpdates;   // отгрузки
+  Success := inherited DoAfterUpdateOrder;
+  // РѕС‚РіСЂСѓР·РєРё
+  if Success and AccessManager.CurUser.AddShipment and AccessManager.CurUser.ViewShipment then
+    Result := FOrderShipment.ApplyUpdates
+  else
+    Result := Success;
 end;
 
 function TWorkController.CreateFrame(Owner: TComponent): TBaseFrame;
@@ -560,7 +566,7 @@ begin
       FOrderShipment.DataSet.Cancel;}
   {end
   else
-    RusMessageDlg('Заказ уже полностью отгружен', mtInformation, [mbOk], 0);}
+    RusMessageDlg('Р—Р°РєР°Р· СѓР¶Рµ РїРѕР»РЅРѕСЃС‚СЊСЋ РѕС‚РіСЂСѓР¶РµРЅ', mtInformation, [mbOk], 0);}
 end;
 
 procedure TWorkController.EditShipment(Sender: TObject);
@@ -589,14 +595,14 @@ begin
       FOrderShipment.Reload;
       if ViewMode = vmLeft then
       begin
-        // Чтобы остаться на той же странице
+        // Р§С‚РѕР±С‹ РѕСЃС‚Р°С‚СЊСЃСЏ РЅР° С‚РѕР№ Р¶Рµ СЃС‚СЂР°РЅРёС†Рµ
         Order.SavePagePosition := true;
         try
           Order.Reload;
         finally
           Order.SavePagePosition := false;
         end;
-        OpenOrderItems;  // сразу обновляем детали
+        OpenOrderItems;  // СЃСЂР°Р·Сѓ РѕР±РЅРѕРІР»СЏРµРј РґРµС‚Р°Р»Рё
       end;
       FOrderShipment.DataSet.Last;
     end;
@@ -608,21 +614,21 @@ end;
 procedure TWorkController.DeleteShipment(Sender: TObject);
 begin
   if not FOrderShipment.IsEmpty
-    and (RusMessageDlg('Вы действительно хотите удалить запись об отгрузке?',
+    and (RusMessageDlg('Р’С‹ РґРµР№СЃС‚РІРёС‚РµР»СЊРЅРѕ С…РѕС‚РёС‚Рµ СѓРґР°Р»РёС‚СЊ Р·Р°РїРёСЃСЊ РѕР± РѕС‚РіСЂСѓР·РєРµ?',
     mtConfirmation, mbYesNoCancel, 0) = mrYes) then
   begin
     FOrderShipment.Delete;
     if ViewMode = vmLeft then
     begin
       FOrderShipment.ApplyUpdates;
-      // Чтобы остаться на той же странице
+      // Р§С‚РѕР±С‹ РѕСЃС‚Р°С‚СЊСЃСЏ РЅР° С‚РѕР№ Р¶Рµ СЃС‚СЂР°РЅРёС†Рµ
       Order.SavePagePosition := true;
       try
         Order.Reload;
       finally
         Order.SavePagePosition := false;
       end;
-      OpenOrderItems;  // сразу обновляем детали
+      OpenOrderItems;  // СЃСЂР°Р·Сѓ РѕР±РЅРѕРІР»СЏРµРј РґРµС‚Р°Р»Рё
     end;
   end;
 end;
@@ -634,7 +640,7 @@ begin
     (Order as TWorkOrder).ToggleApproveShipment;
     if ViewMode = vmLeft then
     begin
-      // Чтобы остаться на той же странице
+      // Р§С‚РѕР±С‹ РѕСЃС‚Р°С‚СЊСЃСЏ РЅР° С‚РѕР№ Р¶Рµ СЃС‚СЂР°РЅРёС†Рµ
       Order.SavePagePosition := true;
       try
         Order.Reload;
@@ -652,7 +658,7 @@ begin
     (Order as TWorkOrder).ToggleApproveOrderMaterials;
     if ViewMode = vmLeft then
     begin
-      // Чтобы остаться на той же странице
+      // Р§С‚РѕР±С‹ РѕСЃС‚Р°С‚СЊСЃСЏ РЅР° С‚РѕР№ Р¶Рµ СЃС‚СЂР°РЅРёС†Рµ
       Order.SavePagePosition := true;
       try
         Order.Reload;
@@ -674,7 +680,7 @@ begin
     ExtMatID := MatData.ExternalMatID;
     if ExecSelectExternalDictionaryForm(ExtMatID, TConfigManager.Instance.StandardDics.deExternalMaterials, '') then
       MatData.ExternalMatID := ExtMatID;
-    // Применяем изменения в режиме "превью"
+    // РџСЂРёРјРµРЅСЏРµРј РёР·РјРµРЅРµРЅРёСЏ РІ СЂРµР¶РёРјРµ "РїСЂРµРІСЊСЋ"
     if ViewMode = vmLeft then
       MatData.ApplyUpdates;
   end;
@@ -692,16 +698,16 @@ begin
     if ViewMode = vmLeft then
     begin
       MatID := MatData.KeyValue;
-      // Проверяем были ли изменения в базе
+      // РџСЂРѕРІРµСЂСЏРµРј Р±С‹Р»Рё Р»Рё РёР·РјРµРЅРµРЅРёСЏ РІ Р±Р°Р·Рµ
       Order.CheckActualState;
-      // проверяем на случай если заказ перезагрузился
+      // РїСЂРѕРІРµСЂСЏРµРј РЅР° СЃР»СѓС‡Р°Р№ РµСЃР»Рё Р·Р°РєР°Р· РїРµСЂРµР·Р°РіСЂСѓР·РёР»СЃСЏ
       AllowDelete := MatData.Locate(MatID) and not MatData.IsEmpty and MatData.RequestModified;
     end else
       AllowDelete := true;
     if AllowDelete then
     begin
       MatData.Delete;
-      // Применяем изменения в режиме "превью"
+      // РџСЂРёРјРµРЅСЏРµРј РёР·РјРµРЅРµРЅРёСЏ РІ СЂРµР¶РёРјРµ "РїСЂРµРІСЊСЋ"
       if ViewMode = vmLeft then
         MatData.ApplyUpdates;
     end;
@@ -724,9 +730,9 @@ begin
     if ViewMode = vmLeft then
     begin
       MatID := MatData.KeyValue;
-      // Проверяем были ли изменения в базе
+      // РџСЂРѕРІРµСЂСЏРµРј Р±С‹Р»Рё Р»Рё РёР·РјРµРЅРµРЅРёСЏ РІ Р±Р°Р·Рµ
       Order.CheckActualState;
-      // проверяем на случай если заказ перезагрузился
+      // РїСЂРѕРІРµСЂСЏРµРј РЅР° СЃР»СѓС‡Р°Р№ РµСЃР»Рё Р·Р°РєР°Р· РїРµСЂРµР·Р°РіСЂСѓР·РёР»СЃСЏ
       AllowEdit := MatData.Locate(MatID) and not MatData.IsEmpty;
     end else
       AllowEdit := true;
@@ -736,33 +742,33 @@ begin
       Order.ReadKindPermissions(false);
 
       _ReadOnly := not AccessManager.CurKindPerm.EditMaterialRequest;
-      // Если не разрешена закупка, то фактические параметры и дата закупки только для чтения
+      // Р•СЃР»Рё РЅРµ СЂР°Р·СЂРµС€РµРЅР° Р·Р°РєСѓРїРєР°, С‚Рѕ С„Р°РєС‚РёС‡РµСЃРєРёРµ РїР°СЂР°РјРµС‚СЂС‹ Рё РґР°С‚Р° Р·Р°РєСѓРїРєРё С‚РѕР»СЊРєРѕ РґР»СЏ С‡С‚РµРЅРёСЏ
       _FactReadOnly := EntSettings.OrderMaterialsApprovement and not (Order as TWorkOrder).OrderMaterialsApproved;
       NeedLock := EntSettings.EditLock and not _ReadOnly and (ViewMode = vmLeft);
       if NeedLock then
       begin
-        // Проверяем наличие блокировки
+        // РџСЂРѕРІРµСЂСЏРµРј РЅР°Р»РёС‡РёРµ Р±Р»РѕРєРёСЂРѕРІРєРё
         if TOrder.IsLockedByAnother(LockerName, Order.KeyValue) then
         begin
           LockerInfo := AccessManager.UserInfo(LockerName);
           if LockerInfo <> nil then
             LockerName := LockerInfo.Name;
-          RusMessageDlg(Order.NameSingular + ' редактируется пользователем '
+          RusMessageDlg(Order.NameSingular + ' СЂРµРґР°РєС‚РёСЂСѓРµС‚СЃСЏ РїРѕР»СЊР·РѕРІР°С‚РµР»РµРј '
             + QuotedStr(LockerName) + #13 +
-            'Вы не сможете сможете сохранить изменения.', mtInformation, [mbok], 0);
+            'Р’С‹ РЅРµ СЃРјРѕР¶РµС‚Рµ СЃРјРѕР¶РµС‚Рµ СЃРѕС…СЂР°РЅРёС‚СЊ РёР·РјРµРЅРµРЅРёСЏ.', mtInformation, [mbok], 0);
           _ReadOnly := true;
         end;
       end;
 
       if not _ReadOnly and NeedLock then
-        CheckAndLockOrder;  // устанавливаем блокировку
-      // отключаем автообновление
+        CheckAndLockOrder;  // СѓСЃС‚Р°РЅР°РІР»РёРІР°РµРј Р±Р»РѕРєРёСЂРѕРІРєСѓ
+      // РѕС‚РєР»СЋС‡Р°РµРј Р°РІС‚РѕРѕР±РЅРѕРІР»РµРЅРёРµ
       OrderInfoTimer.Enabled := false;
       try
         if ExecMaterialRequestForm(MatData, _ReadOnly, _FactReadOnly,
           AccessManager.CurKindPerm.CostView, AccessManager.CurKindPerm.FactCostView) then
         begin
-          // Применяем изменения в режиме "превью"
+          // РџСЂРёРјРµРЅСЏРµРј РёР·РјРµРЅРµРЅРёСЏ РІ СЂРµР¶РёРјРµ "РїСЂРµРІСЊСЋ"
           if not _ReadOnly and (ViewMode = vmLeft) then
             MatData.ApplyUpdates;
         end
@@ -770,7 +776,7 @@ begin
           MatData.DataSet.Cancel;
       finally
         if not _ReadOnly and NeedLock then
-          UnlockOrder(Order.KeyValue);   // снимаем блокировку
+          UnlockOrder(Order.KeyValue);   // СЃРЅРёРјР°РµРј Р±Р»РѕРєРёСЂРѕРІРєСѓ
       end;
     end;
   end;
@@ -779,7 +785,7 @@ end;
 procedure TWorkController.GetCheckMessages(Msgs: TCollection);
 begin
   inherited GetCheckMessages(Msgs);
-  // Сначала проверяем, какие материалы изменились
+  // РЎРЅР°С‡Р°Р»Р° РїСЂРѕРІРµСЂСЏРµРј, РєР°РєРёРµ РјР°С‚РµСЂРёР°Р»С‹ РёР·РјРµРЅРёР»РёСЃСЊ
   CheckRequestsModified(Msgs);
 end;
 
@@ -787,7 +793,7 @@ function TWorkController.ShowCheckResults(ShowCancel: boolean; Msgs: TCollection
 begin
   Result := inherited ShowCheckResults(ShowCancel, Msgs);
   if Result and (Msgs.Count > 0) then
-    // помечаем как измененные
+    // РїРѕРјРµС‡Р°РµРј РєР°Рє РёР·РјРµРЅРµРЅРЅС‹Рµ
     CheckRequestsModified(nil);
 end;
 
