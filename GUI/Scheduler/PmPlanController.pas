@@ -33,7 +33,7 @@ type
     function GetPlan: TPlan;
     procedure ScriptError(_Process: TPolyProcessCfg; _ScriptFieldName: string;
        _ErrPos: integer; _Msg: string);
-    // передается ключ записи на которую перетащили работу
+    // РїРµСЂРµРґР°РµС‚СЃСЏ РєР»СЋС‡ Р·Р°РїРёСЃРё РЅР° РєРѕС‚РѕСЂСѓСЋ РїРµСЂРµС‚Р°С‰РёР»Рё СЂР°Р±РѕС‚Сѓ
     function AddToPlan(WorkloadRowKey: integer): Boolean;
     procedure RemoveFromPlan(Sender: TObject);
     procedure MoveJobUp(Sender: TObject);
@@ -53,23 +53,23 @@ type
     procedure DoLocateOrder(OrderNum: integer);
     procedure PauseJob(Sender: TObject);
 
-    // Проверяет, есть ли пересечения в плане с текущей работой,
-    // если есть, предлагает исправить и сдвигает текущую работу либо работу в плане.
-    // Если CurItemID = 0, то нельзя разбивать
+    // РџСЂРѕРІРµСЂСЏРµС‚, РµСЃС‚СЊ Р»Рё РїРµСЂРµСЃРµС‡РµРЅРёСЏ РІ РїР»Р°РЅРµ СЃ С‚РµРєСѓС‰РµР№ СЂР°Р±РѕС‚РѕР№,
+    // РµСЃР»Рё РµСЃС‚СЊ, РїСЂРµРґР»Р°РіР°РµС‚ РёСЃРїСЂР°РІРёС‚СЊ Рё СЃРґРІРёРіР°РµС‚ С‚РµРєСѓС‰СѓСЋ СЂР°Р±РѕС‚Сѓ Р»РёР±Рѕ СЂР°Р±РѕС‚Сѓ РІ РїР»Р°РЅРµ.
+    // Р•СЃР»Рё CurItemID = 0, С‚Рѕ РЅРµР»СЊР·СЏ СЂР°Р·Р±РёРІР°С‚СЊ
     function CheckMovingJob(CurItemID: integer; Job: TJobParams): boolean;
     function SplitJobAroundUnmovable(w: TWorkload; Job: TJobParams; UnmovableJob: TJobParams): boolean;
     procedure PlaceJobs(w: TWorkload; Jobs: TJobList);
-    // В режиме непрерывного отображения делит работы, попадающие на границы смен,
-    // и объединяет работы, которые были раньше разбиты границей смены, а теперь нет.
-    // Возвращает true, если были изменения и план перезагружен
+    // Р’ СЂРµР¶РёРјРµ РЅРµРїСЂРµСЂС‹РІРЅРѕРіРѕ РѕС‚РѕР±СЂР°Р¶РµРЅРёСЏ РґРµР»РёС‚ СЂР°Р±РѕС‚С‹, РїРѕРїР°РґР°СЋС‰РёРµ РЅР° РіСЂР°РЅРёС†С‹ СЃРјРµРЅ,
+    // Рё РѕР±СЉРµРґРёРЅСЏРµС‚ СЂР°Р±РѕС‚С‹, РєРѕС‚РѕСЂС‹Рµ Р±С‹Р»Рё СЂР°РЅСЊС€Рµ СЂР°Р·Р±РёС‚С‹ РіСЂР°РЅРёС†РµР№ СЃРјРµРЅС‹, Р° С‚РµРїРµСЂСЊ РЅРµС‚.
+    // Р’РѕР·РІСЂР°С‰Р°РµС‚ true, РµСЃР»Рё Р±С‹Р»Рё РёР·РјРµРЅРµРЅРёСЏ Рё РїР»Р°РЅ РїРµСЂРµР·Р°РіСЂСѓР¶РµРЅ
     function CheckShifts: boolean;
     procedure UpdateOverlaps(w: TWorkload);
     function CheckShiftOverlap(w: TWorkload; Job: TJobParams): boolean;
-    // Определяет есть ли пересечения со сменами, и возвращает дату начала смены
+    // РћРїСЂРµРґРµР»СЏРµС‚ РµСЃС‚СЊ Р»Рё РїРµСЂРµСЃРµС‡РµРЅРёСЏ СЃРѕ СЃРјРµРЅР°РјРё, Рё РІРѕР·РІСЂР°С‰Р°РµС‚ РґР°С‚Сѓ РЅР°С‡Р°Р»Р° СЃРјРµРЅС‹
     function IntersectShift(w: TWorkload; Job: TJobParams; var ShiftStart: TDateTime): boolean;
     procedure DivideJob(Sender: TObject);
-    // Возвращает время, где есть свободное место без учета длительности работы.
-    // В режиме просмотра дня или смены может вернуть false, если работу разместить не удалось.
+    // Р’РѕР·РІСЂР°С‰Р°РµС‚ РІСЂРµРјСЏ, РіРґРµ РµСЃС‚СЊ СЃРІРѕР±РѕРґРЅРѕРµ РјРµСЃС‚Рѕ Р±РµР· СѓС‡РµС‚Р° РґР»РёС‚РµР»СЊРЅРѕСЃС‚Рё СЂР°Р±РѕС‚С‹.
+    // Р’ СЂРµР¶РёРјРµ РїСЂРѕСЃРјРѕС‚СЂР° РґРЅСЏ РёР»Рё СЃРјРµРЅС‹ РјРѕР¶РµС‚ РІРµСЂРЅСѓС‚СЊ false, РµСЃР»Рё СЂР°Р±РѕС‚Сѓ СЂР°Р·РјРµСЃС‚РёС‚СЊ РЅРµ СѓРґР°Р»РѕСЃСЊ.
     function FindAvailableStart(w: TWorkload; var StartTime: TDateTime; FromCurrent: boolean): boolean;
     function EditSpecialJob: boolean;
     function GetPrevFinishTime(w: TWorkload; Job: TJobParams): TDateTime;
@@ -84,7 +84,7 @@ type
     procedure HandleEditOrderState(Sender: TObject);
     procedure HandleEditFiles(Sender: TObject);
     procedure HandleTimeLock(Sender: TObject);
-    // Сдвинуть работы вверх. IncludeJob означает, что сдвиг включает указанную работу.
+    // РЎРґРІРёРЅСѓС‚СЊ СЂР°Р±РѕС‚С‹ РІРІРµСЂС…. IncludeJob РѕР·РЅР°С‡Р°РµС‚, С‡С‚Рѕ СЃРґРІРёРі РІРєР»СЋС‡Р°РµС‚ СѓРєР°Р·Р°РЅРЅСѓСЋ СЂР°Р±РѕС‚Сѓ.
     procedure MoveJobsUp(w: TWorkload; StartTime: TDateTime; JobID: integer; IncludeJob: boolean);
     function SameDay(DayStart, Date1, Date2: TDateTime): Boolean;
     //procedure RemoveJob(w: TWorkload);
@@ -94,20 +94,20 @@ type
     procedure HandleAssignShiftAssistant(EmployeeCode: variant);
     procedure HandleAssignEquipmentEmployee(EmployeeCode: variant);
     procedure HandleAssignEquipmentAssistant(EmployeeCode: variant);
-    // становится на последнюю работу в плане
+    // СЃС‚Р°РЅРѕРІРёС‚СЃСЏ РЅР° РїРѕСЃР»РµРґРЅСЋСЋ СЂР°Р±РѕС‚Сѓ РІ РїР»Р°РЅРµ
     function LocateLastPlannedJob(w: TWorkload): boolean;
     function GetCurrentWorkload: TWorkload;
-    // проверяет работы на предмет просроченности отметок
+    // РїСЂРѕРІРµСЂСЏРµС‚ СЂР°Р±РѕС‚С‹ РЅР° РїСЂРµРґРјРµС‚ РїСЂРѕСЃСЂРѕС‡РµРЅРЅРѕСЃС‚Рё РѕС‚РјРµС‚РѕРє
     procedure CheckOverdueJobs(w: TWorkload);
-    // возвращает ключи всех интервалов работы, кроме первого
+    // РІРѕР·РІСЂР°С‰Р°РµС‚ РєР»СЋС‡Рё РІСЃРµС… РёРЅС‚РµСЂРІР°Р»РѕРІ СЂР°Р±РѕС‚С‹, РєСЂРѕРјРµ РїРµСЂРІРѕРіРѕ
     function SplitJobByMultiplier(w: TWorkload; Job: TJobParams; AutoSplit: boolean): TIntArray;
     //function SplitJobByMultiplier(w: TWorkload; AutoSplit: boolean): TIntArray; overload;
-    // возвращает ключ второго интервала работы
+    // РІРѕР·РІСЂР°С‰Р°РµС‚ РєР»СЋС‡ РІС‚РѕСЂРѕРіРѕ РёРЅС‚РµСЂРІР°Р»Р° СЂР°Р±РѕС‚С‹
     function SplitJobBySides(w: TWorkload; Job: TJobParams; AutoSplit: boolean): integer;
     //function SplitJobBySides(w: TWorkload; AutoSplit: boolean): integer; overload;
-    // возвращает ключ второго интервала работы
+    // РІРѕР·РІСЂР°С‰Р°РµС‚ РєР»СЋС‡ РІС‚РѕСЂРѕРіРѕ РёРЅС‚РµСЂРІР°Р»Р° СЂР°Р±РѕС‚С‹
     function SplitJobByQuantity(w: TWorkload; Job: TJobParams; AutoSplit: boolean): integer;
-    // возвращает ключ второго интервала работы
+    // РІРѕР·РІСЂР°С‰Р°РµС‚ РєР»СЋС‡ РІС‚РѕСЂРѕРіРѕ РёРЅС‚РµСЂРІР°Р»Р° СЂР°Р±РѕС‚С‹
     function SplitJobByQuantityEx(w: TWorkload; Job: TJobParams; AutoSplit: boolean;
       NewStartTime1, NewFinishTime1, NewStartTime2, NewFinishTime2: TDateTime): integer;
     procedure RenumberItemJobs(w: TWorkload; Job: TJobParams; SplitModeNum: integer);
@@ -129,22 +129,22 @@ type
     procedure LockWorkload(w: TWorkload);
     procedure UnlockWorkload(w: TWorkload);
     function CheckCurrentLocked: boolean;
-    // true, если план заблокирован другим пользователем и выдает сообщение,
-    // иначе блокирует.
+    // true, РµСЃР»Рё РїР»Р°РЅ Р·Р°Р±Р»РѕРєРёСЂРѕРІР°РЅ РґСЂСѓРіРёРј РїРѕР»СЊР·РѕРІР°С‚РµР»РµРј Рё РІС‹РґР°РµС‚ СЃРѕРѕР±С‰РµРЅРёРµ,
+    // РёРЅР°С‡Рµ Р±Р»РѕРєРёСЂСѓРµС‚.
     function CheckLocked(w: TWorkload): boolean;
-    // true, если план заблокирован другим пользователем
+    // true, РµСЃР»Рё РїР»Р°РЅ Р·Р°Р±Р»РѕРєРёСЂРѕРІР°РЅ РґСЂСѓРіРёРј РїРѕР»СЊР·РѕРІР°С‚РµР»РµРј
     function IsLocked(w: TWorkload): boolean;
     procedure UnlockAll;
-    // проверяет, был ли изменен план с момента последней проверки
+    // РїСЂРѕРІРµСЂСЏРµС‚, Р±С‹Р» Р»Рё РёР·РјРµРЅРµРЅ РїР»Р°РЅ СЃ РјРѕРјРµРЅС‚Р° РїРѕСЃР»РµРґРЅРµР№ РїСЂРѕРІРµСЂРєРё
     function CheckModified(w: TWorkload): boolean;
   protected
     FEnableUndo: boolean;
-    // обновляет текущий план. остальные закрывает
+    // РѕР±РЅРѕРІР»СЏРµС‚ С‚РµРєСѓС‰РёР№ РїР»Р°РЅ. РѕСЃС‚Р°Р»СЊРЅС‹Рµ Р·Р°РєСЂС‹РІР°РµС‚
     //procedure RefreshWorkloads;
-    // Проверяет, можно ли сдвинуть работу
+    // РџСЂРѕРІРµСЂСЏРµС‚, РјРѕР¶РЅРѕ Р»Рё СЃРґРІРёРЅСѓС‚СЊ СЂР°Р±РѕС‚Сѓ
     function CheckCanMove(Job: TJobParams; ShowMessage: boolean): boolean;
-    // Проверяет по всем последующим сменам, есть ли там работа, которые можно сдвинуть вверх.
-    // Начиная с JobID. IncludeJob означает, что сдвиг включает указанную работу.
+    // РџСЂРѕРІРµСЂСЏРµС‚ РїРѕ РІСЃРµРј РїРѕСЃР»РµРґСѓСЋС‰РёРј СЃРјРµРЅР°Рј, РµСЃС‚СЊ Р»Рё С‚Р°Рј СЂР°Р±РѕС‚Р°, РєРѕС‚РѕСЂС‹Рµ РјРѕР¶РЅРѕ СЃРґРІРёРЅСѓС‚СЊ РІРІРµСЂС….
+    // РќР°С‡РёРЅР°СЏ СЃ JobID. IncludeJob РѕР·РЅР°С‡Р°РµС‚, С‡С‚Рѕ СЃРґРІРёРі РІРєР»СЋС‡Р°РµС‚ СѓРєР°Р·Р°РЅРЅСѓСЋ СЂР°Р±РѕС‚Сѓ.
     function CheckCanMoveNext(w: TWorkload; JobID: integer; IncludeJob: boolean): boolean;
     function LocateMovableJob(w: TWorkload; var LastUnmovableJob: TJobParams; MovedJobID: integer; JobDuration: extended): boolean;
     procedure EditOrderState(Job: TJobParams);
@@ -183,7 +183,7 @@ type
   end;
 
 const
-  MIN_JOB = 5; // минимальная работа в минутах
+  MIN_JOB = 5; // РјРёРЅРёРјР°Р»СЊРЅР°СЏ СЂР°Р±РѕС‚Р° РІ РјРёРЅСѓС‚Р°С…
 
 implementation
 
@@ -200,13 +200,13 @@ uses Dialogs, DateUtils,
 constructor TPlanController.Create(_Entity: TEntity);
 begin
   inherited Create(_Entity);
-  FCaption := 'План: ' + TConfigManager.Instance.StandardDics.deEquipGroup.ItemName[TPlan(_Entity).EquipGroupCode];
+  FCaption := 'РџР»Р°РЅ: ' + TConfigManager.Instance.StandardDics.deEquipGroup.ItemName[TPlan(_Entity).EquipGroupCode];
   Plan.OnScriptError := ScriptError;
   FEnableUndo := true;
   CreateWorkloads;
   FNeedRefresh := true;
 
-  // таймер подтверждения блокировкм
+  // С‚Р°Р№РјРµСЂ РїРѕРґС‚РІРµСЂР¶РґРµРЅРёСЏ Р±Р»РѕРєРёСЂРѕРІРєРј
   FEditLockTimer := TTimer.Create(nil);
   FEditLockTimer.Enabled := false;
   FEditLockTimer.Interval := EntSettings.EditLockConfirmInterval * 1000;
@@ -316,7 +316,7 @@ procedure TPlanController.CreateJobRelatedProcesses(tempdm: TDataModule;
 var
   CurProcess: TPolyProcessCfg;
 begin
-  // создаем данные о процессах, предшествующих и последующих текущему
+  // СЃРѕР·РґР°РµРј РґР°РЅРЅС‹Рµ Рѕ РїСЂРѕС†РµСЃСЃР°С…, РїСЂРµРґС€РµСЃС‚РІСѓСЋС‰РёС… Рё РїРѕСЃР»РµРґСѓСЋС‰РёС… С‚РµРєСѓС‰РµРјСѓ
   CurProcess := TConfigManager.Instance.ServiceByID(Plan.ProcessID);
   PrecedingDataSource := GetAdapter(CurrentWorkload).CreateRelatedProcesses(tempDm, false, CurProcess.SequenceOrder,
     Plan.Part, Plan.OrderID, Plan.ItemID, Plan.JobID, null, null);
@@ -329,9 +329,9 @@ begin
   Result := TJobParams.Create;
   Result.JobID := Plan.JobID;
   Result.ItemID := Plan.ItemID;
-  Result.JobComment := null;  // пустое примечание
+  Result.JobComment := null;  // РїСѓСЃС‚РѕРµ РїСЂРёРјРµС‡Р°РЅРёРµ
   Result.JobAlert := false;
-  Result.Executor := null;  // лучше чем unassigned не выбивает KeyValue комбобокса
+  Result.Executor := null;  // Р»СѓС‡С€Рµ С‡РµРј unassigned РЅРµ РІС‹Р±РёРІР°РµС‚ KeyValue РєРѕРјР±РѕР±РѕРєСЃР°
   Result.Part := Plan.Part;
   Result.PartName := Plan.PartName;
   Result.Multiplier := Plan.Multiplier;
@@ -342,7 +342,7 @@ begin
   Result.Comment := Plan.Comment;
 end;
 
-// передается ключ записи на которую перетащили работу
+// РїРµСЂРµРґР°РµС‚СЃСЏ РєР»СЋС‡ Р·Р°РїРёСЃРё РЅР° РєРѕС‚РѕСЂСѓСЋ РїРµСЂРµС‚Р°С‰РёР»Рё СЂР°Р±РѕС‚Сѓ
 function TPlanController.AddToPlan(WorkloadRowKey: integer): Boolean;
 var
   StartTime, FinishTime: TDateTime;
@@ -359,10 +359,10 @@ begin
   w := CurrentWorkload;
 
   AccessManager.ReadUserKindProcPermTo(KPRec, Plan.KindID, AccessManager.CurUser.ID, Plan.ProcessID);
-  // Если план заблокирован или нет прав на планирование и фактич. отметки, то выходим
+  // Р•СЃР»Рё РїР»Р°РЅ Р·Р°Р±Р»РѕРєРёСЂРѕРІР°РЅ РёР»Рё РЅРµС‚ РїСЂР°РІ РЅР° РїР»Р°РЅРёСЂРѕРІР°РЅРёРµ Рё С„Р°РєС‚РёС‡. РѕС‚РјРµС‚РєРё, С‚Рѕ РІС‹С…РѕРґРёРј
   if not KPRec.PlanDate and not KPRec.FactDate or IsLocked(W) then Exit;
 
-  if CheckLocked(w) then  // Если заблокирован, выходим
+  if CheckLocked(w) then  // Р•СЃР»Рё Р·Р°Р±Р»РѕРєРёСЂРѕРІР°РЅ, РІС‹С…РѕРґРёРј
     Exit;
 
   if WorkloadRowKey <> 0 then
@@ -379,13 +379,13 @@ begin
   begin
     if Plan.EquipCode <> w.EquipCode then
     begin
-      // Присвоить незапланированному процессу код оборудования
+      // РџСЂРёСЃРІРѕРёС‚СЊ РЅРµР·Р°РїР»Р°РЅРёСЂРѕРІР°РЅРЅРѕРјСѓ РїСЂРѕС†РµСЃСЃСѓ РєРѕРґ РѕР±РѕСЂСѓРґРѕРІР°РЅРёСЏ
       Plan.DataSet.Edit;
       Plan.EquipCode := w.EquipCode;
       Plan.DataSet.Post;
     end;
 
-    // Присвоить FinishTime с учетом оценочной длительности операций
+    // РџСЂРёСЃРІРѕРёС‚СЊ FinishTime СЃ СѓС‡РµС‚РѕРј РѕС†РµРЅРѕС‡РЅРѕР№ РґР»РёС‚РµР»СЊРЅРѕСЃС‚Рё РѕРїРµСЂР°С†РёР№
     Estimated := Plan.CalcEstimatedDuration(w.EquipCode);
     if Estimated = 0 then
     begin
@@ -397,9 +397,9 @@ begin
     else
       FinishTime := IncMinute(StartTime, Estimated);
 
-    PrevFinishTime := StartTime;  // дата завершения предыдущего процесса
+    PrevFinishTime := StartTime;  // РґР°С‚Р° Р·Р°РІРµСЂС€РµРЅРёСЏ РїСЂРµРґС‹РґСѓС‰РµРіРѕ РїСЂРѕС†РµСЃСЃР°
 
-    CurJobID := Plan.JobID;  // запоминаем ключик
+    CurJobID := Plan.JobID;  // Р·Р°РїРѕРјРёРЅР°РµРј РєР»СЋС‡РёРє
 
     tempDm := TDataModule.Create(nil);
     try
@@ -409,13 +409,13 @@ begin
       Job.PlanFinish := FinishTime;
       Job.EquipCode := w.EquipCode;
       Job.EstimatedDuration := Estimated;
-      SetExecutor(w, Job);  // берем исполнителя из информации о смене, если надо
+      SetExecutor(w, Job);  // Р±РµСЂРµРј РёСЃРїРѕР»РЅРёС‚РµР»СЏ РёР· РёРЅС„РѕСЂРјР°С†РёРё Рѕ СЃРјРµРЅРµ, РµСЃР»Рё РЅР°РґРѕ
 
-      // Проверяем, надо ли показывать окно добавления в план
+      // РџСЂРѕРІРµСЂСЏРµРј, РЅР°РґРѕ Р»Рё РїРѕРєР°Р·С‹РІР°С‚СЊ РѕРєРЅРѕ РґРѕР±Р°РІР»РµРЅРёСЏ РІ РїР»Р°РЅ
       if EntSettings.ShowAddPlanDialog then
         CreateJobRelatedProcesses(tempdm, PrecedingDataSource, FollowingDataSource);
       //try
-        // Проверяем, надо ли показывать окно добавления в план
+        // РџСЂРѕРІРµСЂСЏРµРј, РЅР°РґРѕ Р»Рё РїРѕРєР°Р·С‹РІР°С‚СЊ РѕРєРЅРѕ РґРѕР±Р°РІР»РµРЅРёСЏ РІ РїР»Р°РЅ
         if EntSettings.ShowAddPlanDialog then
           AddOk := ExecAddToPlanForm(Job, PrevFinishTime, PrecedingDataSource, FollowingDataSource, 
                         not ContinuousMode(w), EditJobComment)
@@ -432,9 +432,9 @@ begin
             //w.SortJobs;
             CheckShifts;
             CommitUpdates(w);
-            PlanFrame.UpdateJobControls; // чтобы кнопочки обновились
-            // В очереди работ берем номер следующей работы, чтобы вернуться к ней,
-            // а не переходить в начало таблицы
+            PlanFrame.UpdateJobControls; // С‡С‚РѕР±С‹ РєРЅРѕРїРѕС‡РєРё РѕР±РЅРѕРІРёР»РёСЃСЊ
+            // Р’ РѕС‡РµСЂРµРґРё СЂР°Р±РѕС‚ Р±РµСЂРµРј РЅРѕРјРµСЂ СЃР»РµРґСѓСЋС‰РµР№ СЂР°Р±РѕС‚С‹, С‡С‚РѕР±С‹ РІРµСЂРЅСѓС‚СЊСЃСЏ Рє РЅРµР№,
+            // Р° РЅРµ РїРµСЂРµС…РѕРґРёС‚СЊ РІ РЅР°С‡Р°Р»Рѕ С‚Р°Р±Р»РёС†С‹
             NextItemID := GetNextItemID;
             Plan.ReloadLocate(NextItemID);
           end
@@ -448,7 +448,7 @@ begin
     end;
   end
   else
-    RusMessageDlg('Все смены заполнены', mtWarning, [mbOk], 0);
+    RusMessageDlg('Р’СЃРµ СЃРјРµРЅС‹ Р·Р°РїРѕР»РЅРµРЅС‹', mtWarning, [mbOk], 0);
 
   if not AddOk then
     Plan.CancelUpdates;
@@ -476,12 +476,12 @@ end;
 
 function GetUnScheduleReason(var ReasonText: string): boolean;
 begin
-  Result := ExecEditText('Причина снятия работы', ReasonText, true);
+  Result := ExecEditText('РџСЂРёС‡РёРЅР° СЃРЅСЏС‚РёСЏ СЂР°Р±РѕС‚С‹', ReasonText, true);
 end;
 
 function TPlanController.GetRemovedJobDesc(Job: TJobParams): string;
 begin
-  Result := 'Работа снята: ' + Job.OrderNumber + ', ' + Job.PartName;
+  Result := 'Р Р°Р±РѕС‚Р° СЃРЅСЏС‚Р°: ' + Job.OrderNumber + ', ' + Job.PartName;
 end;
 
 procedure TPlanController.RemoveFromPlan(Sender: TObject);
@@ -496,7 +496,7 @@ var
 begin
   w := PlanFrame.CurrentWorkload;
 
-  if CheckLocked(W) then  // Если заблокирован, выходим
+  if CheckLocked(W) then  // Р•СЃР»Рё Р·Р°Р±Р»РѕРєРёСЂРѕРІР°РЅ, РІС‹С…РѕРґРёРј
     Exit;
 
   if not w.DataSet.IsEmpty then
@@ -504,21 +504,21 @@ begin
     Job := w.CurrentJob;
     if Job = nil then Exit;
 
-    // Надо проверить, если работа уже началась или закончилась, то не снимать
-    // Для разбитых на интервалы работ надо проверить все интервалы.
+    // РќР°РґРѕ РїСЂРѕРІРµСЂРёС‚СЊ, РµСЃР»Рё СЂР°Р±РѕС‚Р° СѓР¶Рµ РЅР°С‡Р°Р»Р°СЃСЊ РёР»Рё Р·Р°РєРѕРЅС‡РёР»Р°СЃСЊ, С‚Рѕ РЅРµ СЃРЅРёРјР°С‚СЊ
+    // Р”Р»СЏ СЂР°Р·Р±РёС‚С‹С… РЅР° РёРЅС‚РµСЂРІР°Р»С‹ СЂР°Р±РѕС‚ РЅР°РґРѕ РїСЂРѕРІРµСЂРёС‚СЊ РІСЃРµ РёРЅС‚РµСЂРІР°Р»С‹.
     FactStarted := not VarIsNull(Job.FactStart) or not VarIsNull(Job.FactFinish);
     if FactStarted then
     begin
-      RusMessageDlg('Работа содержит отметки о фактическом выполнении, поэтому не может быть снята.', mtError, [mbOk], 0);
+      RusMessageDlg('Р Р°Р±РѕС‚Р° СЃРѕРґРµСЂР¶РёС‚ РѕС‚РјРµС‚РєРё Рѕ С„Р°РєС‚РёС‡РµСЃРєРѕРј РІС‹РїРѕР»РЅРµРЅРёРё, РїРѕСЌС‚РѕРјСѓ РЅРµ РјРѕР¶РµС‚ Р±С‹С‚СЊ СЃРЅСЏС‚Р°.', mtError, [mbOk], 0);
       Exit;
     end;
 
-    CurStart := Job.PlanStart;  // начало работы, которая будет снята
-    w.DataSet.Next;   // запоминаем ключ следующей работы
+    CurStart := Job.PlanStart;  // РЅР°С‡Р°Р»Рѕ СЂР°Р±РѕС‚С‹, РєРѕС‚РѕСЂР°СЏ Р±СѓРґРµС‚ СЃРЅСЏС‚Р°
+    w.DataSet.Next;   // Р·Р°РїРѕРјРёРЅР°РµРј РєР»СЋС‡ СЃР»РµРґСѓСЋС‰РµР№ СЂР°Р±РѕС‚С‹
     if not w.DataSet.eof then
     begin
       NextID := w.JobID;
-      w.DataSet.Prior;  // возвращаем назад
+      w.DataSet.Prior;  // РІРѕР·РІСЂР°С‰Р°РµРј РЅР°Р·Р°Рґ
     end
     else
       NextID := 0;
@@ -527,30 +527,30 @@ begin
 
     if Job.JobType >= JobType_Special then
     begin
-      // Для спец работ
+      // Р”Р»СЏ СЃРїРµС† СЂР°Р±РѕС‚
       ReloadNotPlanned := false;
       BeginUpdates(w);
       GetAdapter(w).RemoveJob(Job);
     end
     else
     begin
-      // Для обычных работ
+      // Р”Р»СЏ РѕР±С‹С‡РЅС‹С… СЂР°Р±РѕС‚
       ReloadNotPlanned := true;
 
       if Job.HasSplitMode(smQuantity) or Job.HasSplitMode(smMultiplier) or Job.HasSplitMode(smSide) then
       begin
         if Job.HasSplitMode(smQuantity) and not Job.HasSplitMode(smMultiplier) and not Job.HasSplitMode(smSide) then
         begin
-          Res := RusMessageDlg('Работа разбита на несколько интервалов. Снять всю работу?', mtConfirmation, mbYesNoCancel, 0);
+          Res := RusMessageDlg('Р Р°Р±РѕС‚Р° СЂР°Р·Р±РёС‚Р° РЅР° РЅРµСЃРєРѕР»СЊРєРѕ РёРЅС‚РµСЂРІР°Р»РѕРІ. РЎРЅСЏС‚СЊ РІСЃСЋ СЂР°Р±РѕС‚Сѓ?', mtConfirmation, mbYesNoCancel, 0);
           if Res = mrYes then
           begin
-            if not RemoveItemJobsFromPlan(w, Job) then  // там делается beginupdates
+            if not RemoveItemJobsFromPlan(w, Job) then  // С‚Р°Рј РґРµР»Р°РµС‚СЃСЏ beginupdates
               Exit;
           end
-          else if Res = mrNo then  // Снять только один интервал
+          else if Res = mrNo then  // РЎРЅСЏС‚СЊ С‚РѕР»СЊРєРѕ РѕРґРёРЅ РёРЅС‚РµСЂРІР°Р»
           begin
-            ReloadNotPlanned := false;   // очередь работ не меняется 
-            // разбивка только по тиражу
+            ReloadNotPlanned := false;   // РѕС‡РµСЂРµРґСЊ СЂР°Р±РѕС‚ РЅРµ РјРµРЅСЏРµС‚СЃСЏ 
+            // СЂР°Р·Р±РёРІРєР° С‚РѕР»СЊРєРѕ РїРѕ С‚РёСЂР°Р¶Сѓ
             if AccessManager.CurUser.DescribeUnScheduleJob then
             begin
               if not GetUnScheduleReason(ReasonText) then
@@ -563,7 +563,7 @@ begin
             end;
             BeginUpdates(w);
             GetAdapter(w).RemoveJob(Job);
-            // определяем, по какому полю обновляется разбивка
+            // РѕРїСЂРµРґРµР»СЏРµРј, РїРѕ РєР°РєРѕРјСѓ РїРѕР»СЋ РѕР±РЅРѕРІР»СЏРµС‚СЃСЏ СЂР°Р·Р±РёРІРєР°
             if Job.SplitMode1 = smQuantity then
               sn := 1
             else if Job.SplitMode2 = smQuantity then
@@ -571,7 +571,7 @@ begin
             else if Job.SplitMode3 = smQuantity then
               sn := 3;
             GetAdapter(w).RenumberSplitPartsItem(Job.ItemID, Job.SplitPart1, Job.SplitPart2, sn);
-            if AccessManager.CurUser.DescribeUnScheduleJob then  // заменяем на спец работу с описанием
+            if AccessManager.CurUser.DescribeUnScheduleJob then  // Р·Р°РјРµРЅСЏРµРј РЅР° СЃРїРµС† СЂР°Р±РѕС‚Сѓ СЃ РѕРїРёСЃР°РЅРёРµРј
               NextID := GetAdapter(w).ReplaceJobWithSpecial(Job.JobID, TStandardDics.SpecialJob_Unscheduled,
                 GetRemovedJobDesc(Job) + #13#10 + ReasonText);
           end
@@ -580,22 +580,22 @@ begin
         end
         else
         begin
-          // разбивка не только по тиражу, так что придется снимать все работы сразу
-          // проверяем, есть ли работы с фактич. отметками
+          // СЂР°Р·Р±РёРІРєР° РЅРµ С‚РѕР»СЊРєРѕ РїРѕ С‚РёСЂР°Р¶Сѓ, С‚Р°Рє С‡С‚Рѕ РїСЂРёРґРµС‚СЃСЏ СЃРЅРёРјР°С‚СЊ РІСЃРµ СЂР°Р±РѕС‚С‹ СЃСЂР°Р·Сѓ
+          // РїСЂРѕРІРµСЂСЏРµРј, РµСЃС‚СЊ Р»Рё СЂР°Р±РѕС‚С‹ СЃ С„Р°РєС‚РёС‡. РѕС‚РјРµС‚РєР°РјРё
           JobIDs := GetAdapter(w).GetJobsWithFactInfo(Job.ItemID);
           if Length(JobIDs) > 0 then
           begin
-            // есть работы с фактич. отметками, поэтому снимать нельзя
-            RusMessageDlg('Работа разбита на несколько интервалов, и один из них' + #13
-              + 'содержит отметки о фактическом выполнении, поэтому не может быть снят.', mtError, [mbOk], 0);
+            // РµСЃС‚СЊ СЂР°Р±РѕС‚С‹ СЃ С„Р°РєС‚РёС‡. РѕС‚РјРµС‚РєР°РјРё, РїРѕСЌС‚РѕРјСѓ СЃРЅРёРјР°С‚СЊ РЅРµР»СЊР·СЏ
+            RusMessageDlg('Р Р°Р±РѕС‚Р° СЂР°Р·Р±РёС‚Р° РЅР° РЅРµСЃРєРѕР»СЊРєРѕ РёРЅС‚РµСЂРІР°Р»РѕРІ, Рё РѕРґРёРЅ РёР· РЅРёС…' + #13
+              + 'СЃРѕРґРµСЂР¶РёС‚ РѕС‚РјРµС‚РєРё Рѕ С„Р°РєС‚РёС‡РµСЃРєРѕРј РІС‹РїРѕР»РЅРµРЅРёРё, РїРѕСЌС‚РѕРјСѓ РЅРµ РјРѕР¶РµС‚ Р±С‹С‚СЊ СЃРЅСЏС‚.', mtError, [mbOk], 0);
             Exit;
           end
           else
           begin
-            if RusMessageDlg('Работа разбита на несколько интервалов. Будет снята вся работа.' + #13
-                + 'Продолжить?', mtConfirmation, mbYesNoCancel, 0) = mrYes then
+            if RusMessageDlg('Р Р°Р±РѕС‚Р° СЂР°Р·Р±РёС‚Р° РЅР° РЅРµСЃРєРѕР»СЊРєРѕ РёРЅС‚РµСЂРІР°Р»РѕРІ. Р‘СѓРґРµС‚ СЃРЅСЏС‚Р° РІСЃСЏ СЂР°Р±РѕС‚Р°.' + #13
+                + 'РџСЂРѕРґРѕР»Р¶РёС‚СЊ?', mtConfirmation, mbYesNoCancel, 0) = mrYes then
             begin
-              if not RemoveItemJobsFromPlan(w, Job) then   // там делается beginUpdates
+              if not RemoveItemJobsFromPlan(w, Job) then   // С‚Р°Рј РґРµР»Р°РµС‚СЃСЏ beginUpdates
                 Exit;
             end
             else
@@ -605,7 +605,7 @@ begin
       end
       else
       begin
-        // работа не разбита, просто снимаем
+        // СЂР°Р±РѕС‚Р° РЅРµ СЂР°Р·Р±РёС‚Р°, РїСЂРѕСЃС‚Рѕ СЃРЅРёРјР°РµРј
         if AccessManager.CurUser.DescribeUnScheduleJob then
         begin
           if not GetUnScheduleReason(ReasonText) then
@@ -620,33 +620,33 @@ begin
 
     CommitUpdates(CurrentWorkload);
     //w.Reload;
-    // Теперь делим работы, попадающие на границы смен // 08.09.2008 - не понял зачем, поэтому закомментил
+    // РўРµРїРµСЂСЊ РґРµР»РёРј СЂР°Р±РѕС‚С‹, РїРѕРїР°РґР°СЋС‰РёРµ РЅР° РіСЂР°РЅРёС†С‹ СЃРјРµРЅ // 08.09.2008 - РЅРµ РїРѕРЅСЏР» Р·Р°С‡РµРј, РїРѕСЌС‚РѕРјСѓ Р·Р°РєРѕРјРјРµРЅС‚РёР»
     //CheckShifts;
     if ReloadNotPlanned then
       Plan.Reload;
 
-    if NextID <> 0 then // возвращаем обратно
+    if NextID <> 0 then // РІРѕР·РІСЂР°С‰Р°РµРј РѕР±СЂР°С‚РЅРѕ
       w.Locate(NextID);
 
-    // если были работы за удаленной, то можно сдвинуть их
+    // РµСЃР»Рё Р±С‹Р»Рё СЂР°Р±РѕС‚С‹ Р·Р° СѓРґР°Р»РµРЅРЅРѕР№, С‚Рѕ РјРѕР¶РЅРѕ СЃРґРІРёРЅСѓС‚СЊ РёС…
     if not AccessManager.CurUser.DescribeUnScheduleJob and (NextID > 0) then
     begin
-      if CheckCanMoveNext(w, NextID, true) and (RusMessageDlg('Сдвинуть следующие работы на место удаленной?',
+      if CheckCanMoveNext(w, NextID, true) and (RusMessageDlg('РЎРґРІРёРЅСѓС‚СЊ СЃР»РµРґСѓСЋС‰РёРµ СЂР°Р±РѕС‚С‹ РЅР° РјРµСЃС‚Рѕ СѓРґР°Р»РµРЅРЅРѕР№?',
         mtConfirmation, [mbYes, mbNo], 0) = mrYes) then
       begin
         BeginUpdates(w);
         MoveJobsUp(w, CurStart, NextID, true);
-        // Теперь делим работы, попадающие на границы смен
+        // РўРµРїРµСЂСЊ РґРµР»РёРј СЂР°Р±РѕС‚С‹, РїРѕРїР°РґР°СЋС‰РёРµ РЅР° РіСЂР°РЅРёС†С‹ СЃРјРµРЅ
         CheckShifts;
         CommitUpdates(w);
-        PlanFrame.UpdateJobControls; // чтобы кнопочки обновились
+        PlanFrame.UpdateJobControls; // С‡С‚РѕР±С‹ РєРЅРѕРїРѕС‡РєРё РѕР±РЅРѕРІРёР»РёСЃСЊ
       end;
     end;
   end;
 end;
 
-// Проверяет по всем последующим сменам, есть ли там работа, которую можно сдвинуть вверх.
-// Начиная с JobID.
+// РџСЂРѕРІРµСЂСЏРµС‚ РїРѕ РІСЃРµРј РїРѕСЃР»РµРґСѓСЋС‰РёРј СЃРјРµРЅР°Рј, РµСЃС‚СЊ Р»Рё С‚Р°Рј СЂР°Р±РѕС‚Р°, РєРѕС‚РѕСЂСѓСЋ РјРѕР¶РЅРѕ СЃРґРІРёРЅСѓС‚СЊ РІРІРµСЂС….
+// РќР°С‡РёРЅР°СЏ СЃ JobID.
 function TPlanController.CheckCanMoveNext(w: TWorkload; JobID: integer; IncludeJob: boolean): boolean;
 var
   JobIndex: integer;
@@ -668,35 +668,35 @@ begin
     end;
 end;
 
-// Проверяет, можно ли сдвинуть работу
+// РџСЂРѕРІРµСЂСЏРµС‚, РјРѕР¶РЅРѕ Р»Рё СЃРґРІРёРЅСѓС‚СЊ СЂР°Р±РѕС‚Сѓ
 function TPlanController.CheckCanMove(Job: TJobParams; ShowMessage: boolean): boolean;
 begin
   if not VarIsNull(Job.FactStart) then
   begin
     if ShowMessage then
-      RusMessageDlg('Работа "' + Job.Comment + ' (' + Job.PartName + ')" уже началась. Ее переместить нельзя', mtWarning, [mbOk], 0);
+      RusMessageDlg('Р Р°Р±РѕС‚Р° "' + Job.Comment + ' (' + Job.PartName + ')" СѓР¶Рµ РЅР°С‡Р°Р»Р°СЃСЊ. Р•Рµ РїРµСЂРµРјРµСЃС‚РёС‚СЊ РЅРµР»СЊР·СЏ', mtWarning, [mbOk], 0);
     Result := false;
   end
   else
   if not VarIsNull(Job.FactFinish) then
   begin
     if ShowMessage then
-      RusMessageDlg('Работа "' + Job.Comment + ' (' + Job.PartName + ')" уже завершилась. Ее переместить нельзя', mtWarning, [mbOk], 0);
+      RusMessageDlg('Р Р°Р±РѕС‚Р° "' + Job.Comment + ' (' + Job.PartName + ')" СѓР¶Рµ Р·Р°РІРµСЂС€РёР»Р°СЃСЊ. Р•Рµ РїРµСЂРµРјРµСЃС‚РёС‚СЊ РЅРµР»СЊР·СЏ', mtWarning, [mbOk], 0);
     Result := false;
   end
   else if Job.TimeLocked then
   begin
     if ShowMessage then
-      RusMessageDlg('Работа "' + Job.Comment + '" зафиксирована. Ее переместить нельзя', mtWarning, [mbOk], 0);
+      RusMessageDlg('Р Р°Р±РѕС‚Р° "' + Job.Comment + '" Р·Р°С„РёРєСЃРёСЂРѕРІР°РЅР°. Р•Рµ РїРµСЂРµРјРµСЃС‚РёС‚СЊ РЅРµР»СЊР·СЏ', mtWarning, [mbOk], 0);
     Result := false;
   end
   else
     Result := true;
 end;
 
-// Ищет работу, которую можно сдвинуть, начиная с текущей (LastUnmovableJob).
-// Возвращает последнюю несдвигаемую работу.
-// MovedJobID - работа, которая сдвигается
+// РС‰РµС‚ СЂР°Р±РѕС‚Сѓ, РєРѕС‚РѕСЂСѓСЋ РјРѕР¶РЅРѕ СЃРґРІРёРЅСѓС‚СЊ, РЅР°С‡РёРЅР°СЏ СЃ С‚РµРєСѓС‰РµР№ (LastUnmovableJob).
+// Р’РѕР·РІСЂР°С‰Р°РµС‚ РїРѕСЃР»РµРґРЅСЋСЋ РЅРµСЃРґРІРёРіР°РµРјСѓСЋ СЂР°Р±РѕС‚Сѓ.
+// MovedJobID - СЂР°Р±РѕС‚Р°, РєРѕС‚РѕСЂР°СЏ СЃРґРІРёРіР°РµС‚СЃСЏ
 function TPlanController.LocateMovableJob(w: TWorkload; var LastUnmovableJob: TJobParams; MovedJobID: integer; JobDuration: extended): boolean;
 var
   CurJob: TJobParams;
@@ -712,21 +712,21 @@ begin
     CurJob := w.JobList[I];
     if CurJob.JobID <> MovedJobID then
     begin
-      // Текущую можно сдвинуть
+      // РўРµРєСѓС‰СѓСЋ РјРѕР¶РЅРѕ СЃРґРІРёРЅСѓС‚СЊ
       if CheckCanMove(CurJob, false) then
       begin
         Result := true;
         Exit
       end
       else
-      // Если есть место между окончанием предыдущей работы и началом текущей
+      // Р•СЃР»Рё РµСЃС‚СЊ РјРµСЃС‚Рѕ РјРµР¶РґСѓ РѕРєРѕРЅС‡Р°РЅРёРµРј РїСЂРµРґС‹РґСѓС‰РµР№ СЂР°Р±РѕС‚С‹ Рё РЅР°С‡Р°Р»РѕРј С‚РµРєСѓС‰РµР№
       //if (CurJob.AnyStart - LastUnmovableFinish >= JobDuration) then
       if MinutesBetween(CurJob.AnyStart, LastUnmovableFinish) > MIN_JOB then
       begin
         Result := true;
         Exit;
       end
-      else  // текущая становится последней несдвигаемой
+      else  // С‚РµРєСѓС‰Р°СЏ СЃС‚Р°РЅРѕРІРёС‚СЃСЏ РїРѕСЃР»РµРґРЅРµР№ РЅРµСЃРґРІРёРіР°РµРјРѕР№
       begin
         LastUnmovableFinish := CurJob.AnyFinish;
         LastUnmovableJob := CurJob;
@@ -734,13 +734,13 @@ begin
     end
     else
     begin
-      // добрались до работы, которую нам и надо сдвинуть.
-      // значит, она останется на своем месте или подтянется к последней несдвигаемой
+      // РґРѕР±СЂР°Р»РёСЃСЊ РґРѕ СЂР°Р±РѕС‚С‹, РєРѕС‚РѕСЂСѓСЋ РЅР°Рј Рё РЅР°РґРѕ СЃРґРІРёРЅСѓС‚СЊ.
+      // Р·РЅР°С‡РёС‚, РѕРЅР° РѕСЃС‚Р°РЅРµС‚СЃСЏ РЅР° СЃРІРѕРµРј РјРµСЃС‚Рµ РёР»Рё РїРѕРґС‚СЏРЅРµС‚СЃСЏ Рє РїРѕСЃР»РµРґРЅРµР№ РЅРµСЃРґРІРёРіР°РµРјРѕР№
       Result := true;
       Exit;
     end;
   end;
-  // Не нашли, ставим после последней несдвигаемой
+  // РќРµ РЅР°С€Р»Рё, СЃС‚Р°РІРёРј РїРѕСЃР»Рµ РїРѕСЃР»РµРґРЅРµР№ РЅРµСЃРґРІРёРіР°РµРјРѕР№
   Result := true;
 end;
 
@@ -767,7 +767,7 @@ begin
     if not w.DataSet.eof then
     begin
       WasShiftMarker := false;
-      // Если след. запись - маркер смены, пропускаем его
+      // Р•СЃР»Рё СЃР»РµРґ. Р·Р°РїРёСЃСЊ - РјР°СЂРєРµСЂ СЃРјРµРЅС‹, РїСЂРѕРїСѓСЃРєР°РµРј РµРіРѕ
       if w.IsShiftMarker then
       begin
         WasShiftMarker := true;
@@ -775,7 +775,7 @@ begin
         w.DataSet.Next;
         if not w.DataSet.Eof then
         begin
-          // Если опять маркер смены, возвращаемся на предыдущую запись и ставим туда
+          // Р•СЃР»Рё РѕРїСЏС‚СЊ РјР°СЂРєРµСЂ СЃРјРµРЅС‹, РІРѕР·РІСЂР°С‰Р°РµРјСЃСЏ РЅР° РїСЂРµРґС‹РґСѓС‰СѓСЋ Р·Р°РїРёСЃСЊ Рё СЃС‚Р°РІРёРј С‚СѓРґР°
           if w.IsShiftMarker then
           begin
             w.DataSet.Prior;
@@ -790,22 +790,22 @@ begin
             end;
 
             w.Reload;
-            // работа может разбиваться сменами. проверяем
+            // СЂР°Р±РѕС‚Р° РјРѕР¶РµС‚ СЂР°Р·Р±РёРІР°С‚СЊСЃСЏ СЃРјРµРЅР°РјРё. РїСЂРѕРІРµСЂСЏРµРј
             CheckShifts;
 
-            Exit;  // все
+            Exit;  // РІСЃРµ
           end;
         end;
       end;
-      if CheckCanMove(w.CurrentJob, false) then   // без сообщения
+      if CheckCanMove(w.CurrentJob, false) then   // Р±РµР· СЃРѕРѕР±С‰РµРЅРёСЏ
       begin
-        // сдвигаем работу дальше
+        // СЃРґРІРёРіР°РµРј СЂР°Р±РѕС‚Сѓ РґР°Р»СЊС€Рµ
         if WasShiftMarker then
         begin
-          // если работа стоит не в начале смены, то впихиваем перед ней
+          // РµСЃР»Рё СЂР°Р±РѕС‚Р° СЃС‚РѕРёС‚ РЅРµ РІ РЅР°С‡Р°Р»Рµ СЃРјРµРЅС‹, С‚Рѕ РІРїРёС…РёРІР°РµРј РїРµСЂРµРґ РЅРµР№
           if MinuteSpan(ShiftStart, w.AnyStartDateTime) > MIN_JOB then
             CurJob.PlanStart := ShiftStart
-          else // иначе ставим после первой работы
+          else // РёРЅР°С‡Рµ СЃС‚Р°РІРёРј РїРѕСЃР»Рµ РїРµСЂРІРѕР№ СЂР°Р±РѕС‚С‹
             CurJob.PlanStart := w.AnyFinishDateTime;
           CurJob.PlanFinish := CurJob.PlanStart + CurFinish - CurStart;
           if CheckMovingJob(CurItemID, CurJob) then
@@ -813,7 +813,7 @@ begin
         end
         else
         begin
-          // меняем местами последующую и текущую
+          // РјРµРЅСЏРµРј РјРµСЃС‚Р°РјРё РїРѕСЃР»РµРґСѓСЋС‰СѓСЋ Рё С‚РµРєСѓС‰СѓСЋ
           NextStart := w.AnyStartDateTime;
           NextFinish := w.AnyFinishDateTime;
           NextID := w.JobID;
@@ -832,8 +832,8 @@ begin
       end
       else
       begin
-        // Работу сдвинуть нельзя, значит, надо поместить нашу работу после нее.
-        // Надо найти ту, которую можно сдвинуть
+        // Р Р°Р±РѕС‚Сѓ СЃРґРІРёРЅСѓС‚СЊ РЅРµР»СЊР·СЏ, Р·РЅР°С‡РёС‚, РЅР°РґРѕ РїРѕРјРµСЃС‚РёС‚СЊ РЅР°С€Сѓ СЂР°Р±РѕС‚Сѓ РїРѕСЃР»Рµ РЅРµРµ.
+        // РќР°РґРѕ РЅР°Р№С‚Рё С‚Сѓ, РєРѕС‚РѕСЂСѓСЋ РјРѕР¶РЅРѕ СЃРґРІРёРЅСѓС‚СЊ
         UnMovableJobID := w.JobID;
         UnmovableJob := w.JobList.GetJob(UnmovableJobID);
         if LocateMovableJob(w, UnMovableJob, CurID, CurFinish - CurStart{, MovableJobStart}) then
@@ -846,7 +846,7 @@ begin
         else
         begin
           w.Locate(UnMovableJobID);
-          CheckCanMove(w.CurrentJob, true); // показываем сообщение об ошибке
+          CheckCanMove(w.CurrentJob, true); // РїРѕРєР°Р·С‹РІР°РµРј СЃРѕРѕР±С‰РµРЅРёРµ РѕР± РѕС€РёР±РєРµ
         end;
       end;
     end;
@@ -877,19 +877,19 @@ begin
     w.DataSet.Prior;
     if not w.DataSet.Bof then
     begin
-      // Если предыд. запись - маркер смены, пропускаем его
+      // Р•СЃР»Рё РїСЂРµРґС‹Рґ. Р·Р°РїРёСЃСЊ - РјР°СЂРєРµСЂ СЃРјРµРЅС‹, РїСЂРѕРїСѓСЃРєР°РµРј РµРіРѕ
       if w.IsShiftMarker then
       begin
         PriorStart := w.AnyStartDateTime;
         w.DataSet.Prior;
         if not w.DataSet.Bof then
         begin
-          // Если опять маркер смены, тут может быть 2 варианта:
-          // 1. возвращаемся на предыдущую смену и ставим перед ней
-          // 2. ставим в начало смены
+          // Р•СЃР»Рё РѕРїСЏС‚СЊ РјР°СЂРєРµСЂ СЃРјРµРЅС‹, С‚СѓС‚ РјРѕР¶РµС‚ Р±С‹С‚СЊ 2 РІР°СЂРёР°РЅС‚Р°:
+          // 1. РІРѕР·РІСЂР°С‰Р°РµРјСЃСЏ РЅР° РїСЂРµРґС‹РґСѓС‰СѓСЋ СЃРјРµРЅСѓ Рё СЃС‚Р°РІРёРј РїРµСЂРµРґ РЅРµР№
+          // 2. СЃС‚Р°РІРёРј РІ РЅР°С‡Р°Р»Рѕ СЃРјРµРЅС‹
           if w.IsShiftMarker then
           begin
-            { Вариант 1:
+            { Р’Р°СЂРёР°РЅС‚ 1:
             w.DataSet.Next;
             NewFinish := w.FactFinishDateTime;
             Database.BeginTrans;
@@ -900,7 +900,7 @@ begin
               Database.RollbackTrans;
               raise;
             end;}
-            // Вариант 2:
+            // Р’Р°СЂРёР°РЅС‚ 2:
             Database.BeginTrans;
             try
               GetAdapter(w).UpdatePlan(CurID, w.AnyStartDateTime, w.AnyStartDateTime + CurFinish - CurStart);
@@ -911,49 +911,49 @@ begin
             end;
 
             w.Reload;
-            // работа может разбиваться сменами. проверяем
+            // СЂР°Р±РѕС‚Р° РјРѕР¶РµС‚ СЂР°Р·Р±РёРІР°С‚СЊСЃСЏ СЃРјРµРЅР°РјРё. РїСЂРѕРІРµСЂСЏРµРј
             CheckShifts;
 
-            Moved := true;  // все
+            Moved := true;  // РІСЃРµ
           end
           else
           begin
-            // Если мы стоим на работе, находящейся в предыдущей смене,
-            // то надо проверить, есть ли еще место в этой смене
+            // Р•СЃР»Рё РјС‹ СЃС‚РѕРёРј РЅР° СЂР°Р±РѕС‚Рµ, РЅР°С…РѕРґСЏС‰РµР№СЃСЏ РІ РїСЂРµРґС‹РґСѓС‰РµР№ СЃРјРµРЅРµ,
+            // С‚Рѕ РЅР°РґРѕ РїСЂРѕРІРµСЂРёС‚СЊ, РµСЃС‚СЊ Р»Рё РµС‰Рµ РјРµСЃС‚Рѕ РІ СЌС‚РѕР№ СЃРјРµРЅРµ
             if MinuteSpan(PriorStart, w.AnyFinishDateTime) > MIN_JOB then
             begin
-              // ставим сюда
+              // СЃС‚Р°РІРёРј СЃСЋРґР°
               GetAdapter(w).UpdatePlan(CurID, w.AnyFinishDateTime, w.AnyFinishDateTime + CurFinish - CurStart);
-              // работа может разбиваться сменами. проверяем
+              // СЂР°Р±РѕС‚Р° РјРѕР¶РµС‚ СЂР°Р·Р±РёРІР°С‚СЊСЃСЏ СЃРјРµРЅР°РјРё. РїСЂРѕРІРµСЂСЏРµРј
               w.Reload;
               CheckShifts;
 
               Moved := true;
             end;
-            // иначе места нету - идем дальше и меняем местами с работой в смене
+            // РёРЅР°С‡Рµ РјРµСЃС‚Р° РЅРµС‚Сѓ - РёРґРµРј РґР°Р»СЊС€Рµ Рё РјРµРЅСЏРµРј РјРµСЃС‚Р°РјРё СЃ СЂР°Р±РѕС‚РѕР№ РІ СЃРјРµРЅРµ
           end;
         end;
       end;
 
       if not Moved then
       begin
-        // Проверяем есть ли место между работами
+        // РџСЂРѕРІРµСЂСЏРµРј РµСЃС‚СЊ Р»Рё РјРµСЃС‚Рѕ РјРµР¶РґСѓ СЂР°Р±РѕС‚Р°РјРё
         if CurStart - w.AnyFinishDateTime > 0 then
         begin
           GetAdapter(w).UpdatePlan(CurID, w.AnyFinishDateTime, w.AnyFinishDateTime + CurFinish - CurStart);
           Moved := true;
-          // работа может разбиваться сменами или склеиваться. проверяем
+          // СЂР°Р±РѕС‚Р° РјРѕР¶РµС‚ СЂР°Р·Р±РёРІР°С‚СЊСЃСЏ СЃРјРµРЅР°РјРё РёР»Рё СЃРєР»РµРёРІР°С‚СЊСЃСЏ. РїСЂРѕРІРµСЂСЏРµРј
           w.Reload;
           CheckShifts;
         end
         else
         if CheckCanMove(w.CurrentJob, true) then
         begin
-          // сдвигаем работу назад - меняем местами предыдущую и текущую
+          // СЃРґРІРёРіР°РµРј СЂР°Р±РѕС‚Сѓ РЅР°Р·Р°Рґ - РјРµРЅСЏРµРј РјРµСЃС‚Р°РјРё РїСЂРµРґС‹РґСѓС‰СѓСЋ Рё С‚РµРєСѓС‰СѓСЋ
           PriorStart := w.AnyStartDateTime;
           PriorFinish := w.AnyFinishDateTime;
           PriorID := w.JobID;
-          // новое начало предыдущей работы
+          // РЅРѕРІРѕРµ РЅР°С‡Р°Р»Рѕ РїСЂРµРґС‹РґСѓС‰РµР№ СЂР°Р±РѕС‚С‹
           NewStart := PriorStart + CurFinish - CurStart;
           Database.BeginTrans;
           try
@@ -965,7 +965,7 @@ begin
             Database.RollbackTrans;
             raise;
           end;
-          // работа может разбиваться сменами или склеиваться. проверяем
+          // СЂР°Р±РѕС‚Р° РјРѕР¶РµС‚ СЂР°Р·Р±РёРІР°С‚СЊСЃСЏ СЃРјРµРЅР°РјРё РёР»Рё СЃРєР»РµРёРІР°С‚СЊСЃСЏ. РїСЂРѕРІРµСЂСЏРµРј
           w.Reload;
           CheckShifts;
         end;
@@ -996,51 +996,51 @@ begin
     CurFinish := w.PlanFinishDateTime;
     w.DataSet.DisableControls;
     try
-      // в непрерывном режиме находим начало смены
+      // РІ РЅРµРїСЂРµСЂС‹РІРЅРѕРј СЂРµР¶РёРјРµ РЅР°С…РѕРґРёРј РЅР°С‡Р°Р»Рѕ СЃРјРµРЅС‹
       if ContinuousMode(w) then
       begin
-        if not w.LocateShift then Exit;  // аварийный выход
+        if not w.LocateShift then Exit;  // Р°РІР°СЂРёР№РЅС‹Р№ РІС‹С…РѕРґ
       end else
         w.DataSet.First;
 
       if w.IsShiftMarker then
       begin
-        // стоим на начале смены
+        // СЃС‚РѕРёРј РЅР° РЅР°С‡Р°Р»Рµ СЃРјРµРЅС‹
         w.DataSet.Next;
-        if w.JobID = CurID then // если наша работа стоит первой то ничего не делаем
+        if w.JobID = CurID then // РµСЃР»Рё РЅР°С€Р° СЂР°Р±РѕС‚Р° СЃС‚РѕРёС‚ РїРµСЂРІРѕР№ С‚Рѕ РЅРёС‡РµРіРѕ РЅРµ РґРµР»Р°РµРј
           Exit;
       end;
       FirstJobID := w.JobID;
 
-      if CurID <> w.JobID then  // если это не первая работа
+      if CurID <> w.JobID then  // РµСЃР»Рё СЌС‚Рѕ РЅРµ РїРµСЂРІР°СЏ СЂР°Р±РѕС‚Р°
       begin
-        // Проходим по всем работам и проверяем нет ли такой, которую нельзя сдвинуть
+        // РџСЂРѕС…РѕРґРёРј РїРѕ РІСЃРµРј СЂР°Р±РѕС‚Р°Рј Рё РїСЂРѕРІРµСЂСЏРµРј РЅРµС‚ Р»Рё С‚Р°РєРѕР№, РєРѕС‚РѕСЂСѓСЋ РЅРµР»СЊР·СЏ СЃРґРІРёРЅСѓС‚СЊ
         CanMove := true;
-        // пока не дойдем до нашей
+        // РїРѕРєР° РЅРµ РґРѕР№РґРµРј РґРѕ РЅР°С€РµР№
         while not w.DataSet.Eof and (CurID <> w.JobID) and CanMove do
         begin
           CanMove := CheckCanMove(w.CurrentJob, true);
           w.DataSet.Next;
         end;
-        if CanMove then  // Если все нормально, то сдвигаем
+        if CanMove then  // Р•СЃР»Рё РІСЃРµ РЅРѕСЂРјР°Р»СЊРЅРѕ, С‚Рѕ СЃРґРІРёРіР°РµРј
         begin
           w.Locate(FirstJobID);
           Database.BeginTrans;
           try
-            NextStart := w.AnyStartDateTime; // новое начало сдвигаемой работы
+            NextStart := w.AnyStartDateTime; // РЅРѕРІРѕРµ РЅР°С‡Р°Р»Рѕ СЃРґРІРёРіР°РµРјРѕР№ СЂР°Р±РѕС‚С‹
             GetAdapter(w).UpdatePlan(CurID, NextStart, NextStart + CurFinish - CurStart);
             while not w.DataSet.eof do
             begin
               NextID := w.JobID;
-              if NextID <> CurID then  // кроме той которая встала в начало
+              if NextID <> CurID then  // РєСЂРѕРјРµ С‚РѕР№ РєРѕС‚РѕСЂР°СЏ РІСЃС‚Р°Р»Р° РІ РЅР°С‡Р°Р»Рѕ
               begin
-                NextStart := w.AnyStartDateTime; // начало и конец работ, следующих после первой
+                NextStart := w.AnyStartDateTime; // РЅР°С‡Р°Р»Рѕ Рё РєРѕРЅРµС† СЂР°Р±РѕС‚, СЃР»РµРґСѓСЋС‰РёС… РїРѕСЃР»Рµ РїРµСЂРІРѕР№
                 NextFinish := w.AnyFinishDateTime;
-                NewStart := NextStart + CurFinish - CurStart; // новое начало следующей работы
+                NewStart := NextStart + CurFinish - CurStart; // РЅРѕРІРѕРµ РЅР°С‡Р°Р»Рѕ СЃР»РµРґСѓСЋС‰РµР№ СЂР°Р±РѕС‚С‹
                 GetAdapter(w).UpdatePlan(NextID, NewStart, NewStart + NextFinish - NextStart);
               end
               else
-                break;  // если дошли до работы, которая перешла в начало, то дальше не идем
+                break;  // РµСЃР»Рё РґРѕС€Р»Рё РґРѕ СЂР°Р±РѕС‚С‹, РєРѕС‚РѕСЂР°СЏ РїРµСЂРµС€Р»Р° РІ РЅР°С‡Р°Р»Рѕ, С‚Рѕ РґР°Р»СЊС€Рµ РЅРµ РёРґРµРј
               w.DataSet.Next;
             end;
             Database.CommitTrans;
@@ -1049,7 +1049,7 @@ begin
             raise;
           end;
           w.Reload;
-          // проверяем пересечение границ смен
+          // РїСЂРѕРІРµСЂСЏРµРј РїРµСЂРµСЃРµС‡РµРЅРёРµ РіСЂР°РЅРёС† СЃРјРµРЅ
           CheckShifts;
         end;
       end;
@@ -1076,35 +1076,35 @@ begin
     CurFinish := w.PlanFinishDateTime;
     w.DataSet.DisableControls;
     try
-      // TODO: надо проверить на всякий случай, что можно сдвинуть все работы
-      w.DataSet.Next;  // переходим на следующую работу и с нее начнем сдвигать назад
+      // TODO: РЅР°РґРѕ РїСЂРѕРІРµСЂРёС‚СЊ РЅР° РІСЃСЏРєРёР№ СЃР»СѓС‡Р°Р№, С‡С‚Рѕ РјРѕР¶РЅРѕ СЃРґРІРёРЅСѓС‚СЊ РІСЃРµ СЂР°Р±РѕС‚С‹
+      w.DataSet.Next;  // РїРµСЂРµС…РѕРґРёРј РЅР° СЃР»РµРґСѓСЋС‰СѓСЋ СЂР°Р±РѕС‚Сѓ Рё СЃ РЅРµРµ РЅР°С‡РЅРµРј СЃРґРІРёРіР°С‚СЊ РЅР°Р·Р°Рґ
       if CheckCanMove(w.CurrentJob, true) then
       begin
-        if not w.DataSet.Eof then  // если это еще не последняя работа
+        if not w.DataSet.Eof then  // РµСЃР»Рё СЌС‚Рѕ РµС‰Рµ РЅРµ РїРѕСЃР»РµРґРЅСЏСЏ СЂР°Р±РѕС‚Р°
         begin
           Database.BeginTrans;
           try
             while not w.DataSet.eof do
             begin
-              // В непрерывном режиме обрабатываем до конца смены
+              // Р’ РЅРµРїСЂРµСЂС‹РІРЅРѕРј СЂРµР¶РёРјРµ РѕР±СЂР°Р±Р°С‚С‹РІР°РµРј РґРѕ РєРѕРЅС†Р° СЃРјРµРЅС‹
               if ContinuousMode(w) and w.IsShiftMarker then
                 break;
               NextID := w.JobID;
-              NextStart := w.AnyStartDateTime; // начало и конец работ, ранее следовавших после нашей
+              NextStart := w.AnyStartDateTime; // РЅР°С‡Р°Р»Рѕ Рё РєРѕРЅРµС† СЂР°Р±РѕС‚, СЂР°РЅРµРµ СЃР»РµРґРѕРІР°РІС€РёС… РїРѕСЃР»Рµ РЅР°С€РµР№
               NextFinish := w.AnyFinishDateTime;
-              NewStart := NextStart - CurFinish + CurStart; // новое начало следующей работы
+              NewStart := NextStart - CurFinish + CurStart; // РЅРѕРІРѕРµ РЅР°С‡Р°Р»Рѕ СЃР»РµРґСѓСЋС‰РµР№ СЂР°Р±РѕС‚С‹
               NewFinish := NewStart + NextFinish - NextStart;
               GetAdapter(w).UpdatePlan(NextID, NewStart, NewFinish);
               w.DataSet.Next;
             end;
-            NextStart := NewFinish; // новое начало сдвигаемой работы
+            NextStart := NewFinish; // РЅРѕРІРѕРµ РЅР°С‡Р°Р»Рѕ СЃРґРІРёРіР°РµРјРѕР№ СЂР°Р±РѕС‚С‹
             GetAdapter(w).UpdatePlan(CurID, NextStart, NextStart + CurFinish - CurStart);
             Database.CommitTrans;
           except
             Database.RollbackTrans;
             raise;
           end;
-          // на всякий случай проверяем пересечения с маркерами смен
+          // РЅР° РІСЃСЏРєРёР№ СЃР»СѓС‡Р°Р№ РїСЂРѕРІРµСЂСЏРµРј РїРµСЂРµСЃРµС‡РµРЅРёСЏ СЃ РјР°СЂРєРµСЂР°РјРё СЃРјРµРЅ
           w.Reload;
           CheckShifts;
         end;
@@ -1124,10 +1124,15 @@ var
   Job, TargetJob: TJobParams;
   CurStart, TargetFinish: TDateTime;
   SourceShift, TargetShift: TShiftInfo;
+  KPRec: TKindProcPerm;
 begin
   w := CurrentWorkload;
 
-  if CheckLocked(W) then  // Если заблокирован, выходим
+  AccessManager.ReadUserKindProcPermTo(KPRec, w.KindID, AccessManager.CurUser.ID, w.ProcessID);
+  // Р•СЃР»Рё РїР»Р°РЅ Р·Р°Р±Р»РѕРєРёСЂРѕРІР°РЅ РёР»Рё РЅРµС‚ РїСЂР°РІ РЅР° РїР»Р°РЅРёСЂРѕРІР°РЅРёРµ Рё С„Р°РєС‚РёС‡. РѕС‚РјРµС‚РєРё, С‚Рѕ РІС‹С…РѕРґРёРј
+  if not KPRec.PlanDate and not KPRec.FactDate or IsLocked(W) then Exit;
+
+  if CheckLocked(W) then  // Р•СЃР»Рё Р·Р°Р±Р»РѕРєРёСЂРѕРІР°РЅ, РІС‹С…РѕРґРёРј
     Exit;
 
   w.DataSet.DisableControls;
@@ -1143,26 +1148,26 @@ begin
         //try
           //if w.Locate(TargetJobID) then
           //begin
-            // ставим работу ПОСЛЕ выбранной
+            // СЃС‚Р°РІРёРј СЂР°Р±РѕС‚Сѓ РџРћРЎР›Р• РІС‹Р±СЂР°РЅРЅРѕР№
             if TargetJobID < 0 then
-              TargetFinish := w.GetShiftByID(TargetJobID).Start  // Если бросаем на начало смены
+              TargetFinish := w.GetShiftByID(TargetJobID).Start  // Р•СЃР»Рё Р±СЂРѕСЃР°РµРј РЅР° РЅР°С‡Р°Р»Рѕ СЃРјРµРЅС‹
             else
             begin
               TargetJob := w.JobList.GetJob(TargetJobID);
-              TargetFinish := TargetJob.AnyFinish;  // Если бросаем на другую работу
+              TargetFinish := TargetJob.AnyFinish;  // Р•СЃР»Рё Р±СЂРѕСЃР°РµРј РЅР° РґСЂСѓРіСѓСЋ СЂР°Р±РѕС‚Сѓ
             end;
             //TargetShift := w.GetShift(TargetJobID);
             CurStart := Job.PlanStart;
             BeginUpdates(w);
             Job.PlanStart := TargetFinish;
             Job.PlanFinish := Job.PlanStart + (Job.PlanFinish - CurStart);
-            //w.JobList.Remove(Job);  // временно убираем, чтобы не путалась
+            //w.JobList.Remove(Job);  // РІСЂРµРјРµРЅРЅРѕ СѓР±РёСЂР°РµРј, С‡С‚РѕР±С‹ РЅРµ РїСѓС‚Р°Р»Р°СЃСЊ
             //SourceShift.JobList.Remove(Job);
             //TargetShift.JobList.Insert(TargetShift.JobList.IndexOf(TargetJob) + 1, Job);
             if CheckMovingJob(Job.ItemID, Job) then
             begin
-              //w.JobList.Add(Job);  // добавляем обратно
-              //w.SortJobs;          // ставим на нужное место
+              //w.JobList.Add(Job);  // РґРѕР±Р°РІР»СЏРµРј РѕР±СЂР°С‚РЅРѕ
+              //w.SortJobs;          // СЃС‚Р°РІРёРј РЅР° РЅСѓР¶РЅРѕРµ РјРµСЃС‚Рѕ
               //w.ReloadLocate(CurID);
               CheckShifts;
               CommitUpdates(w);
@@ -1203,7 +1208,7 @@ var
   _ReadOnly, _JustLocked: boolean;
 begin
   w := PlanFrame.CurrentWorkload;
-  _ReadOnly := IsLocked(W);  // Если заблокирован, только для чтения
+  _ReadOnly := IsLocked(W);  // Р•СЃР»Рё Р·Р°Р±Р»РѕРєРёСЂРѕРІР°РЅ, С‚РѕР»СЊРєРѕ РґР»СЏ С‡С‚РµРЅРёСЏ
 
   Job := w.CurrentJob;
   if Job = nil then Exit;
@@ -1211,16 +1216,16 @@ begin
   CurID := Job.JobID;
 
   Estimated := NvlInteger(TConfigManager.Instance.StandardDics.deSpecialJob.ItemValue[Job.JobType, 1]);
-  if Estimated = 0 then Estimated := 1; // нулевая длительность не прокатит
+  if Estimated = 0 then Estimated := 1; // РЅСѓР»РµРІР°СЏ РґР»РёС‚РµР»СЊРЅРѕСЃС‚СЊ РЅРµ РїСЂРѕРєР°С‚РёС‚
 
   PrevFinishTime := GetPrevFinishTime(w, Job);
-  SetExecutor(w, Job);  // берем исполнителя из информации о смене, если надо
+  SetExecutor(w, Job);  // Р±РµСЂРµРј РёСЃРїРѕР»РЅРёС‚РµР»СЏ РёР· РёРЅС„РѕСЂРјР°С†РёРё Рѕ СЃРјРµРЅРµ, РµСЃР»Рё РЅР°РґРѕ
   Job.EstimatedDuration := Estimated;
-  Job.ClearChanges;  // очищаем флажки изменения полей
+  Job.ClearChanges;  // РѕС‡РёС‰Р°РµРј С„Р»Р°Р¶РєРё РёР·РјРµРЅРµРЅРёСЏ РїРѕР»РµР№
 
   if not _ReadOnly and not w.Locked then
   begin
-    _ReadOnly := CheckLocked(w);  // блокируем
+    _ReadOnly := CheckLocked(w);  // Р±Р»РѕРєРёСЂСѓРµРј
     _JustLocked := true;
   end
   else
@@ -1250,10 +1255,10 @@ begin
     CheckShifts;
     CommitUpdates(w);
     w.Locate(CurID);
-    PlanFrame.UpdateJobControls; // чтобы кнопочки обновились
+    PlanFrame.UpdateJobControls; // С‡С‚РѕР±С‹ РєРЅРѕРїРѕС‡РєРё РѕР±РЅРѕРІРёР»РёСЃСЊ
   end
   else
-    // Если был заблокирован только что и отменили, то снимаем блокировку
+    // Р•СЃР»Рё Р±С‹Р» Р·Р°Р±Р»РѕРєРёСЂРѕРІР°РЅ С‚РѕР»СЊРєРѕ С‡С‚Рѕ Рё РѕС‚РјРµРЅРёР»Рё, С‚Рѕ СЃРЅРёРјР°РµРј Р±Р»РѕРєРёСЂРѕРІРєСѓ
     if _JustLocked then
       UnlockWorkload(w);
 end;
@@ -1264,7 +1269,7 @@ var
   NewExecutor: variant;
   Shift: TShiftInfo;
 begin
-  // Если плановое начало не отмечено, то ставим исполнителя из смены
+  // Р•СЃР»Рё РїР»Р°РЅРѕРІРѕРµ РЅР°С‡Р°Р»Рѕ РЅРµ РѕС‚РјРµС‡РµРЅРѕ, С‚Рѕ СЃС‚Р°РІРёРј РёСЃРїРѕР»РЅРёС‚РµР»СЏ РёР· СЃРјРµРЅС‹
   if ContinuousMode(w) and VarIsNull(Job.FactStart) then
   begin
     CurJobID := Job.JobID;
@@ -1278,14 +1283,14 @@ begin
   end;
 end;
 
-// Если работа разбита по тиражу, то надо рассчитать фактическую скорость и удлинить-укоротить следующие кусочки.
-// Если не разбита по тиражу, и фактическая выработка меньше плановой, то создается новая работа.
-// w - до редактирования, Job - после.
+// Р•СЃР»Рё СЂР°Р±РѕС‚Р° СЂР°Р·Р±РёС‚Р° РїРѕ С‚РёСЂР°Р¶Сѓ, С‚Рѕ РЅР°РґРѕ СЂР°СЃСЃС‡РёС‚Р°С‚СЊ С„Р°РєС‚РёС‡РµСЃРєСѓСЋ СЃРєРѕСЂРѕСЃС‚СЊ Рё СѓРґР»РёРЅРёС‚СЊ-СѓРєРѕСЂРѕС‚РёС‚СЊ СЃР»РµРґСѓСЋС‰РёРµ РєСѓСЃРѕС‡РєРё.
+// Р•СЃР»Рё РЅРµ СЂР°Р·Р±РёС‚Р° РїРѕ С‚РёСЂР°Р¶Сѓ, Рё С„Р°РєС‚РёС‡РµСЃРєР°СЏ РІС‹СЂР°Р±РѕС‚РєР° РјРµРЅСЊС€Рµ РїР»Р°РЅРѕРІРѕР№, С‚Рѕ СЃРѕР·РґР°РµС‚СЃСЏ РЅРѕРІР°СЏ СЂР°Р±РѕС‚Р°.
+// w - РґРѕ СЂРµРґР°РєС‚РёСЂРѕРІР°РЅРёСЏ, Job - РїРѕСЃР»Рµ.
 procedure TPlanController.ProcessFactProductOutChange(w: TWorkload; Job: TJobParams);
 
   function ConfirmUser: boolean;
   begin
-    Result := RusMessageDlg('Фактическая выработка меньше плановой. Добавить дополнительную работу?',
+    Result := RusMessageDlg('Р¤Р°РєС‚РёС‡РµСЃРєР°СЏ РІС‹СЂР°Р±РѕС‚РєР° РјРµРЅСЊС€Рµ РїР»Р°РЅРѕРІРѕР№. Р”РѕР±Р°РІРёС‚СЊ РґРѕРїРѕР»РЅРёС‚РµР»СЊРЅСѓСЋ СЂР°Р±РѕС‚Сѓ?',
       mtConfirmation, [mbYes, mbNo], 0) = mrYes;
   end;
 
@@ -1299,34 +1304,34 @@ begin
 
   NewFactProd := NvlInteger(Job.FactProductOut);
 
-  // фактическая скорость
+  // С„Р°РєС‚РёС‡РµСЃРєР°СЏ СЃРєРѕСЂРѕСЃС‚СЊ
   FactSpeed := Round(NewFactProd / (Job.AnyFinish - Job.AnyStart));
 
   if (NewFactProd < Job.ProductOut) and not Job.HasSplitMode(smQuantity)
     and (FactSpeed > 0) then
   begin
-    // нет разбивки по тиражу, добавляем
+    // РЅРµС‚ СЂР°Р·Р±РёРІРєРё РїРѕ С‚РёСЂР°Р¶Сѓ, РґРѕР±Р°РІР»СЏРµРј
     RestDuration := (Job.ProductOut - NewFactProd) / FactSpeed;
     if (MinuteSpan(RestDuration, 0) > MIN_JOB) and ConfirmUser then
     begin
-      // создается новый кусочек работы, ставим его после текущей работы
+      // СЃРѕР·РґР°РµС‚СЃСЏ РЅРѕРІС‹Р№ РєСѓСЃРѕС‡РµРє СЂР°Р±РѕС‚С‹, СЃС‚Р°РІРёРј РµРіРѕ РїРѕСЃР»Рµ С‚РµРєСѓС‰РµР№ СЂР°Р±РѕС‚С‹
       sn := GetAdapter(w).UpdateJobSplitMode(Job, Job.AnyStart, Job.AnyFinish, smQuantity,
-        false);  // auto split в этом случае, чтобы склеилось, если вдруг снимется факт. дата
-      // нам вернули номер разбивки
+        false);  // auto split РІ СЌС‚РѕРј СЃР»СѓС‡Р°Рµ, С‡С‚РѕР±С‹ СЃРєР»РµРёР»РѕСЃСЊ, РµСЃР»Рё РІРґСЂСѓРі СЃРЅРёРјРµС‚СЃСЏ С„Р°РєС‚. РґР°С‚Р°
+      // РЅР°Рј РІРµСЂРЅСѓР»Рё РЅРѕРјРµСЂ СЂР°Р·Р±РёРІРєРё
       NewJobID := GetAdapter(w).AddSplitJob(Job, Job.AnyFinish, Job.AnyFinish + RestDuration, sn);
-      // Чтобы обновить параметра, общие для всех работ одного процесса
+      // Р§С‚РѕР±С‹ РѕР±РЅРѕРІРёС‚СЊ РїР°СЂР°РјРµС‚СЂР°, РѕР±С‰РёРµ РґР»СЏ РІСЃРµС… СЂР°Р±РѕС‚ РѕРґРЅРѕРіРѕ РїСЂРѕС†РµСЃСЃР°
       GetAdapter(w).UpdatePlan(Job);
-      // Только после этого перенумеровать
+      // РўРѕР»СЊРєРѕ РїРѕСЃР»Рµ СЌС‚РѕРіРѕ РїРµСЂРµРЅСѓРјРµСЂРѕРІР°С‚СЊ
       RenumberItemJobs(w, Job, sn);
-      // ставим на правильное место
+      // СЃС‚Р°РІРёРј РЅР° РїСЂР°РІРёР»СЊРЅРѕРµ РјРµСЃС‚Рѕ
       NewJob := w.JobList.GetJob(NewJobID);//w.CurrentJob;
       CheckMovingJob(Job.ItemID, NewJob);
     end;
   end
   else if Job.HasSplitMode(smQuantity) and (FactSpeed > 0) then
   begin
-    // удлинить-укоротить следующие кусочки.
-    // ищем последний кусочек
+    // СѓРґР»РёРЅРёС‚СЊ-СѓРєРѕСЂРѕС‚РёС‚СЊ СЃР»РµРґСѓСЋС‰РёРµ РєСѓСЃРѕС‡РєРё.
+    // РёС‰РµРј РїРѕСЃР»РµРґРЅРёР№ РєСѓСЃРѕС‡РµРє
     if Job.SplitMode1 = smQuantity then
       sn := 1
     else if Job.SplitMode2 = smQuantity then
@@ -1339,8 +1344,8 @@ begin
       if (LastJobID <> Job.JobID) then
       begin
         LastJob := w.JobList.GetJob(LastJobID);
-        // вычисляем новое время для последнего кусочка...
-        // время всех промежуточных кусочков
+        // РІС‹С‡РёСЃР»СЏРµРј РЅРѕРІРѕРµ РІСЂРµРјСЏ РґР»СЏ РїРѕСЃР»РµРґРЅРµРіРѕ РєСѓСЃРѕС‡РєР°...
+        // РІСЂРµРјСЏ РІСЃРµС… РїСЂРѕРјРµР¶СѓС‚РѕС‡РЅС‹С… РєСѓСЃРѕС‡РєРѕРІ
         TotalSecExcept := GetAdapter(w).GetJobTotalSecExcept(Job, [Job.JobID, LastJob.JobID]);
         p := Job.ItemProductOut;
         if Job.HasSplitMode(smMultiplier) then
@@ -1352,26 +1357,26 @@ begin
           RestDuration := IncSecond(RestDuration, -TotalSecExcept);
           if RestDuration < 0 then
             RestDuration := 0;
-          // сдвигаем остальные работы
+          // СЃРґРІРёРіР°РµРј РѕСЃС‚Р°Р»СЊРЅС‹Рµ СЂР°Р±РѕС‚С‹
           LastJob.PlanFinish := LastJob.PlanStart + RestDuration;
-          // работа может залезть на следующую, поэтому сдвигаем
+          // СЂР°Р±РѕС‚Р° РјРѕР¶РµС‚ Р·Р°Р»РµР·С‚СЊ РЅР° СЃР»РµРґСѓСЋС‰СѓСЋ, РїРѕСЌС‚РѕРјСѓ СЃРґРІРёРіР°РµРј
           CheckMovingJob(LastJob.ItemID, LastJob);
-          // после пересчета количества могли получиться нулевые "хвостики". их можно удалить.
+          // РїРѕСЃР»Рµ РїРµСЂРµСЃС‡РµС‚Р° РєРѕР»РёС‡РµСЃС‚РІР° РјРѕРіР»Рё РїРѕР»СѓС‡РёС‚СЊСЃСЏ РЅСѓР»РµРІС‹Рµ "С…РІРѕСЃС‚РёРєРё". РёС… РјРѕР¶РЅРѕ СѓРґР°Р»РёС‚СЊ.
           GetAdapter(w).RemoveZeroTimeJobs(LastJob);
         end;
       end
       else
       begin
-        // Если это последний кусочек, то спрашиваем, надо ли добавить еще один
+        // Р•СЃР»Рё СЌС‚Рѕ РїРѕСЃР»РµРґРЅРёР№ РєСѓСЃРѕС‡РµРє, С‚Рѕ СЃРїСЂР°С€РёРІР°РµРј, РЅР°РґРѕ Р»Рё РґРѕР±Р°РІРёС‚СЊ РµС‰Рµ РѕРґРёРЅ
         RestDuration := (Job.ProductOut - NewFactProd) / FactSpeed;
         if (MinuteSpan(RestDuration, 0) > MIN_JOB) and ConfirmUser then
         begin
           NewJobID := GetAdapter(w).AddSplitJob(Job, Job.AnyFinish, Job.AnyFinish + RestDuration, sn);
-          // Чтобы обновить параметра, общие для всех работ одного процесса
+          // Р§С‚РѕР±С‹ РѕР±РЅРѕРІРёС‚СЊ РїР°СЂР°РјРµС‚СЂР°, РѕР±С‰РёРµ РґР»СЏ РІСЃРµС… СЂР°Р±РѕС‚ РѕРґРЅРѕРіРѕ РїСЂРѕС†РµСЃСЃР°
           GetAdapter(w).UpdatePlan(Job);
-          // Только после этого перенумеровать
+          // РўРѕР»СЊРєРѕ РїРѕСЃР»Рµ СЌС‚РѕРіРѕ РїРµСЂРµРЅСѓРјРµСЂРѕРІР°С‚СЊ
           RenumberItemJobs(w, Job, sn);
-          // ставим на правильное место
+          // СЃС‚Р°РІРёРј РЅР° РїСЂР°РІРёР»СЊРЅРѕРµ РјРµСЃС‚Рѕ
           NewJob := w.JobList.GetJob(NewJobID);//w.CurrentJob;
           CheckMovingJob(Job.ItemID, NewJob);
         end;
@@ -1416,12 +1421,12 @@ begin
   if w.CurrentJob = nil then Exit;
 
   AccessManager.ReadUserKindProcPermTo(KPRec, w.KindID, AccessManager.CurUser.ID, w.ProcessID);
-  // Если план заблокирован или нет прав на планирование и фактич. отметки, то открыть только для чтения
+  // Р•СЃР»Рё РїР»Р°РЅ Р·Р°Р±Р»РѕРєРёСЂРѕРІР°РЅ РёР»Рё РЅРµС‚ РїСЂР°РІ РЅР° РїР»Р°РЅРёСЂРѕРІР°РЅРёРµ Рё С„Р°РєС‚РёС‡. РѕС‚РјРµС‚РєРё, С‚Рѕ РѕС‚РєСЂС‹С‚СЊ С‚РѕР»СЊРєРѕ РґР»СЏ С‡С‚РµРЅРёСЏ
   _ReadOnly := not KPRec.PlanDate and not KPRec.FactDate or IsLocked(W);
 
   if not _ReadOnly and not w.Locked then
   begin
-    _ReadOnly := CheckLocked(w);  // блокируем
+    _ReadOnly := CheckLocked(w);  // Р±Р»РѕРєРёСЂСѓРµРј
     _JustLocked := true;
   end
   else
@@ -1429,14 +1434,14 @@ begin
 
   Job := w.CurrentJob;
 
-  SetExecutor(w, Job);  // берем исполнителя из информации о смене, если надо
+  SetExecutor(w, Job);  // Р±РµСЂРµРј РёСЃРїРѕР»РЅРёС‚РµР»СЏ РёР· РёРЅС„РѕСЂРјР°С†РёРё Рѕ СЃРјРµРЅРµ, РµСЃР»Рё РЅР°РґРѕ
 
-  JobCopy := Job.Copy;  // копия для сравнения
+  JobCopy := Job.Copy;  // РєРѕРїРёСЏ РґР»СЏ СЃСЂР°РІРЅРµРЅРёСЏ
   try
     PrevFinishTime := GetPrevFinishTime(w, Job);
     CurID := Job.JobID;
 
-    // создаем данные о процессах, предшествующих и последующих текущему
+    // СЃРѕР·РґР°РµРј РґР°РЅРЅС‹Рµ Рѕ РїСЂРѕС†РµСЃСЃР°С…, РїСЂРµРґС€РµСЃС‚РІСѓСЋС‰РёС… Рё РїРѕСЃР»РµРґСѓСЋС‰РёС… С‚РµРєСѓС‰РµРјСѓ
     CurProcess := TConfigManager.Instance.ServiceByID(w.ProcessID);
     tempDm := TDataModule.Create(nil);
     PrecedingDataSource := GetAdapter(w).CreateRelatedProcesses(tempDm, false, CurProcess.SequenceOrder,
@@ -1448,13 +1453,13 @@ begin
            not ContinuousMode(w), _ReadOnly, EditJobComment, EditAdvanced)
          and not _ReadOnly then
       begin
-        // были ли проставлены фактические отметки?
+        // Р±С‹Р»Рё Р»Рё РїСЂРѕСЃС‚Р°РІР»РµРЅС‹ С„Р°РєС‚РёС‡РµСЃРєРёРµ РѕС‚РјРµС‚РєРё?
         FactSet := (NvlDateTime(Job.FactStart) > 0) and (NvlDateTime(JobCopy.FactStart) = 0)
             or (NvlDateTime(Job.FactFinish) > 0) and (NvlDateTime(JobCopy.FactFinish) = 0);
         if FactSet then
         begin
-          // Если заказы должны закрываться по порядку,
-          // то проверяем, закрыты ли все предшествующие в этой смене.
+          // Р•СЃР»Рё Р·Р°РєР°Р·С‹ РґРѕР»Р¶РЅС‹ Р·Р°РєСЂС‹РІР°С‚СЊСЃСЏ РїРѕ РїРѕСЂСЏРґРєСѓ,
+          // С‚Рѕ РїСЂРѕРІРµСЂСЏРµРј, Р·Р°РєСЂС‹С‚С‹ Р»Рё РІСЃРµ РїСЂРµРґС€РµСЃС‚РІСѓСЋС‰РёРµ РІ СЌС‚РѕР№ СЃРјРµРЅРµ.
           if EntSettings.FactDateStrictOrder then
             AllowChangeFact := CheckSetFactOrder(Job)
           else
@@ -1462,20 +1467,20 @@ begin
 
           if not AllowChangeFact then
           begin
-            RusMessageDlg('Фактические отметки должны ставиться в порядке очередности заказов. Изменения не внесены.',
+            RusMessageDlg('Р¤Р°РєС‚РёС‡РµСЃРєРёРµ РѕС‚РјРµС‚РєРё РґРѕР»Р¶РЅС‹ СЃС‚Р°РІРёС‚СЊСЃСЏ РІ РїРѕСЂСЏРґРєРµ РѕС‡РµСЂРµРґРЅРѕСЃС‚Рё Р·Р°РєР°Р·РѕРІ. РР·РјРµРЅРµРЅРёСЏ РЅРµ РІРЅРµСЃРµРЅС‹.',
               mtError, [mbOk], 0);
             Result := false;
             Exit;
           end;
         end;
 
-        // теперь проверяем были сняты какие то фактические отметки?
+        // С‚РµРїРµСЂСЊ РїСЂРѕРІРµСЂСЏРµРј Р±С‹Р»Рё СЃРЅСЏС‚С‹ РєР°РєРёРµ С‚Рѕ С„Р°РєС‚РёС‡РµСЃРєРёРµ РѕС‚РјРµС‚РєРё?
         FactRemoved := (NvlDateTime(Job.FactStart) = 0) and (NvlDateTime(JobCopy.FactStart) > 0)
             or (NvlDateTime(Job.FactFinish) = 0) and (NvlDateTime(JobCopy.FactFinish) > 0);
         if FactRemoved then
         begin
-          // Если заказы должны закрываться по порядку,
-          // то проверяем, сняты ли отметки со всех последующих в этой смене.
+          // Р•СЃР»Рё Р·Р°РєР°Р·С‹ РґРѕР»Р¶РЅС‹ Р·Р°РєСЂС‹РІР°С‚СЊСЃСЏ РїРѕ РїРѕСЂСЏРґРєСѓ,
+          // С‚Рѕ РїСЂРѕРІРµСЂСЏРµРј, СЃРЅСЏС‚С‹ Р»Рё РѕС‚РјРµС‚РєРё СЃРѕ РІСЃРµС… РїРѕСЃР»РµРґСѓСЋС‰РёС… РІ СЌС‚РѕР№ СЃРјРµРЅРµ.
           if EntSettings.FactDateStrictOrder then
             AllowChangeFact := CheckRemoveFactOrder(Job)
           else
@@ -1483,7 +1488,7 @@ begin
 
           if not AllowChangeFact then
           begin
-            RusMessageDlg('Сначала нужно снять фактические отметки со всех последующих заказов. Изменения не внесены.',
+            RusMessageDlg('РЎРЅР°С‡Р°Р»Р° РЅСѓР¶РЅРѕ СЃРЅСЏС‚СЊ С„Р°РєС‚РёС‡РµСЃРєРёРµ РѕС‚РјРµС‚РєРё СЃРѕ РІСЃРµС… РїРѕСЃР»РµРґСѓСЋС‰РёС… Р·Р°РєР°Р·РѕРІ. РР·РјРµРЅРµРЅРёСЏ РЅРµ РІРЅРµСЃРµРЅС‹.',
               mtError, [mbOk], 0);
             Result := false;
             Exit;
@@ -1492,20 +1497,20 @@ begin
 
         BeginUpdates(w);
 
-        // TODO: Здесь надо проверить, были ли изменения
+        // TODO: Р—РґРµСЃСЊ РЅР°РґРѕ РїСЂРѕРІРµСЂРёС‚СЊ, Р±С‹Р»Рё Р»Рё РёР·РјРµРЅРµРЅРёСЏ
         if CheckMovingJob(Job.ItemID, Job) then
         begin
-          // если изменения успешно внесены в план,
-          // проверяем, менялись ли фактические параметры
+          // РµСЃР»Рё РёР·РјРµРЅРµРЅРёСЏ СѓСЃРїРµС€РЅРѕ РІРЅРµСЃРµРЅС‹ РІ РїР»Р°РЅ,
+          // РїСЂРѕРІРµСЂСЏРµРј, РјРµРЅСЏР»РёСЃСЊ Р»Рё С„Р°РєС‚РёС‡РµСЃРєРёРµ РїР°СЂР°РјРµС‚СЂС‹
           FactProductOutChanged := NvlInteger(Job.FactProductOut) <> NvlInteger(JobCopy.FactProductOut);
           if FactSet or FactProductOutChanged then
           begin
-            // Если изменилась фактич. выработка, то надо обработать хвостики
+            // Р•СЃР»Рё РёР·РјРµРЅРёР»Р°СЃСЊ С„Р°РєС‚РёС‡. РІС‹СЂР°Р±РѕС‚РєР°, С‚Рѕ РЅР°РґРѕ РѕР±СЂР°Р±РѕС‚Р°С‚СЊ С…РІРѕСЃС‚РёРєРё
             if NvlInteger(Job.FactProductOut) <> NvlInteger(JobCopy.FactProductOut) then
             begin
               ProcessFactProductOutChange(w, Job);
             end;
-            // предлагаем изменить состояние заказа
+            // РїСЂРµРґР»Р°РіР°РµРј РёР·РјРµРЅРёС‚СЊ СЃРѕСЃС‚РѕСЏРЅРёРµ Р·Р°РєР°Р·Р°
             EditOrderState(JobCopy);
           end
           else
@@ -1514,16 +1519,16 @@ begin
         CheckShifts;
 
         CommitUpdates(w);
-        if w.Locate(CurID) then  // работа могла склеиться с другой и ее уже нет
+        if w.Locate(CurID) then  // СЂР°Р±РѕС‚Р° РјРѕРіР»Р° СЃРєР»РµРёС‚СЊСЃСЏ СЃ РґСЂСѓРіРѕР№ Рё РµРµ СѓР¶Рµ РЅРµС‚
         begin
           Job := w.CurrentJob;
 
           PlanFrame.UpdateJobControls;
-          // Проверяем, укоротилась ли работа и предлагаем сдвинуть
+          // РџСЂРѕРІРµСЂСЏРµРј, СѓРєРѕСЂРѕС‚РёР»Р°СЃСЊ Р»Рё СЂР°Р±РѕС‚Р° Рё РїСЂРµРґР»Р°РіР°РµРј СЃРґРІРёРЅСѓС‚СЊ
           if ((w.KeyValue = CurID) or w.Locate(CurID)) and (JobCopy.AnyFinish > Job.AnyFinish)
             and (MinutesBetween(JobCopy.AnyFinish, Job.AnyFinish) > 1) then
           begin
-            if CheckCanMoveNext(w, Job.JobID, false) and (RusMessageDlg('Сдвинуть последующие работы на освободившееся место?',
+            if CheckCanMoveNext(w, Job.JobID, false) and (RusMessageDlg('РЎРґРІРёРЅСѓС‚СЊ РїРѕСЃР»РµРґСѓСЋС‰РёРµ СЂР°Р±РѕС‚С‹ РЅР° РѕСЃРІРѕР±РѕРґРёРІС€РµРµСЃСЏ РјРµСЃС‚Рѕ?',
               mtConfirmation, [mbYes, mbNo], 0) = mrYes) then
             begin
               BeginUpdates(w);
@@ -1540,7 +1545,7 @@ begin
       else
       begin
         Result := false;
-        // Если был заблокирован только что и отменили, то снимаем блокировку
+        // Р•СЃР»Рё Р±С‹Р» Р·Р°Р±Р»РѕРєРёСЂРѕРІР°РЅ С‚РѕР»СЊРєРѕ С‡С‚Рѕ Рё РѕС‚РјРµРЅРёР»Рё, С‚Рѕ СЃРЅРёРјР°РµРј Р±Р»РѕРєРёСЂРѕРІРєСѓ
         if _JustLocked then
           UnlockWorkload(w);
       end;
@@ -1552,7 +1557,7 @@ begin
   end;
 end;
 
-// Сдвинуть работы вверх. IncludeJob означает, что сдвиг включает указанную работу.
+// РЎРґРІРёРЅСѓС‚СЊ СЂР°Р±РѕС‚С‹ РІРІРµСЂС…. IncludeJob РѕР·РЅР°С‡Р°РµС‚, С‡С‚Рѕ СЃРґРІРёРі РІРєР»СЋС‡Р°РµС‚ СѓРєР°Р·Р°РЅРЅСѓСЋ СЂР°Р±РѕС‚Сѓ.
 procedure TPlanController.MoveJobsUp(w: TWorkload; StartTime: TDateTime; JobID: integer; IncludeJob: boolean);
 var
   NewStart, NewFinish: TDateTime;
@@ -1572,13 +1577,13 @@ begin
   for JobIndex := CurJobIndex to w.JobList.Count - 1 do
   begin
     CurJob := w.JobList[JobIndex];
-    // если наткнулись на исходную работу, то пропускаем
+    // РµСЃР»Рё РЅР°С‚РєРЅСѓР»РёСЃСЊ РЅР° РёСЃС…РѕРґРЅСѓСЋ СЂР°Р±РѕС‚Сѓ, С‚Рѕ РїСЂРѕРїСѓСЃРєР°РµРј
     //if CurJob.JobID <> Job.JobID then
     //begin
-    TLogger.GetInstance.Debug('Сдвиг работы: Start: ' + DateTimeToStr(CurJob.AnyStart)
+    TLogger.GetInstance.Debug('РЎРґРІРёРі СЂР°Р±РѕС‚С‹: Start: ' + DateTimeToStr(CurJob.AnyStart)
        + ', Finish: ' + DateTimeToStr(CurJob.AnyFinish));
     CanMove := CheckCanMove(CurJob, false);
-    if CanMove then    // несдвигаемые не трогаем
+    if CanMove then    // РЅРµСЃРґРІРёРіР°РµРјС‹Рµ РЅРµ С‚СЂРѕРіР°РµРј
     begin
       NewFinish := NewStart + (CurJob.AnyFinish - CurJob.AnyStart);
       //GetAdapter(w).UpdatePlan(CurJob.JobID, NewStart, NewFinish);
@@ -1587,7 +1592,7 @@ begin
       NewStart := NewFinish;
     end
     else
-      break;     // заканчиваем сдвиг на первой же зафиксированной
+      break;     // Р·Р°РєР°РЅС‡РёРІР°РµРј СЃРґРІРёРі РЅР° РїРµСЂРІРѕР№ Р¶Рµ Р·Р°С„РёРєСЃРёСЂРѕРІР°РЅРЅРѕР№
   end;
 end;
 
@@ -1596,7 +1601,7 @@ var
   I: Integer;
   Job: TJobParams;
 begin
-  // Выводит в лог весь план в режиме подробного логирования
+  // Р’С‹РІРѕРґРёС‚ РІ Р»РѕРі РІРµСЃСЊ РїР»Р°РЅ РІ СЂРµР¶РёРјРµ РїРѕРґСЂРѕР±РЅРѕРіРѕ Р»РѕРіРёСЂРѕРІР°РЅРёСЏ
   if Options.VerboseLog then
   begin
     TLogger.GetInstance.Debug('------- Workload at ' + FromWhere + ' ---------------');
@@ -1620,7 +1625,7 @@ var
   TailIDs: TIntArray;
   TailJobs: TJobList;
 begin
-  NewStart := StartTime;     // эта работа будет стоять сразу после нашей основной
+  NewStart := StartTime;     // СЌС‚Р° СЂР°Р±РѕС‚Р° Р±СѓРґРµС‚ СЃС‚РѕСЏС‚СЊ СЃСЂР°Р·Сѓ РїРѕСЃР»Рµ РЅР°С€РµР№ РѕСЃРЅРѕРІРЅРѕР№
   Finished := false;
   CurJobIndex := w.JobList.IndexOf(Job);
 
@@ -1628,7 +1633,7 @@ begin
   for JobIndex := CurJobIndex to w.JobList.Count - 1 do
   begin
     CurJob := w.JobList[JobIndex];
-    // Добавляем в список для последующего сдвига
+    // Р”РѕР±Р°РІР»СЏРµРј РІ СЃРїРёСЃРѕРє РґР»СЏ РїРѕСЃР»РµРґСѓСЋС‰РµРіРѕ СЃРґРІРёРіР°
     TailIDs[JobIndex - CurJobIndex] := CurJob.JobID;
   end;
 
@@ -1637,27 +1642,27 @@ begin
     for I := Low(TailIDs) to High(TailIDs) do
     begin
       CurJob := w.JobList.GetJob(TailIDs[I]);
-      TLogger.GetInstance.Debug('Сдвиг работы: Start: ' + DateTimeToStr(CurJob.AnyStart)
+      TLogger.GetInstance.Debug('РЎРґРІРёРі СЂР°Р±РѕС‚С‹: Start: ' + DateTimeToStr(CurJob.AnyStart)
          + ', Finish: ' + DateTimeToStr(CurJob.AnyFinish));
-      //if CurJob.AnyStart > NewStart then  // если работа отстоит достаточно далеко, заканчиваем сдвиг
+      //if CurJob.AnyStart > NewStart then  // РµСЃР»Рё СЂР°Р±РѕС‚Р° РѕС‚СЃС‚РѕРёС‚ РґРѕСЃС‚Р°С‚РѕС‡РЅРѕ РґР°Р»РµРєРѕ, Р·Р°РєР°РЅС‡РёРІР°РµРј СЃРґРІРёРі
       //  break;
       CanMove := CheckCanMove(CurJob, false);
-      if CanMove then    // несдвигаемые не трогаем
+      if CanMove then    // РЅРµСЃРґРІРёРіР°РµРјС‹Рµ РЅРµ С‚СЂРѕРіР°РµРј
       begin
-        // Добавляем во временный список для последующего сдвига и убираем их из списка работ
+        // Р”РѕР±Р°РІР»СЏРµРј РІРѕ РІСЂРµРјРµРЅРЅС‹Р№ СЃРїРёСЃРѕРє РґР»СЏ РїРѕСЃР»РµРґСѓСЋС‰РµРіРѕ СЃРґРІРёРіР° Рё СѓР±РёСЂР°РµРј РёС… РёР· СЃРїРёСЃРєР° СЂР°Р±РѕС‚
         TailJobs.Add(CurJob);
         w.JobList.Remove(CurJob);
 
-        // Если работа отстоит достаточно далеко, то ее не сдвигаем, но убираем в список.
+        // Р•СЃР»Рё СЂР°Р±РѕС‚Р° РѕС‚СЃС‚РѕРёС‚ РґРѕСЃС‚Р°С‚РѕС‡РЅРѕ РґР°Р»РµРєРѕ, С‚Рѕ РµРµ РЅРµ СЃРґРІРёРіР°РµРј, РЅРѕ СѓР±РёСЂР°РµРј РІ СЃРїРёСЃРѕРє.
         if CurJob.AnyStart < NewStart then
         begin
-          // Ставим на следующее место
+          // РЎС‚Р°РІРёРј РЅР° СЃР»РµРґСѓСЋС‰РµРµ РјРµСЃС‚Рѕ
           NewFinish := NewStart + (CurJob.PlanFinish - CurJob.PlanStart);
           CurJob.PlanStart := NewStart;
           CurJob.PlanFinish := NewFinish;
 
-          // Если есть несдвигаемая работа, которая начинается раньше начала нашей
-          // и заканчивается позже начала CurJob, то CurJob надо поставить после несдвигаемой.
+          // Р•СЃР»Рё РµСЃС‚СЊ РЅРµСЃРґРІРёРіР°РµРјР°СЏ СЂР°Р±РѕС‚Р°, РєРѕС‚РѕСЂР°СЏ РЅР°С‡РёРЅР°РµС‚СЃСЏ СЂР°РЅСЊС€Рµ РЅР°С‡Р°Р»Р° РЅР°С€РµР№
+          // Рё Р·Р°РєР°РЅС‡РёРІР°РµС‚СЃСЏ РїРѕР·Р¶Рµ РЅР°С‡Р°Р»Р° CurJob, С‚Рѕ CurJob РЅР°РґРѕ РїРѕСЃС‚Р°РІРёС‚СЊ РїРѕСЃР»Рµ РЅРµСЃРґРІРёРіР°РµРјРѕР№.
           for J := I + 1 to High(TailIDs) do
           begin
             JobInPlan := w.JobList.GetJob(TailIDs[J]);
@@ -1680,7 +1685,7 @@ begin
       end;
     end;
     DumpWorkload(w, 'MoveFromJobDown, before PlaceJobs');
-    // Теперь ставим все работы на место
+    // РўРµРїРµСЂСЊ СЃС‚Р°РІРёРј РІСЃРµ СЂР°Р±РѕС‚С‹ РЅР° РјРµСЃС‚Рѕ
     PlaceJobs(w, TailJobs);
     DumpWorkload(w, 'MoveFromJobDown, after PlaceJobs');
   finally
@@ -1698,9 +1703,9 @@ begin
     Result := Result + ' (' + s + ')';
 end;
 
-// Проверяет, есть ли пересечения в плане по текущему процессу с текущей работой,
-// если есть, предлагает исправить и сдвигает текущую работу либо работу в плане.
-// Если CurItemID = 0, то нельзя разбивать
+// РџСЂРѕРІРµСЂСЏРµС‚, РµСЃС‚СЊ Р»Рё РїРµСЂРµСЃРµС‡РµРЅРёСЏ РІ РїР»Р°РЅРµ РїРѕ С‚РµРєСѓС‰РµРјСѓ РїСЂРѕС†РµСЃСЃСѓ СЃ С‚РµРєСѓС‰РµР№ СЂР°Р±РѕС‚РѕР№,
+// РµСЃР»Рё РµСЃС‚СЊ, РїСЂРµРґР»Р°РіР°РµС‚ РёСЃРїСЂР°РІРёС‚СЊ Рё СЃРґРІРёРіР°РµС‚ С‚РµРєСѓС‰СѓСЋ СЂР°Р±РѕС‚Сѓ Р»РёР±Рѕ СЂР°Р±РѕС‚Сѓ РІ РїР»Р°РЅРµ.
+// Р•СЃР»Рё CurItemID = 0, С‚Рѕ РЅРµР»СЊР·СЏ СЂР°Р·Р±РёРІР°С‚СЊ
 function TPlanController.CheckMovingJob(CurItemID: integer; Job: TJobParams): boolean;
 var
   AnyStart, AnyFinish: TDateTime;
@@ -1717,10 +1722,10 @@ begin
   w := PlanFrame.CurrentWorkload;
   Applied := false;
 
-  AnyStart := Job.AnyStart;    // начало заданной работы
-  AnyFinish := Job.AnyFinish;  // окончание заданной работы
+  AnyStart := Job.AnyStart;    // РЅР°С‡Р°Р»Рѕ Р·Р°РґР°РЅРЅРѕР№ СЂР°Р±РѕС‚С‹
+  AnyFinish := Job.AnyFinish;  // РѕРєРѕРЅС‡Р°РЅРёРµ Р·Р°РґР°РЅРЅРѕР№ СЂР°Р±РѕС‚С‹
 
-  // временно удаляем работу из общего списка, чтобы не мешала
+  // РІСЂРµРјРµРЅРЅРѕ СѓРґР°Р»СЏРµРј СЂР°Р±РѕС‚Сѓ РёР· РѕР±С‰РµРіРѕ СЃРїРёСЃРєР°, С‡С‚РѕР±С‹ РЅРµ РјРµС€Р°Р»Р°
   if w.JobList.IndexOf(Job) <> -1 then
   begin
     w.JobList.Remove(Job);
@@ -1742,8 +1747,8 @@ begin
         begin
           AfterUnmovable := false;
           CanMove := true;
-          // Находим работы, начинающиеся раньше и заканчивающиеся позже начала нашей работы.
-          // Ставим нашу работу после найденной.
+          // РќР°С…РѕРґРёРј СЂР°Р±РѕС‚С‹, РЅР°С‡РёРЅР°СЋС‰РёРµСЃСЏ СЂР°РЅСЊС€Рµ Рё Р·Р°РєР°РЅС‡РёРІР°СЋС‰РёРµСЃСЏ РїРѕР·Р¶Рµ РЅР°С‡Р°Р»Р° РЅР°С€РµР№ СЂР°Р±РѕС‚С‹.
+          // РЎС‚Р°РІРёРј РЅР°С€Сѓ СЂР°Р±РѕС‚Сѓ РїРѕСЃР»Рµ РЅР°Р№РґРµРЅРЅРѕР№.
           { ======= CurJob =======>
                   =========== Job ==========> }
           if (CurJob.AnyStart < AnyStart) and (CurJob.AnyFinish > AnyStart)
@@ -1752,26 +1757,26 @@ begin
             //CanMove := true;
             AfterUnmovable := true;
           end
-          // Находим работы, начинающиеся позже начала и раньше окончания нашей работы.
-          // Или начала работысовпадают.
+          // РќР°С…РѕРґРёРј СЂР°Р±РѕС‚С‹, РЅР°С‡РёРЅР°СЋС‰РёРµСЃСЏ РїРѕР·Р¶Рµ РЅР°С‡Р°Р»Р° Рё СЂР°РЅСЊС€Рµ РѕРєРѕРЅС‡Р°РЅРёСЏ РЅР°С€РµР№ СЂР°Р±РѕС‚С‹.
+          // РР»Рё РЅР°С‡Р°Р»Р° СЂР°Р±РѕС‚С‹СЃРѕРІРїР°РґР°СЋС‚.
           {             ======= CurJob =======>
              =========== Job ==========> }
           else
           if (CurJob.AnyStart >= AnyStart) and (CurJob.AnyStart < AnyFinish)
             and (SecondsBetween(CurJob.AnyStart, AnyFinish) > 1) then
           begin
-            // Проверяем, можно ли сдвинуть работы...
-            TLogger.GetInstance.Debug('Проверяем, можно ли сдвинуть работы...');
-            // Если фактические отметки, то сдвигать нельзя (на всякий случай проверка)
-            CanMove := CheckCanMove(CurJob, false); // без сообщения
+            // РџСЂРѕРІРµСЂСЏРµРј, РјРѕР¶РЅРѕ Р»Рё СЃРґРІРёРЅСѓС‚СЊ СЂР°Р±РѕС‚С‹...
+            TLogger.GetInstance.Debug('РџСЂРѕРІРµСЂСЏРµРј, РјРѕР¶РЅРѕ Р»Рё СЃРґРІРёРЅСѓС‚СЊ СЂР°Р±РѕС‚С‹...');
+            // Р•СЃР»Рё С„Р°РєС‚РёС‡РµСЃРєРёРµ РѕС‚РјРµС‚РєРё, С‚Рѕ СЃРґРІРёРіР°С‚СЊ РЅРµР»СЊР·СЏ (РЅР° РІСЃСЏРєРёР№ СЃР»СѓС‡Р°Р№ РїСЂРѕРІРµСЂРєР°)
+            CanMove := CheckCanMove(CurJob, false); // Р±РµР· СЃРѕРѕР±С‰РµРЅРёСЏ
             if CanMove then
             begin
-              // Запоминаем текущую позицию
+              // Р—Р°РїРѕРјРёРЅР°РµРј С‚РµРєСѓС‰СѓСЋ РїРѕР·РёС†РёСЋ
               CurJobKey := CurJob.JobID;
-              // Сразу ставим на место исходную работу
+              // РЎСЂР°Р·Сѓ СЃС‚Р°РІРёРј РЅР° РјРµСЃС‚Рѕ РёСЃС…РѕРґРЅСѓСЋ СЂР°Р±РѕС‚Сѓ
               GetAdapter(w).UpdatePlan(Job);
               Applied := true;
-              // Сдвигаем эту работу и все что за ней
+              // РЎРґРІРёРіР°РµРј СЌС‚Сѓ СЂР°Р±РѕС‚Сѓ Рё РІСЃРµ С‡С‚Рѕ Р·Р° РЅРµР№
               MoveFromJobDown(w, CurJob, AnyFinish);
               DumpWorkload(w, 'CheckMovingJob, after MoveFromJobDown');
               Result := true;
@@ -1781,15 +1786,15 @@ begin
 
           if not CanMove then
           begin
-            // сдвинуть перекрывающуюся работу нельзя, поэтому пытаемся найти место, куда можно поставить эту работу
+            // СЃРґРІРёРЅСѓС‚СЊ РїРµСЂРµРєСЂС‹РІР°СЋС‰СѓСЋСЃСЏ СЂР°Р±РѕС‚Сѓ РЅРµР»СЊР·СЏ, РїРѕСЌС‚РѕРјСѓ РїС‹С‚Р°РµРјСЃСЏ РЅР°Р№С‚Рё РјРµСЃС‚Рѕ, РєСѓРґР° РјРѕР¶РЅРѕ РїРѕСЃС‚Р°РІРёС‚СЊ СЌС‚Сѓ СЂР°Р±РѕС‚Сѓ
             UnmovableJobID := CurJob.JobID;
-            // Если начала работ очень близки, то ставим после неперемещаемой...
+            // Р•СЃР»Рё РЅР°С‡Р°Р»Р° СЂР°Р±РѕС‚ РѕС‡РµРЅСЊ Р±Р»РёР·РєРё, С‚Рѕ СЃС‚Р°РІРёРј РїРѕСЃР»Рµ РЅРµРїРµСЂРµРјРµС‰Р°РµРјРѕР№...
             if (MinuteSpan(AnyStart, CurJob.AnyStart) < MIN_JOB)
                or (CurJob.AnyStart < AnyStart) and (CurJob.AnyFinish > AnyStart) then
               AfterUnmovable := true
             else
             begin
-              // ... иначе есть два варианта - поместить после или разбить
+              // ... РёРЅР°С‡Рµ РµСЃС‚СЊ РґРІР° РІР°СЂРёР°РЅС‚Р° - РїРѕРјРµСЃС‚РёС‚СЊ РїРѕСЃР»Рµ РёР»Рё СЂР°Р·Р±РёС‚СЊ
               AfterUnmovable := not ExecJobOverlapForm(GetJobName(Job), AnyStart, AnyFinish,
                   GetJobName(CurJob), CurJob.AnyStart, CurJob.AnyFinish);
               if not AfterUnmovable then
@@ -1803,27 +1808,27 @@ begin
           if AfterUnmovable then
           begin
             LocateMovableJob(w, CurJob, Job.JobID, AnyFinish - AnyStart);
-            // CurJob - работа, после которой можно поставить
+            // CurJob - СЂР°Р±РѕС‚Р°, РїРѕСЃР»Рµ РєРѕС‚РѕСЂРѕР№ РјРѕР¶РЅРѕ РїРѕСЃС‚Р°РІРёС‚СЊ
             Job.PlanStart := CurJob.AnyFinish;
             Job.PlanFinish := CurJob.AnyFinish + AnyFinish - AnyStart;
-            AnyStart := Job.AnyStart;    // начало заданной работы
-            AnyFinish := Job.AnyFinish;  // окончание заданной работы
-            // Повторяем проверку сначала, потому что после CurJob может быть сдвигаемая работа
+            AnyStart := Job.AnyStart;    // РЅР°С‡Р°Р»Рѕ Р·Р°РґР°РЅРЅРѕР№ СЂР°Р±РѕС‚С‹
+            AnyFinish := Job.AnyFinish;  // РѕРєРѕРЅС‡Р°РЅРёРµ Р·Р°РґР°РЅРЅРѕР№ СЂР°Р±РѕС‚С‹
+            // РџРѕРІС‚РѕСЂСЏРµРј РїСЂРѕРІРµСЂРєСѓ СЃРЅР°С‡Р°Р»Р°, РїРѕС‚РѕРјСѓ С‡С‚Рѕ РїРѕСЃР»Рµ CurJob РјРѕР¶РµС‚ Р±С‹С‚СЊ СЃРґРІРёРіР°РµРјР°СЏ СЂР°Р±РѕС‚Р°
             RepeatCheck := true;
             continue;
           end;
         end;
       end;
-      // Прошли все работы, можно выходить
+      // РџСЂРѕС€Р»Рё РІСЃРµ СЂР°Р±РѕС‚С‹, РјРѕР¶РЅРѕ РІС‹С…РѕРґРёС‚СЊ
       //RepeatCheck := false;
     //end
     until not RepeatCheck;
-    // Теперь ставим на место работу с которой все и началось
+    // РўРµРїРµСЂСЊ СЃС‚Р°РІРёРј РЅР° РјРµСЃС‚Рѕ СЂР°Р±РѕС‚Сѓ СЃ РєРѕС‚РѕСЂРѕР№ РІСЃРµ Рё РЅР°С‡Р°Р»РѕСЃСЊ
     if not Applied then
       GetAdapter(w).UpdatePlan(Job);
     Result := true;
   finally
-    // Если удаляли работу из списка, возврашаем обратно
+    // Р•СЃР»Рё СѓРґР°Р»СЏР»Рё СЂР°Р±РѕС‚Сѓ РёР· СЃРїРёСЃРєР°, РІРѕР·РІСЂР°С€Р°РµРј РѕР±СЂР°С‚РЅРѕ
     if WasRemoved then
     begin
       w.JobList.Add(Job);
@@ -1844,7 +1849,7 @@ type
     AllowSplitQuantity, AllowSplitMult, AllowSplitSide: boolean;
     Params: pointer): boolean;
 
-// определяет, как разбивать работу
+// РѕРїСЂРµРґРµР»СЏРµС‚, РєР°Рє СЂР°Р·Р±РёРІР°С‚СЊ СЂР°Р±РѕС‚Сѓ
 function GetSplitModeEx(Job: TJobParams; var SplitMode: TSplitMode;
    SelectFunc: TSelectSplitFunc; Params: pointer; AlwaysAsk: boolean): boolean;
 var
@@ -1854,26 +1859,26 @@ begin
   AllowSplitSide := Job.SideCount > 1;
   Result := true;
 
-  if VarIsNull(Job.SplitMode1) then  // еще не разбита
+  if VarIsNull(Job.SplitMode1) then  // РµС‰Рµ РЅРµ СЂР°Р·Р±РёС‚Р°
     Result := SelectFunc(SplitMode, true, AllowSplitMult, AllowSplitSide, Params)
   else
   if (TSplitMode(NvlInteger(Job.SplitMode1)) = smQuantity) and not VarIsNull(Job.SplitPart1) then
   begin
-    if VarIsNull(Job.SplitMode2) then  // второй разбивки еще нет вообще
+    if VarIsNull(Job.SplitMode2) then  // РІС‚РѕСЂРѕР№ СЂР°Р·Р±РёРІРєРё РµС‰Рµ РЅРµС‚ РІРѕРѕР±С‰Рµ
       Result := SelectFunc(SplitMode, true, AllowSplitMult, AllowSplitSide, Params)
     else
     if Job.SplitMode2 = smMultiplier then
     begin
       if NvlInteger(Job.SplitPart2) = 0 then
       begin
-        // другой интервал тиража уже разбит по листам, значит можно бить только по листам
+        // РґСЂСѓРіРѕР№ РёРЅС‚РµСЂРІР°Р» С‚РёСЂР°Р¶Р° СѓР¶Рµ СЂР°Р·Р±РёС‚ РїРѕ Р»РёСЃС‚Р°Рј, Р·РЅР°С‡РёС‚ РјРѕР¶РЅРѕ Р±РёС‚СЊ С‚РѕР»СЊРєРѕ РїРѕ Р»РёСЃС‚Р°Рј
         SplitMode := smMultiplier;
         if AlwaysAsk then
           Result := SelectFunc(SplitMode, false, true, false, Params);
       end
       else
       begin
-        // новая разбивка - осталось только по сторонам
+        // РЅРѕРІР°СЏ СЂР°Р·Р±РёРІРєР° - РѕСЃС‚Р°Р»РѕСЃСЊ С‚РѕР»СЊРєРѕ РїРѕ СЃС‚РѕСЂРѕРЅР°Рј
         Result := AllowSplitSide;
         SplitMode := smSide;
         if AlwaysAsk and Result then
@@ -1885,14 +1890,14 @@ begin
     begin
       if NvlInteger(Job.SplitPart2) = 0 then
       begin
-        // другой интервал тиража уже разбит по сторонам, значит можно бить только по сторонам
+        // РґСЂСѓРіРѕР№ РёРЅС‚РµСЂРІР°Р» С‚РёСЂР°Р¶Р° СѓР¶Рµ СЂР°Р·Р±РёС‚ РїРѕ СЃС‚РѕСЂРѕРЅР°Рј, Р·РЅР°С‡РёС‚ РјРѕР¶РЅРѕ Р±РёС‚СЊ С‚РѕР»СЊРєРѕ РїРѕ СЃС‚РѕСЂРѕРЅР°Рј
         SplitMode := smSide;
         if AlwaysAsk then
           Result := SelectFunc(SplitMode, false, false, true, Params);
       end
       else
       begin
-        // новая разбивка - осталось только по листам
+        // РЅРѕРІР°СЏ СЂР°Р·Р±РёРІРєР° - РѕСЃС‚Р°Р»РѕСЃСЊ С‚РѕР»СЊРєРѕ РїРѕ Р»РёСЃС‚Р°Рј
         Result := AllowSplitMult;
         SplitMode := smMultiplier;
         if AlwaysAsk and Result then
@@ -1903,21 +1908,21 @@ begin
   else
   if (TSplitMode(NvlInteger(Job.SplitMode1)) = smMultiplier) and not VarIsNull(Job.SplitPart1) then
   begin
-    if VarIsNull(Job.SplitMode2) then  // второй разбивки еще нет вообще
+    if VarIsNull(Job.SplitMode2) then  // РІС‚РѕСЂРѕР№ СЂР°Р·Р±РёРІРєРё РµС‰Рµ РЅРµС‚ РІРѕРѕР±С‰Рµ
       Result := SelectFunc(SplitMode, true, false, AllowSplitSide, Params)
     else
     if Job.SplitMode2 = smQuantity then
     begin
       if NvlInteger(Job.SplitPart2) = 0 then
       begin
-        // другой лист уже разбит по тиражу, значит можно бить только по тиражу
+        // РґСЂСѓРіРѕР№ Р»РёСЃС‚ СѓР¶Рµ СЂР°Р·Р±РёС‚ РїРѕ С‚РёСЂР°Р¶Сѓ, Р·РЅР°С‡РёС‚ РјРѕР¶РЅРѕ Р±РёС‚СЊ С‚РѕР»СЊРєРѕ РїРѕ С‚РёСЂР°Р¶Сѓ
         SplitMode := smQuantity;
         if AlwaysAsk then
           Result := SelectFunc(SplitMode, true, false, false, Params);
       end
       else
       begin
-        // новая разбивка - осталось только по сторонам
+        // РЅРѕРІР°СЏ СЂР°Р·Р±РёРІРєР° - РѕСЃС‚Р°Р»РѕСЃСЊ С‚РѕР»СЊРєРѕ РїРѕ СЃС‚РѕСЂРѕРЅР°Рј
         Result := AllowSplitSide;
         SplitMode := smSide;
         if AlwaysAsk and Result then
@@ -1929,14 +1934,14 @@ begin
     begin
       if NvlInteger(Job.SplitPart2) = 0 then
       begin
-        // другой лист уже разбит по сторонам, значит можно бить только по сторонам
+        // РґСЂСѓРіРѕР№ Р»РёСЃС‚ СѓР¶Рµ СЂР°Р·Р±РёС‚ РїРѕ СЃС‚РѕСЂРѕРЅР°Рј, Р·РЅР°С‡РёС‚ РјРѕР¶РЅРѕ Р±РёС‚СЊ С‚РѕР»СЊРєРѕ РїРѕ СЃС‚РѕСЂРѕРЅР°Рј
         SplitMode := smSide;
         if AlwaysAsk then
           Result := SelectFunc(SplitMode, false, false, true, Params);
       end
       else
       begin
-        // новая разбивка - осталось только по тиражу
+        // РЅРѕРІР°СЏ СЂР°Р·Р±РёРІРєР° - РѕСЃС‚Р°Р»РѕСЃСЊ С‚РѕР»СЊРєРѕ РїРѕ С‚РёСЂР°Р¶Сѓ
         SplitMode := smQuantity;
         if AlwaysAsk then
           Result := SelectFunc(SplitMode, true, false, false, Params);
@@ -1946,21 +1951,21 @@ begin
   else
   if (TSplitMode(NvlInteger(Job.SplitMode1)) = smSide) and not VarIsNull(Job.SplitPart1) then
   begin
-    if VarIsNull(Job.SplitMode2) then  // второй разбивки еще нет вообще
+    if VarIsNull(Job.SplitMode2) then  // РІС‚РѕСЂРѕР№ СЂР°Р·Р±РёРІРєРё РµС‰Рµ РЅРµС‚ РІРѕРѕР±С‰Рµ
       Result := SelectFunc(SplitMode, true, false, AllowSplitSide, Params)
     else
     if Job.SplitMode2 = smQuantity then
     begin
       if NvlInteger(Job.SplitPart2) = 0 then
       begin
-        // другой лист уже разбит по тиражу, значит можно бить только по тиражу
+        // РґСЂСѓРіРѕР№ Р»РёСЃС‚ СѓР¶Рµ СЂР°Р·Р±РёС‚ РїРѕ С‚РёСЂР°Р¶Сѓ, Р·РЅР°С‡РёС‚ РјРѕР¶РЅРѕ Р±РёС‚СЊ С‚РѕР»СЊРєРѕ РїРѕ С‚РёСЂР°Р¶Сѓ
         SplitMode := smQuantity;
         if AlwaysAsk then
           Result := SelectFunc(SplitMode, true, false, false, Params);
       end
       else
       begin
-        // новая разбивка - осталось только по сторонам
+        // РЅРѕРІР°СЏ СЂР°Р·Р±РёРІРєР° - РѕСЃС‚Р°Р»РѕСЃСЊ С‚РѕР»СЊРєРѕ РїРѕ СЃС‚РѕСЂРѕРЅР°Рј
         Result := AllowSplitSide;
         SplitMode := smSide;
         if AlwaysAsk and Result then
@@ -1972,14 +1977,14 @@ begin
     begin
       if NvlInteger(Job.SplitPart2) = 0 then
       begin
-        // другой лист уже разбит по сторонам, значит можно бить только по сторонам
+        // РґСЂСѓРіРѕР№ Р»РёСЃС‚ СѓР¶Рµ СЂР°Р·Р±РёС‚ РїРѕ СЃС‚РѕСЂРѕРЅР°Рј, Р·РЅР°С‡РёС‚ РјРѕР¶РЅРѕ Р±РёС‚СЊ С‚РѕР»СЊРєРѕ РїРѕ СЃС‚РѕСЂРѕРЅР°Рј
         SplitMode := smSide;
         if AlwaysAsk then
           Result := SelectFunc(SplitMode, false, false, true, Params);
       end
       else
       begin
-        // новая разбивка - осталось только по тиражу
+        // РЅРѕРІР°СЏ СЂР°Р·Р±РёРІРєР° - РѕСЃС‚Р°Р»РѕСЃСЊ С‚РѕР»СЊРєРѕ РїРѕ С‚РёСЂР°Р¶Сѓ
         SplitMode := smQuantity;
         if AlwaysAsk then
           Result := SelectFunc(SplitMode, true, false, false, Params);
@@ -1988,7 +1993,7 @@ begin
   end;
 end;
 
-// Работы в Jobs не должны быть в списке работ!
+// Р Р°Р±РѕС‚С‹ РІ Jobs РЅРµ РґРѕР»Р¶РЅС‹ Р±С‹С‚СЊ РІ СЃРїРёСЃРєРµ СЂР°Р±РѕС‚!
 procedure TPlanController.PlaceJobs(w: TWorkload; Jobs: TJobList);
 var
   CurPlanFinish: TDateTime;
@@ -2002,12 +2007,12 @@ begin
     w.SortJobs;
     CurPlanFinish := NewJob.PlanFinish;
     DumpWorkload(w, 'PlaceJobs, before CheckMovingJob');
-    // TODO: может не получиться установка на нужное место. ПРОВЕРИТЬ!
+    // TODO: РјРѕР¶РµС‚ РЅРµ РїРѕР»СѓС‡РёС‚СЊСЃСЏ СѓСЃС‚Р°РЅРѕРІРєР° РЅР° РЅСѓР¶РЅРѕРµ РјРµСЃС‚Рѕ. РџР РћР’Р•Р РРўР¬!
     if CheckMovingJob(NewJob.ItemID, NewJob) then
       //w.Reload;
       ;
     DumpWorkload(w, 'PlaceJobs, after CheckMovingJob 1');
-    // Если работа передвинулась вперед, то надо сдвинуть все остальные, которые идут после нее
+    // Р•СЃР»Рё СЂР°Р±РѕС‚Р° РїРµСЂРµРґРІРёРЅСѓР»Р°СЃСЊ РІРїРµСЂРµРґ, С‚Рѕ РЅР°РґРѕ СЃРґРІРёРЅСѓС‚СЊ РІСЃРµ РѕСЃС‚Р°Р»СЊРЅС‹Рµ, РєРѕС‚РѕСЂС‹Рµ РёРґСѓС‚ РїРѕСЃР»Рµ РЅРµРµ
     if (NewJob.PlanFinish > CurPlanFinish) and (I < Jobs.Count - 1) then
     begin
       for J := I + 1 to Jobs.Count - 1 do
@@ -2021,7 +2026,7 @@ begin
   end;
 end;
 
-// определяет, как разбивать работу, при выборе запрашивает пользователя
+// РѕРїСЂРµРґРµР»СЏРµС‚, РєР°Рє СЂР°Р·Р±РёРІР°С‚СЊ СЂР°Р±РѕС‚Сѓ, РїСЂРё РІС‹Р±РѕСЂРµ Р·Р°РїСЂР°С€РёРІР°РµС‚ РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ
 function GetSplitMode(Job: TJobParams; var SplitMode: TSplitMode): boolean;
 begin
   Result := GetSplitModeEx(Job, SplitMode, DoExecJobSplitForm, nil, false);
@@ -2041,11 +2046,11 @@ var
     SplitJobIDs: TIntArray;
     SplitJobs: TJobList;
   begin
-    TLogger.GetInstance.Debug('CheckMovingJob: разбиваем по множителю на ' + VarToStr(Job.Multiplier) + ' интервалов');
+    TLogger.GetInstance.Debug('CheckMovingJob: СЂР°Р·Р±РёРІР°РµРј РїРѕ РјРЅРѕР¶РёС‚РµР»СЋ РЅР° ' + VarToStr(Job.Multiplier) + ' РёРЅС‚РµСЂРІР°Р»РѕРІ');
     SplitJobIDs := SplitJobByMultiplier(w, Job, true);  // auto
     SplitJobs := TJobList.Create;
     try
-      // изымаем получившиеся интервалы из плана и добавляем их по одному, иначе они перепутаются
+      // РёР·С‹РјР°РµРј РїРѕР»СѓС‡РёРІС€РёРµСЃСЏ РёРЅС‚РµСЂРІР°Р»С‹ РёР· РїР»Р°РЅР° Рё РґРѕР±Р°РІР»СЏРµРј РёС… РїРѕ РѕРґРЅРѕРјСѓ, РёРЅР°С‡Рµ РѕРЅРё РїРµСЂРµРїСѓС‚Р°СЋС‚СЃСЏ
       for I := Low(SplitJobIDs) to High(SplitJobIDs) do
       begin
         NewJob := w.JobList.GetJob(SplitJobIDs[I]);
@@ -2053,7 +2058,7 @@ var
         SplitJobs.Add(NewJob);
       end;
 
-      // теперь проверяем и передвигаем интервалы, если они перекрываются с чем-либо
+      // С‚РµРїРµСЂСЊ РїСЂРѕРІРµСЂСЏРµРј Рё РїРµСЂРµРґРІРёРіР°РµРј РёРЅС‚РµСЂРІР°Р»С‹, РµСЃР»Рё РѕРЅРё РїРµСЂРµРєСЂС‹РІР°СЋС‚СЃСЏ СЃ С‡РµРј-Р»РёР±Рѕ
       PlaceJobs(w, SplitJobs);
     finally
       SplitJobs.Free;
@@ -2065,17 +2070,17 @@ var
   var
     UnmovableJob1: TJobParams;
   begin
-    // Длительность второй половины
+    // Р”Р»РёС‚РµР»СЊРЅРѕСЃС‚СЊ РІС‚РѕСЂРѕР№ РїРѕР»РѕРІРёРЅС‹
     Half2Duration := Job.AnyFinish - Job.AnyStart - (UnmovableJob.AnyStart - Job.AnyStart);
-    // надо определить, встанет ли вторая половина после несдвигаемой работы
+    // РЅР°РґРѕ РѕРїСЂРµРґРµР»РёС‚СЊ, РІСЃС‚Р°РЅРµС‚ Р»Рё РІС‚РѕСЂР°СЏ РїРѕР»РѕРІРёРЅР° РїРѕСЃР»Рµ РЅРµСЃРґРІРёРіР°РµРјРѕР№ СЂР°Р±РѕС‚С‹
     UnmovableJob1 := UnmovableJob;
     LocateMovableJob(w, UnmovableJob1, Job.JobID, Half2Duration);
-    // разбиваем работу по тиражу, вторую половину ставим после несдвигаемой работы
+    // СЂР°Р·Р±РёРІР°РµРј СЂР°Р±РѕС‚Сѓ РїРѕ С‚РёСЂР°Р¶Сѓ, РІС‚РѕСЂСѓСЋ РїРѕР»РѕРІРёРЅСѓ СЃС‚Р°РІРёРј РїРѕСЃР»Рµ РЅРµСЃРґРІРёРіР°РµРјРѕР№ СЂР°Р±РѕС‚С‹
     Half2JobID := SplitJobByQuantityEx(w, Job, true, Job.AnyStart, UnmovableJob.AnyStart, UnmovableJob1.AnyFinish,
     UnmovableJob1.AnyFinish + Half2Duration);
     NewJob := w.JobList.GetJob(Half2JobID);
     DumpWorkload(w, 'SplitJobAroundUnmovable, before CheckMovingJob');
-    // TODO: может не получиться установка хвоста на нужное место. ПРОВЕРИТЬ!
+    // TODO: РјРѕР¶РµС‚ РЅРµ РїРѕР»СѓС‡РёС‚СЊСЃСЏ СѓСЃС‚Р°РЅРѕРІРєР° С…РІРѕСЃС‚Р° РЅР° РЅСѓР¶РЅРѕРµ РјРµСЃС‚Рѕ. РџР РћР’Р•Р РРўР¬!
     if CheckMovingJob(NewJob.ItemID, NewJob) then
       //w.Reload;
       ;
@@ -2085,18 +2090,18 @@ var
 
   procedure BySides;
   begin
-    // Надо определить, встанет ли одна сторона после несдвигаемой работы.
-    // Определяем длительность первой стороны в минутах.
+    // РќР°РґРѕ РѕРїСЂРµРґРµР»РёС‚СЊ, РІСЃС‚Р°РЅРµС‚ Р»Рё РѕРґРЅР° СЃС‚РѕСЂРѕРЅР° РїРѕСЃР»Рµ РЅРµСЃРґРІРёРіР°РµРјРѕР№ СЂР°Р±РѕС‚С‹.
+    // РћРїСЂРµРґРµР»СЏРµРј РґР»РёС‚РµР»СЊРЅРѕСЃС‚СЊ РїРµСЂРІРѕР№ СЃС‚РѕСЂРѕРЅС‹ РІ РјРёРЅСѓС‚Р°С….
     m := Trunc(MinuteSpan(Job.AnyFinish, Job.AnyStart) / 2);
-    // Определяем длительность второго листа.
+    // РћРїСЂРµРґРµР»СЏРµРј РґР»РёС‚РµР»СЊРЅРѕСЃС‚СЊ РІС‚РѕСЂРѕРіРѕ Р»РёСЃС‚Р°.
     Half2Duration := Job.AnyFinish - IncMinute(Job.AnyStart, m);
     UnmovableJob1 := UnmovableJob;
     if LocateMovableJob(w, UnmovableJob1, Job.JobID, Half2Duration) then
     begin
-      TLogger.GetInstance.Debug('CheckMovingJob: разбиваем по стороне на 2 интервала');
+      TLogger.GetInstance.Debug('CheckMovingJob: СЂР°Р·Р±РёРІР°РµРј РїРѕ СЃС‚РѕСЂРѕРЅРµ РЅР° 2 РёРЅС‚РµСЂРІР°Р»Р°');
       Half2JobID := SplitJobBySides(w, Job, true);  // auto
       NewJob := w.JobList.GetJob(Half2JobID);
-      // TODO: может не получиться установка хвоста на нужное место. ПРОВЕРИТЬ!
+      // TODO: РјРѕР¶РµС‚ РЅРµ РїРѕР»СѓС‡РёС‚СЊСЃСЏ СѓСЃС‚Р°РЅРѕРІРєР° С…РІРѕСЃС‚Р° РЅР° РЅСѓР¶РЅРѕРµ РјРµСЃС‚Рѕ. РџР РћР’Р•Р РРўР¬!
       if CheckMovingJob(NewJob.ItemID, NewJob) then
         //w.Reload;
         ;
@@ -2115,11 +2120,11 @@ begin
     WasAdded := false;
 
   try
-    (*// Если последняя разбивка - по тиражу, то по тиражу и бьем
-    // сначала разбиваем по листам, если они есть
+    (*// Р•СЃР»Рё РїРѕСЃР»РµРґРЅСЏСЏ СЂР°Р·Р±РёРІРєР° - РїРѕ С‚РёСЂР°Р¶Сѓ, С‚Рѕ РїРѕ С‚РёСЂР°Р¶Сѓ Рё Р±СЊРµРј
+    // СЃРЅР°С‡Р°Р»Р° СЂР°Р·Р±РёРІР°РµРј РїРѕ Р»РёСЃС‚Р°Рј, РµСЃР»Рё РѕРЅРё РµСЃС‚СЊ
     if not Job.HasSplitMode(smMultiplier) and (Job.Multiplier > 1) then
     begin
-      // листы есть, но разбивки интервала нет
+      // Р»РёСЃС‚С‹ РµСЃС‚СЊ, РЅРѕ СЂР°Р·Р±РёРІРєРё РёРЅС‚РµСЂРІР°Р»Р° РЅРµС‚
       if (Job.SplitMode2 = smMultiplier) and (NvlInteger(Job.SplitPart2) = 0) then
         SplitMode := smMultiplier;
       //elsedfg ge ghef
@@ -2140,18 +2145,18 @@ begin
       end;
     end
     else
-    // потом по сторонам, если они есть
+    // РїРѕС‚РѕРј РїРѕ СЃС‚РѕСЂРѕРЅР°Рј, РµСЃР»Рё РѕРЅРё РµСЃС‚СЊ
     if not Job.HasSplitMode(smSide) and (NvlInteger(Job.SideCount) > 1) then
     begin
-      // разбивка по листам уже есть
+      // СЂР°Р·Р±РёРІРєР° РїРѕ Р»РёСЃС‚Р°Рј СѓР¶Рµ РµСЃС‚СЊ
       if (Job.SplitMode2 = smQuantity) and (NvlInteger(Job.SplitPart2) = 0) then
-        // другой лист уже разбит по тиражу, бьем этот по тиражу
+        // РґСЂСѓРіРѕР№ Р»РёСЃС‚ СѓР¶Рµ СЂР°Р·Р±РёС‚ РїРѕ С‚РёСЂР°Р¶Сѓ, Р±СЊРµРј СЌС‚РѕС‚ РїРѕ С‚РёСЂР°Р¶Сѓ
         SplitMode := smQuantity
       else if (Job.SplitMode2 = smMultiplier) and (Job.Multiplier > 1) and (NvlInteger(Job.SplitPart2) = 0) then
-        // другая часть тиража уже разбита по листам, бьем эту часть по листам
+        // РґСЂСѓРіР°СЏ С‡Р°СЃС‚СЊ С‚РёСЂР°Р¶Р° СѓР¶Рµ СЂР°Р·Р±РёС‚Р° РїРѕ Р»РёСЃС‚Р°Рј, Р±СЊРµРј СЌС‚Сѓ С‡Р°СЃС‚СЊ РїРѕ Р»РёСЃС‚Р°Рј
         SplitMode := smMultiplier
       else if (Job.SplitMode2 = smSide) and (NvlInteger(Job.SplitPart2) = 0) then
-        // другой лист уже разбит по сторонам, бьем этот по по сторонам
+        // РґСЂСѓРіРѕР№ Р»РёСЃС‚ СѓР¶Рµ СЂР°Р·Р±РёС‚ РїРѕ СЃС‚РѕСЂРѕРЅР°Рј, Р±СЊРµРј СЌС‚РѕС‚ РїРѕ РїРѕ СЃС‚РѕСЂРѕРЅР°Рј
         SplitMode := smSide
       else
       begin
@@ -2168,7 +2173,7 @@ begin
 
       Result := true;
     end
-    else   // по тиражу
+    else   // РїРѕ С‚РёСЂР°Р¶Сѓ
     begin
       ByQuantity;
       Result := true;
@@ -2176,12 +2181,12 @@ begin
 
     if not Result then
     begin
-      RusMessageDlg('Не найдено свободное место', mtError, [mbOk], 0);
+      RusMessageDlg('РќРµ РЅР°Р№РґРµРЅРѕ СЃРІРѕР±РѕРґРЅРѕРµ РјРµСЃС‚Рѕ', mtError, [mbOk], 0);
       Result := false;
     end;*)
     if not GetSplitMode(Job, SplitMode) then
     begin
-      RusMessageDlg('Работу разбить не удалось', mtError, [mbOk], 0);
+      RusMessageDlg('Р Р°Р±РѕС‚Сѓ СЂР°Р·Р±РёС‚СЊ РЅРµ СѓРґР°Р»РѕСЃСЊ', mtError, [mbOk], 0);
       Result := false;
     end
     else
@@ -2204,7 +2209,7 @@ begin
   end;
 end;
 
-// Определяет есть ли пересечения со сменами, и возвращает дату начала смены
+// РћРїСЂРµРґРµР»СЏРµС‚ РµСЃС‚СЊ Р»Рё РїРµСЂРµСЃРµС‡РµРЅРёСЏ СЃРѕ СЃРјРµРЅР°РјРё, Рё РІРѕР·РІСЂР°С‰Р°РµС‚ РґР°С‚Сѓ РЅР°С‡Р°Р»Р° СЃРјРµРЅС‹
 function TPlanController.IntersectShift(w: TWorkload; Job: TJobParams; var ShiftStart: TDateTime): boolean;
 var
   I: Integer;
@@ -2227,8 +2232,8 @@ function CanMerge(Job: TJobParams): boolean;
 begin
   Result := VarIsNull(Job.FactStart) and VarIsNull(Job.FactStart) and (Job.JobType = 0)
         and Job.AutoSplit and (Job.HasSplitMode(smQuantity) or Job.HasSplitMode(smSide));
-  // работы, разбитые на листы или стороны, тоже можно слить, если они принадлежат к одному интервалу,
-  // поэтому не отсеиваем их сразу
+  // СЂР°Р±РѕС‚С‹, СЂР°Р·Р±РёС‚С‹Рµ РЅР° Р»РёСЃС‚С‹ РёР»Рё СЃС‚РѕСЂРѕРЅС‹, С‚РѕР¶Рµ РјРѕР¶РЅРѕ СЃР»РёС‚СЊ, РµСЃР»Рё РѕРЅРё РїСЂРёРЅР°РґР»РµР¶Р°С‚ Рє РѕРґРЅРѕРјСѓ РёРЅС‚РµСЂРІР°Р»Сѓ,
+  // РїРѕСЌС‚РѕРјСѓ РЅРµ РѕС‚СЃРµРёРІР°РµРј РёС… СЃСЂР°Р·Сѓ
 end;
 
 type
@@ -2258,10 +2263,10 @@ var
   SplitJob: TJobParams;
 begin
   RepeatCheck := false;
-  if IntersectShift(w, Job, ShiftStart) then     // пересечение
+  if IntersectShift(w, Job, ShiftStart) then     // РїРµСЂРµСЃРµС‡РµРЅРёРµ
   begin
     //WasSplit := false;
-    TLogger.GetInstance.Debug('CheckShifts: найдено пересечение с границей смены у работы AnyStart = ' + DateTimeToStr(Job.AnyStart)
+    TLogger.GetInstance.Debug('CheckShifts: РЅР°Р№РґРµРЅРѕ РїРµСЂРµСЃРµС‡РµРЅРёРµ СЃ РіСЂР°РЅРёС†РµР№ СЃРјРµРЅС‹ Сѓ СЂР°Р±РѕС‚С‹ AnyStart = ' + DateTimeToStr(Job.AnyStart)
       + ', AnyFinish = ' + DateTimeToStr(Job.AnyFinish)
       + ' ShiftStart = ' + DateTimeToStr(ShiftStart));
     CurJobID := Job.JobID;
@@ -2269,19 +2274,19 @@ begin
     SplitParams.AtShiftStart := false;
     SplitParams.ShiftStart := ShiftStart;
     SplitParams.Job := Job;
-    // Всегда показывать окно выбора, т.к. там есть еще возможность поставить на начало смены,
-    // поэтому AlwaysAsk = true.
+    // Р’СЃРµРіРґР° РїРѕРєР°Р·С‹РІР°С‚СЊ РѕРєРЅРѕ РІС‹Р±РѕСЂР°, С‚.Рє. С‚Р°Рј РµСЃС‚СЊ РµС‰Рµ РІРѕР·РјРѕР¶РЅРѕСЃС‚СЊ РїРѕСЃС‚Р°РІРёС‚СЊ РЅР° РЅР°С‡Р°Р»Рѕ СЃРјРµРЅС‹,
+    // РїРѕСЌС‚РѕРјСѓ AlwaysAsk = true.
     if GetSplitModeEx(Job, SplitMode, DoExecJobSplitShiftForm, @SplitParams, true) then
     begin
       if not SplitParams.AtShiftStart then
       begin
         if SplitMode = smQuantity then
         begin
-          TLogger.GetInstance.Debug('CheckShifts: разбиваем по тиражу на 2 интервала');
+          TLogger.GetInstance.Debug('CheckShifts: СЂР°Р·Р±РёРІР°РµРј РїРѕ С‚РёСЂР°Р¶Сѓ РЅР° 2 РёРЅС‚РµСЂРІР°Р»Р°');
           FinishTime := Job.AnyFinish;
           SplitJobID := SplitJobByQuantityEx(w, Job, true, Job.AnyStart, ShiftStart,
             ShiftStart, FinishTime);
-          // нам вернули ключ второго интервала, ставим фактич. отметки, если работа отмечена как завершенная
+          // РЅР°Рј РІРµСЂРЅСѓР»Рё РєР»СЋС‡ РІС‚РѕСЂРѕРіРѕ РёРЅС‚РµСЂРІР°Р»Р°, СЃС‚Р°РІРёРј С„Р°РєС‚РёС‡. РѕС‚РјРµС‚РєРё, РµСЃР»Рё СЂР°Р±РѕС‚Р° РѕС‚РјРµС‡РµРЅР° РєР°Рє Р·Р°РІРµСЂС€РµРЅРЅР°СЏ
           if not VarIsNull(Job.FactFinish) then
             GetAdapter(w).UpdateFact(SplitJobID, ShiftStart, FinishTime);
           SplitJob := w.JobList.GetJob(SplitJobID);
@@ -2293,20 +2298,20 @@ begin
         end
         else if SplitMode = smSide then
         begin
-          TLogger.GetInstance.Debug('CheckShifts: разбиваем по сторонам на 2 интервала');
+          TLogger.GetInstance.Debug('CheckShifts: СЂР°Р·Р±РёРІР°РµРј РїРѕ СЃС‚РѕСЂРѕРЅР°Рј РЅР° 2 РёРЅС‚РµСЂРІР°Р»Р°');
           SplitJobBySides(w, Job, true);  // auto
           //WasSplit := true;
           RepeatCheck := true;
         end
         else if SplitMode = smMultiplier then
         begin
-          TLogger.GetInstance.Debug('CheckShifts: разбиваем по множителю на ' + VarToStr(Job.Multiplier) + ' интервалов');
+          TLogger.GetInstance.Debug('CheckShifts: СЂР°Р·Р±РёРІР°РµРј РїРѕ РјРЅРѕР¶РёС‚РµР»СЋ РЅР° ' + VarToStr(Job.Multiplier) + ' РёРЅС‚РµСЂРІР°Р»РѕРІ');
           SplitJobByMultiplier(w, Job, true);  // auto
           //WasSplit := true;
           RepeatCheck := true;
         end;
       end
-      else // Ставим в начало следующей смены
+      else // РЎС‚Р°РІРёРј РІ РЅР°С‡Р°Р»Рѕ СЃР»РµРґСѓСЋС‰РµР№ СЃРјРµРЅС‹
       begin
         FinishTime := ShiftStart + (Job.PlanFinish - Job.PlanStart);
         Job.PlanStart := ShiftStart;
@@ -2315,12 +2320,12 @@ begin
         RepeatCheck := true;
       end;
     end
-    else ;// TODO: не знаю, попадет ли сюда?
+    else ;// TODO: РЅРµ Р·РЅР°СЋ, РїРѕРїР°РґРµС‚ Р»Рё СЃСЋРґР°?
   end;
   Result := RepeatCheck;
 end;
 
-// Обновляет отметки в работах о том, перекрываются ли они со сменами
+// РћР±РЅРѕРІР»СЏРµС‚ РѕС‚РјРµС‚РєРё РІ СЂР°Р±РѕС‚Р°С… Рѕ С‚РѕРј, РїРµСЂРµРєСЂС‹РІР°СЋС‚СЃСЏ Р»Рё РѕРЅРё СЃРѕ СЃРјРµРЅР°РјРё
 procedure TPlanController.UpdateOverlaps(w: TWorkload);
 var
   JobIndex: integer;
@@ -2334,9 +2339,9 @@ begin
   end;
 end;
 
-// В режиме непрерывного отображения делит работы, попадающие на границы смен,
-// и объединяет работы, которые были раньше разбиты границей смены, а теперь нет.
-// Возвращает true, если были изменения и план перезагружен
+// Р’ СЂРµР¶РёРјРµ РЅРµРїСЂРµСЂС‹РІРЅРѕРіРѕ РѕС‚РѕР±СЂР°Р¶РµРЅРёСЏ РґРµР»РёС‚ СЂР°Р±РѕС‚С‹, РїРѕРїР°РґР°СЋС‰РёРµ РЅР° РіСЂР°РЅРёС†С‹ СЃРјРµРЅ,
+// Рё РѕР±СЉРµРґРёРЅСЏРµС‚ СЂР°Р±РѕС‚С‹, РєРѕС‚РѕСЂС‹Рµ Р±С‹Р»Рё СЂР°РЅСЊС€Рµ СЂР°Р·Р±РёС‚С‹ РіСЂР°РЅРёС†РµР№ СЃРјРµРЅС‹, Р° С‚РµРїРµСЂСЊ РЅРµС‚.
+// Р’РѕР·РІСЂР°С‰Р°РµС‚ true, РµСЃР»Рё Р±С‹Р»Рё РёР·РјРµРЅРµРЅРёСЏ Рё РїР»Р°РЅ РїРµСЂРµР·Р°РіСЂСѓР¶РµРЅ
 function TPlanController.CheckShifts: boolean;
 var
   //ds: TDataSet;
@@ -2354,7 +2359,7 @@ var
   begin
     CurJob := Job;
     //CurItemID := w.ItemID;
-    // Запоминаем сторону и лист
+    // Р—Р°РїРѕРјРёРЅР°РµРј СЃС‚РѕСЂРѕРЅСѓ Рё Р»РёСЃС‚
     if Job.HasSplitMode(smMultiplier) then
       SplitPartMult := Job.GetSplitPart(smMultiplier)
     else
@@ -2398,7 +2403,7 @@ begin
     SplitPartQuantity := 0;
     SaveJobID := w.KeyValue;
     RepeatCheck := true;
-    while RepeatCheck do    // поиск пересечений может быть повторен
+    while RepeatCheck do    // РїРѕРёСЃРє РїРµСЂРµСЃРµС‡РµРЅРёР№ РјРѕР¶РµС‚ Р±С‹С‚СЊ РїРѕРІС‚РѕСЂРµРЅ
     begin
       //RepeatCheck := false;
       for JobIndex := 0 to w.JobList.Count - 1 do
@@ -2409,7 +2414,7 @@ begin
     end;
   end;
 
-  // Теперь надо проверить, можно ли склеить некоторые работы, которые были разбиты ранее
+  // РўРµРїРµСЂСЊ РЅР°РґРѕ РїСЂРѕРІРµСЂРёС‚СЊ, РјРѕР¶РЅРѕ Р»Рё СЃРєР»РµРёС‚СЊ РЅРµРєРѕС‚РѕСЂС‹Рµ СЂР°Р±РѕС‚С‹, РєРѕС‚РѕСЂС‹Рµ Р±С‹Р»Рё СЂР°Р·Р±РёС‚С‹ СЂР°РЅРµРµ
   SaveShiftID := 0;
   for ShiftIndex := 0 to w.ShiftList.Count - 1 do
   begin
@@ -2419,61 +2424,61 @@ begin
     while JobIndex < Shift.JobList.Count do
     begin
       Job := Shift.JobList[JobIndex];
-      // если нет факт. отметок, то будем дальше проверять, можно ли к этой работе приклеить другую
+      // РµСЃР»Рё РЅРµС‚ С„Р°РєС‚. РѕС‚РјРµС‚РѕРє, С‚Рѕ Р±СѓРґРµРј РґР°Р»СЊС€Рµ РїСЂРѕРІРµСЂСЏС‚СЊ, РјРѕР¶РЅРѕ Р»Рё Рє СЌС‚РѕР№ СЂР°Р±РѕС‚Рµ РїСЂРёРєР»РµРёС‚СЊ РґСЂСѓРіСѓСЋ
       if (CurJob = nil) and CanMerge(Job) then
       begin
         SaveJob;
       end
-      // если интервал той же работы и нет факт. отметок и разбита автоматически
+      // РµСЃР»Рё РёРЅС‚РµСЂРІР°Р» С‚РѕР№ Р¶Рµ СЂР°Р±РѕС‚С‹ Рё РЅРµС‚ С„Р°РєС‚. РѕС‚РјРµС‚РѕРє Рё СЂР°Р·Р±РёС‚Р° Р°РІС‚РѕРјР°С‚РёС‡РµСЃРєРё
       else if (CurJob <> nil) and (CurJob.ItemID = Job.ItemID) and (CurJob.ItemID <> 0) and CanMerge(Job) then
       begin
         sm1 := Job.SplitMode1;
         sm2 := Job.SplitMode2;
         sm3 := Job.SplitMode3;
         sn := 0;
-        // по одному виду разбивки
+        // РїРѕ РѕРґРЅРѕРјСѓ РІРёРґСѓ СЂР°Р·Р±РёРІРєРё
         AllowMerge := (sm1 = smSide) and (NvlInteger(Job.SplitPart2) = 0) and (SplitPartQuantity = 0) and (SplitPartMult = 0)
             or (sm1 = smQuantity) and (NvlInteger(Job.SplitPart2) = 0) and (SplitPartSide = 0) and (SplitPartMult = 0);
         if AllowMerge then
-          sn := GetSplitModeNum(Job, sm1)  // определяем, по какому полю обновляется разбивка
+          sn := GetSplitModeNum(Job, sm1)  // РѕРїСЂРµРґРµР»СЏРµРј, РїРѕ РєР°РєРѕРјСѓ РїРѕР»СЋ РѕР±РЅРѕРІР»СЏРµС‚СЃСЏ СЂР°Р·Р±РёРІРєР°
         else
         begin
-          // по стороне, потом по тиражу - интервалы одной стороны
+          // РїРѕ СЃС‚РѕСЂРѕРЅРµ, РїРѕС‚РѕРј РїРѕ С‚РёСЂР°Р¶Сѓ - РёРЅС‚РµСЂРІР°Р»С‹ РѕРґРЅРѕР№ СЃС‚РѕСЂРѕРЅС‹
           AllowMerge := ((sm1 = smSide) and (sm2 = smQuantity) and (NvlInteger(Job.SplitPart3) = 0) and (SplitPartMult = 0) and (SplitPartSide = Job.SplitPart1))
             or ((sm2 = smSide) and (sm3 = smQuantity) and (SplitPartMult = Job.SplitPart1) and (SplitPartSide = Job.SplitPart2));
           if AllowMerge then
             sn := GetSplitModeNum(Job, smQuantity)
           else
           begin
-            // по стороне, потом по листам
+            // РїРѕ СЃС‚РѕСЂРѕРЅРµ, РїРѕС‚РѕРј РїРѕ Р»РёСЃС‚Р°Рј
             {AllowMerge := ((sm1 = smSide) and (sm2 = smMultiplier) and (NvlInteger(Job.SplitPart3) = 0) and (SplitPartSide = Job.SplitPart1))
               or ((sm2 = smSide) and (sm3 = smMultiplier) and (SplitPartQuantity = Job.SplitPart1) and (SplitPartSide = Job.SplitPart2));
             if AllowMerge then
               sn := GetSplitModeNum(smMultiplier)
             else
             begin}
-              // по листам, потом по тиражу - интервалы одного листа
+              // РїРѕ Р»РёСЃС‚Р°Рј, РїРѕС‚РѕРј РїРѕ С‚РёСЂР°Р¶Сѓ - РёРЅС‚РµСЂРІР°Р»С‹ РѕРґРЅРѕРіРѕ Р»РёСЃС‚Р°
               AllowMerge := ((sm1 = smMultiplier) and (sm2 = smQuantity) and (NvlInteger(Job.SplitPart3) = 0) and (SplitPartSide = 0) and (SplitPartMult = Job.SplitPart1))
                 or ((sm2 = smMultiplier) and (sm3 = smQuantity) and (SplitPartSide = Job.SplitPart1) and (SplitPartMult = Job.SplitPart2));
               if AllowMerge then
                 sn := GetSplitModeNum(Job, smQuantity)
               else
               begin
-                // по листам, потом по стороне
+                // РїРѕ Р»РёСЃС‚Р°Рј, РїРѕС‚РѕРј РїРѕ СЃС‚РѕСЂРѕРЅРµ
                 AllowMerge := ((sm1 = smMultiplier) and (sm2 = smSide) and (NvlInteger(Job.SplitPart3) = 0) and (SplitPartQuantity = 0) and (SplitPartMult = Job.SplitPart1))
                   or ((sm2 = smMultiplier) and (sm3 = smSide) and (SplitPartQuantity = Job.SplitPart1) and (SplitPartMult = Job.SplitPart2));
                 if AllowMerge then
                   sn := GetSplitModeNum(Job, smSide)
                 else
                 begin
-                  // по тиражу, потом по листам
+                  // РїРѕ С‚РёСЂР°Р¶Сѓ, РїРѕС‚РѕРј РїРѕ Р»РёСЃС‚Р°Рј
                   {AllowMerge := ((sm1 = smQuantity) and (sm2 = smMultiplier) and (NvlInteger(w.SplitPart3) = 0) and (SplitPartQuantity = w.SplitPart1))
                     or ((sm2 = smQuantity) and (sm3 = smMultiplier) and (SplitPartSide = w.SplitPart1) and (SplitPartQuantity = w.SplitPart2));
                   if AllowMerge then
                     sn := GetSplitModeNum(smMultiplier)
                   else
                   begin}
-                    // по тиражу, потом по стороне
+                    // РїРѕ С‚РёСЂР°Р¶Сѓ, РїРѕС‚РѕРј РїРѕ СЃС‚РѕСЂРѕРЅРµ
                     AllowMerge := ((sm1 = smQuantity) and (sm2 = smSide) and (NvlInteger(Job.SplitPart3) = 0) and (SplitPartMult = 0) and (SplitPartQuantity = Job.SplitPart1))
                       or ((sm2 = smQuantity) and (sm3 = smSide) and (SplitPartMult = Job.SplitPart1) and (SplitPartQuantity = Job.SplitPart2));
                     if AllowMerge then
@@ -2487,13 +2492,13 @@ begin
 
         if sn > 0 then
         begin
-          // ... то склеиваем (удаляем текущую, первой устанавливаем время окончания текущей)
+          // ... С‚Рѕ СЃРєР»РµРёРІР°РµРј (СѓРґР°Р»СЏРµРј С‚РµРєСѓС‰СѓСЋ, РїРµСЂРІРѕР№ СѓСЃС‚Р°РЅР°РІР»РёРІР°РµРј РІСЂРµРјСЏ РѕРєРѕРЅС‡Р°РЅРёСЏ С‚РµРєСѓС‰РµР№)
           FinishTime := Job.PlanFinish;
           GetAdapter(w).RemoveJob(Job);
-          Dec(JobIndex); // возвращаемся на предыдущую, т.к. удалили
-          // обновляем длительность
+          Dec(JobIndex); // РІРѕР·РІСЂР°С‰Р°РµРјСЃСЏ РЅР° РїСЂРµРґС‹РґСѓС‰СѓСЋ, С‚.Рє. СѓРґР°Р»РёР»Рё
+          // РѕР±РЅРѕРІР»СЏРµРј РґР»РёС‚РµР»СЊРЅРѕСЃС‚СЊ
           GetAdapter(w).UpdatePlan(CurJob.JobID, CurJob.PlanStart, FinishTime);
-          // перенумеровываем интервалы разбивки
+          // РїРµСЂРµРЅСѓРјРµСЂРѕРІС‹РІР°РµРј РёРЅС‚РµСЂРІР°Р»С‹ СЂР°Р·Р±РёРІРєРё
           RenumberItemJobs(w, CurJob, sn);
           //CurJob.PlanFinish := FinishTime;
         end
@@ -2530,7 +2535,7 @@ begin
 
     if not Result then
     begin
-      // Найти сегодняшнюю смену
+      // РќР°Р№С‚Рё СЃРµРіРѕРґРЅСЏС€РЅСЋСЋ СЃРјРµРЅСѓ
       Shift := w.GetShiftByDate(Now);
       if Shift <> nil then
         w.Locate(-Shift.Number)
@@ -2572,7 +2577,7 @@ begin
   begin
     FWorkloads := TList.Create;
     FAdapters := TList.Create;
-    // TODO! DepartmentID берется первый попавшийся
+    // TODO! DepartmentID Р±РµСЂРµС‚СЃСЏ РїРµСЂРІС‹Р№ РїРѕРїР°РІС€РёР№СЃСЏ
     FShiftEmployees := TShiftEmployees.Create(TConfigManager.Instance.StandardDics.deDepartments.CurrentID);
     FShiftAssistants := TShiftAssistants.Create(TConfigManager.Instance.StandardDics.deDepartments.CurrentID);
 
@@ -2595,7 +2600,7 @@ begin
     end;
   end
   else
-    raise Exception.Create('Не найден справочник оборудования');
+    raise Exception.Create('РќРµ РЅР°Р№РґРµРЅ СЃРїСЂР°РІРѕС‡РЅРёРє РѕР±РѕСЂСѓРґРѕРІР°РЅРёСЏ');
 end;
 
 
@@ -2653,7 +2658,7 @@ begin
   Rpt := ScriptManager.OpenReport(ExtractFileDir(ParamStr(0)) + '\' + FileName);
   if Rpt <> nil then
   begin
-    Rpt.WinCaption1 := 'Excel -::- PolyMix'; // Изменение заголовка окна
+    Rpt.WinCaption1 := 'Excel -::- PolyMix'; // РР·РјРµРЅРµРЅРёРµ Р·Р°РіРѕР»РѕРІРєР° РѕРєРЅР°
     Rpt.WinCaption2 := RptCaption; //Plan_GetReportCaption;
     Rpt.FontApplied := false;
     DataSet := w.DataSet;
@@ -2662,14 +2667,14 @@ begin
     CurDate := PlanFrame.WorkDate;
     if (ColCount > 0) and (DataSet.RecordCount > 0) then
     begin
-      // список номеров строк со спецработами
+      // СЃРїРёСЃРѕРє РЅРѕРјРµСЂРѕРІ СЃС‚СЂРѕРє СЃРѕ СЃРїРµС†СЂР°Р±РѕС‚Р°РјРё
       SpecialRowCount := 0;
       SetLength(SpecialRows, DataSet.RecordCount);
       CommentRowCount := 0;
       SetLength(CommentRows, DataSet.RecordCount);
       if _ContinuousMode then
       begin
-        // список номеров строк с названиями смен
+        // СЃРїРёСЃРѕРє РЅРѕРјРµСЂРѕРІ СЃС‚СЂРѕРє СЃ РЅР°Р·РІР°РЅРёСЏРјРё СЃРјРµРЅ
         ShiftRowCount := 0;
         SetLength(ShiftRows, DataSet.RecordCount);
       end;
@@ -2690,11 +2695,11 @@ begin
             //TLogger.GetInstance.Info('Workload report shift marker: r = ' + VarToStr(r) + ', ' + VarToStr(w.JobComment));
             V[r, 1] := w.AnyStartDateTime;
             //V[r, 2] := w.AnyFinishDateTime;
-            SkipFields := true;  // название смены - пропускаем все поля
+            SkipFields := true;  // РЅР°Р·РІР°РЅРёРµ СЃРјРµРЅС‹ - РїСЂРѕРїСѓСЃРєР°РµРј РІСЃРµ РїРѕР»СЏ
           end;
         end
         else
-          // Если другой день, то вставляем его дату, и он становится новым текущим днем
+          // Р•СЃР»Рё РґСЂСѓРіРѕР№ РґРµРЅСЊ, С‚Рѕ РІСЃС‚Р°РІР»СЏРµРј РµРіРѕ РґР°С‚Сѓ, Рё РѕРЅ СЃС‚Р°РЅРѕРІРёС‚СЃСЏ РЅРѕРІС‹Рј С‚РµРєСѓС‰РёРј РґРЅРµРј
           if not SameDay(w.RangeStart, CurDate, DataSet['PlanStartDate']) then
           begin
             V[r, 1] := DateToStr(DataSet['PlanStartDate']);
@@ -2702,12 +2707,12 @@ begin
             r := r + 1;
           end;
 
-        // Если было название смены - пропускаем все поля
+        // Р•СЃР»Рё Р±С‹Р»Рѕ РЅР°Р·РІР°РЅРёРµ СЃРјРµРЅС‹ - РїСЂРѕРїСѓСЃРєР°РµРј РІСЃРµ РїРѕР»СЏ
         if not SkipFields then
         begin
           if w.JobType >= JobType_Special then
           begin
-            // Спец работа - только название
+            // РЎРїРµС† СЂР°Р±РѕС‚Р° - С‚РѕР»СЊРєРѕ РЅР°Р·РІР°РЅРёРµ
             V[r, 1] := w.AnyStartDateTime;
             V[r, 2] := w.AnyFinishDateTime;
             V[r, 3] := w.PlanDuration;
@@ -2717,12 +2722,12 @@ begin
           end
           else
           begin
-            // обычная работа
+            // РѕР±С‹С‡РЅР°СЏ СЂР°Р±РѕС‚Р°
             for c := 1 to ColCount do
             begin
               FName := SubStrBySeparator(ReportFields, c - 1, ';');
               F := DataSet.FieldByName(FName);
-              // ставим галочку Wingdings на булевых полях
+              // СЃС‚Р°РІРёРј РіР°Р»РѕС‡РєСѓ Wingdings РЅР° Р±СѓР»РµРІС‹С… РїРѕР»СЏС…
               if F is TBooleanField then
               begin
                 if NvlBoolean(F.Value) then
@@ -2734,15 +2739,15 @@ begin
               else
               if TPlanFrame(FFrame).GetColumnTag(TPlanFrame(FFrame).CurrentWorkloadGrid, F.FieldName) = CellTag_DateTimeIcon then
               begin
-                // хитрая обработка даты ожидания материала
+                // С…РёС‚СЂР°СЏ РѕР±СЂР°Р±РѕС‚РєР° РґР°С‚С‹ РѕР¶РёРґР°РЅРёСЏ РјР°С‚РµСЂРёР°Р»Р°
                 if VarIsNull(F.Value) then
-                  V[r, c] := 'нет'
+                  V[r, c] := 'РЅРµС‚'
                 else if YearOf(F.Value) = 1900 then
-                  V[r, c] := 'получена'
+                  V[r, c] := 'РїРѕР»СѓС‡РµРЅР°'
                 else
-                  V[r, c] := 'ожидание' + #10 + FormatDateTime('dd.mm', F.Value);
+                  V[r, c] := 'РѕР¶РёРґР°РЅРёРµ' + #10 + FormatDateTime('dd.mm', F.Value);
               end
-              else  // Если не включен просмотр стоимости, а поле указано, то пустышку пишем
+              else  // Р•СЃР»Рё РЅРµ РІРєР»СЋС‡РµРЅ РїСЂРѕСЃРјРѕС‚СЂ СЃС‚РѕРёРјРѕСЃС‚Рё, Р° РїРѕР»Рµ СѓРєР°Р·Р°РЅРѕ, С‚Рѕ РїСѓСЃС‚С‹С€РєСѓ РїРёС€РµРј
               if not Options.ScheduleShowCost and (CompareText(FName, TWorkload.F_JobCost) = 0) then
                 V[r, c] := ''
               else
@@ -2752,7 +2757,7 @@ begin
                 V[r, c] := F.Value;
               //TLogger.GetInstance.Info('Workload report: ' + FName + ' = ' + VarToStr(DataSet[FName]));
             end;
-            // Если есть комментарий, то добавляем его как отдельную строку
+            // Р•СЃР»Рё РµСЃС‚СЊ РєРѕРјРјРµРЅС‚Р°СЂРёР№, С‚Рѕ РґРѕР±Р°РІР»СЏРµРј РµРіРѕ РєР°Рє РѕС‚РґРµР»СЊРЅСѓСЋ СЃС‚СЂРѕРєСѓ
             if Trim(NvlString(w.JobComment)) <> '' then
             begin
               r := r + 1;
@@ -2771,12 +2776,12 @@ begin
         StartRow + r - 1, StartCol + ColCount - 1);
       Rpt.AutoFitRows(StartRow, r);
 
-      RptCaption := 'План для ' + TConfigManager.Instance.StandardDics.deEquip.ItemName[w.EquipCode];
+      RptCaption := 'РџР»Р°РЅ РґР»СЏ ' + TConfigManager.Instance.StandardDics.deEquip.ItemName[w.EquipCode];
       if not _ContinuousMode then
         RptCaption := RptCaption + '  (' + DateToStr(PlanFrame.WorkDate) + ')';
       Rpt.Cells[1, 1] := RptCaption + ' -- ' + FormatDateTime('dd/mm/yyyy hh:mm', Now);
 
-      // рисуем названия смен
+      // СЂРёСЃСѓРµРј РЅР°Р·РІР°РЅРёСЏ СЃРјРµРЅ
       if _ContinuousMode then
         for I := 0 to ShiftRowCount - 1 do
         begin
@@ -2791,7 +2796,7 @@ begin
           Rpt.SetRowHeight(CurRow, 27);
         end;
 
-      // рисуем спец работы
+      // СЂРёСЃСѓРµРј СЃРїРµС† СЂР°Р±РѕС‚С‹
       for I := 0 to SpecialRowCount - 1 do
       begin
         CurRow := StartRow + SpecialRows[I] - 1;
@@ -2805,7 +2810,7 @@ begin
         Rpt.SetRowHeight(CurRow, 27);
       end;
 
-      // рисуем примечания
+      // СЂРёСЃСѓРµРј РїСЂРёРјРµС‡Р°РЅРёСЏ
       for I := 0 to CommentRowCount - 1 do
       begin
         CurRow := StartRow + CommentRows[I] - 1;
@@ -2817,7 +2822,7 @@ begin
         Rpt.AutoFitRows(CurRow, 1);
         if Rpt.GetRowHeight(CurRow) < 15 then
           Rpt.SetRowHeight(CurRow, 15);
-        // объединяем ячейки с временем и номером заказа
+        // РѕР±СЉРµРґРёРЅСЏРµРј СЏС‡РµР№РєРё СЃ РІСЂРµРјРµРЅРµРј Рё РЅРѕРјРµСЂРѕРј Р·Р°РєР°Р·Р°
         Rpt.MergeAllCells(CurRow - 1, 1, CurRow, 1);
         Rpt.MergeAllCells(CurRow - 1, 2, CurRow, 2);
         Rpt.MergeAllCells(CurRow - 1, 3, CurRow, 3);
@@ -2843,7 +2848,7 @@ begin
   AddOk := false;
   w := CurrentWorkload;
 
-  if CheckLocked(w) then  // Если заблокирован, выходим
+  if CheckLocked(w) then  // Р•СЃР»Рё Р·Р°Р±Р»РѕРєРёСЂРѕРІР°РЅ, РІС‹С…РѕРґРёРј
     Exit;
 
   StartFound := FindAvailableStart(w, StartTime, false);
@@ -2853,7 +2858,7 @@ begin
     if Editable then
     begin
       JobComment := '';
-      if ExecEditText('Описание работы', JobComment, true) then
+      if ExecEditText('РћРїРёСЃР°РЅРёРµ СЂР°Р±РѕС‚С‹', JobComment, true) then
         JobComment := Trim(JobComment)
       else
         Exit;
@@ -2862,13 +2867,13 @@ begin
     Job := TJobParams.Create;
     Job.IsNew := true;
     Job.PlanStart := StartTime;
-    Job.Executor := null; // лучше чем unassigned не выбивает KeyValue комбобокса
+    Job.Executor := null; // Р»СѓС‡С€Рµ С‡РµРј unassigned РЅРµ РІС‹Р±РёРІР°РµС‚ KeyValue РєРѕРјР±РѕР±РѕРєСЃР°
     Job.EstimatedDuration := NvlInteger(TConfigManager.Instance.StandardDics.deSpecialJob.ItemValue[JobCode, 1]);
-    if Job.EstimatedDuration = 0 then Job.EstimatedDuration := 1; // нулевая длительность не прокатит
+    if Job.EstimatedDuration = 0 then Job.EstimatedDuration := 1; // РЅСѓР»РµРІР°СЏ РґР»РёС‚РµР»СЊРЅРѕСЃС‚СЊ РЅРµ РїСЂРѕРєР°С‚РёС‚
     Job.PlanFinish := IncMinute(Job.PlanStart, Job.EstimatedDuration);
     Job.JobAlert := false;
     Job.JobType := JobCode;
-    Job.TimeLocked := NvlBoolean(TConfigManager.Instance.StandardDics.deSpecialJob.ItemValue[JobCode, 7]); // зафиксированная или нет
+    Job.TimeLocked := NvlBoolean(TConfigManager.Instance.StandardDics.deSpecialJob.ItemValue[JobCode, 7]); // Р·Р°С„РёРєСЃРёСЂРѕРІР°РЅРЅР°СЏ РёР»Рё РЅРµС‚
     Job.EquipCode := w.EquipCode;
 
     Editable := NvlBoolean(TConfigManager.Instance.StandardDics.deSpecialJob.ItemValue[JobCode, 6]);
@@ -2888,11 +2893,11 @@ begin
       AddOk := CheckMovingJob(0, Job);
       CheckShifts;
       CommitUpdates(w);
-      PlanFrame.UpdateJobControls; // чтобы кнопочки обновились
+      PlanFrame.UpdateJobControls; // С‡С‚РѕР±С‹ РєРЅРѕРїРѕС‡РєРё РѕР±РЅРѕРІРёР»РёСЃСЊ
     end;
   end
   else
-    RusMessageDlg('Смена заполнена', mtWarning, [mbOk], 0);
+    RusMessageDlg('РЎРјРµРЅР° Р·Р°РїРѕР»РЅРµРЅР°', mtWarning, [mbOk], 0);
 
   if not AddOk then
     Plan.CancelUpdates;
@@ -2908,13 +2913,13 @@ var
 begin
   w := PlanFrame.CurrentWorkload;
 
-  if CheckLocked(W) then  // Если заблокирован, выходим
+  if CheckLocked(W) then  // Р•СЃР»Рё Р·Р°Р±Р»РѕРєРёСЂРѕРІР°РЅ, РІС‹С…РѕРґРёРј
     Exit;
 
   Job := w.CurrentJob;
   if Job = nil then Exit;
 
-  // Если есть пересечение с границей смены, то бьем по ней сначала
+  // Р•СЃР»Рё РµСЃС‚СЊ РїРµСЂРµСЃРµС‡РµРЅРёРµ СЃ РіСЂР°РЅРёС†РµР№ СЃРјРµРЅС‹, С‚Рѕ Р±СЊРµРј РїРѕ РЅРµР№ СЃРЅР°С‡Р°Р»Р°
   if IntersectShift(w, Job, ShiftStart) then
   begin
     BeginUpdates(w);
@@ -2924,7 +2929,7 @@ begin
   else
   begin
     if not GetSplitMode(Job, SplitMode) then
-      RusMessageDlg('Работу разбить нельзя', mtError, [mbOk], 0)
+      RusMessageDlg('Р Р°Р±РѕС‚Сѓ СЂР°Р·Р±РёС‚СЊ РЅРµР»СЊР·СЏ', mtError, [mbOk], 0)
     else
     begin
       BeginUpdates(w);
@@ -2945,21 +2950,32 @@ end;
 
 procedure TPlanController.DoOpenOrder(Sender: TObject);
 var
-  OrderID: variant;
+  OrderID, KindID: Variant;
+  KRec: TKindPerm;
 begin
   if Sender = Plan then
-    OrderID := Plan.OrderID
+  begin
+    OrderID := Plan.OrderID;
+    KindID := Plan.KindID;
+  end
   else
+  begin
     OrderID := PlanFrame.CurrentWorkload.OrderID;
+    KindID := PlanFrame.CurrentWorkload.KindID;
+  end;
 
   if not VarIsNull(OrderID) then
   begin
+    // РњР°СЋС‚СЊ Р±СѓС‚Рё РїСЂР°РІР° РЅР° РїРµСЂРµРіР»СЏРґ Р·Р°РјРѕРІР»РµРЅРЅСЏ
+    AccessManager.ReadUserKindPermTo(KRec, Plan.KindID, AccessManager.CurUser.ID);
+    if not KRec.WorkVisible or not KRec.WorkBrowse then Exit;
+
     AppController.EditWorkOrder(OrderID);
   end;
 
 end;
 
-// Ищет в плане заказ с указанным номером
+// РС‰РµС‚ РІ РїР»Р°РЅРµ Р·Р°РєР°Р· СЃ СѓРєР°Р·Р°РЅРЅС‹Рј РЅРѕРјРµСЂРѕРј
 procedure TPlanController.DoLocateOrder(OrderNum: integer);
 var
   LocData: TDataSource;
@@ -2973,16 +2989,16 @@ begin
   tempDm := TDataModule.Create(nil);
   try
     Found := false;
-    // ищем в текущем году
+    // РёС‰РµРј РІ С‚РµРєСѓС‰РµРј РіРѕРґСѓ
     LocData := GetAdapter(w).CreateLocatedProcesses(Plan.EquipGroupCode, OrderNum, tempDm, YearOf(Now));
     if LocData.DataSet.RecordCount = 0 then
     begin
       FreeAndNil(tempDm);
       tempDm := TDataModule.Create(nil);
-      // ищем во всех годах
+      // РёС‰РµРј РІРѕ РІСЃРµС… РіРѕРґР°С…
       LocData := GetAdapter(w).CreateLocatedProcesses(Plan.EquipGroupCode, OrderNum, tempDm, 0);
       if LocData.DataSet.RecordCount = 0 then
-        RusMessageDlg('Работы для заказа № ' + IntToStr(OrderNum) + ' не найдены в текущей группе оборудования',
+        RusMessageDlg('Р Р°Р±РѕС‚С‹ РґР»СЏ Р·Р°РєР°Р·Р° в„– ' + IntToStr(OrderNum) + ' РЅРµ РЅР°Р№РґРµРЅС‹ РІ С‚РµРєСѓС‰РµР№ РіСЂСѓРїРїРµ РѕР±РѕСЂСѓРґРѕРІР°РЅРёСЏ',
           mtWarning, [mbOk], 0)
       else
         Found := true;
@@ -2992,7 +3008,7 @@ begin
 
     if Found then
     begin
-      // если возращено несколько работ (разные интервалы), то предлагаем пользователю выбор
+      // РµСЃР»Рё РІРѕР·СЂР°С‰РµРЅРѕ РЅРµСЃРєРѕР»СЊРєРѕ СЂР°Р±РѕС‚ (СЂР°Р·РЅС‹Рµ РёРЅС‚РµСЂРІР°Р»С‹), С‚Рѕ РїСЂРµРґР»Р°РіР°РµРј РїРѕР»СЊР·РѕРІР°С‚РµР»СЋ РІС‹Р±РѕСЂ
       if LocData.DataSet.RecordCount > 1 then
         if not ExecJobListForm(LocData) then Exit;
       JobID := LocData.DataSet['JobID'];
@@ -3002,29 +3018,29 @@ begin
         begin
           if not PlanFrame.ActivateWorkload(LocData.DataSet['EquipCode']) then
           begin
-            RusMessageDlg('Оборудование для выбранной работы не найдено.', mtError, [mbOk], 0);
+            RusMessageDlg('РћР±РѕСЂСѓРґРѕРІР°РЅРёРµ РґР»СЏ РІС‹Р±СЂР°РЅРЅРѕР№ СЂР°Р±РѕС‚С‹ РЅРµ РЅР°Р№РґРµРЅРѕ.', mtError, [mbOk], 0);
             Exit;
           end;
         end;
 
-        // находим работу
+        // РЅР°С…РѕРґРёРј СЂР°Р±РѕС‚Сѓ
         if not CurrentWorkload.Locate(JobID) then
         begin
           if not VarIsNull(LocData.DataSet['AnyStartDate']) then
             StartDate := LocData.DataSet['AnyStartDate']
           else
           begin
-            RusMessageDlg('Выбранная работа не запланирована и не выполнена. Поиск таких работ пока не реализован', mtError, [mbOk], 0);
+            RusMessageDlg('Р’С‹Р±СЂР°РЅРЅР°СЏ СЂР°Р±РѕС‚Р° РЅРµ Р·Р°РїР»Р°РЅРёСЂРѕРІР°РЅР° Рё РЅРµ РІС‹РїРѕР»РЅРµРЅР°. РџРѕРёСЃРє С‚Р°РєРёС… СЂР°Р±РѕС‚ РїРѕРєР° РЅРµ СЂРµР°Р»РёР·РѕРІР°РЅ', mtError, [mbOk], 0);
             Exit;
           end;
 
           ReplaceTime(StartDate, 0);
           PlanFrame.WorkDate := StartDate;
 
-          // TODO: работа может быть в другой смене!
+          // TODO: СЂР°Р±РѕС‚Р° РјРѕР¶РµС‚ Р±С‹С‚СЊ РІ РґСЂСѓРіРѕР№ СЃРјРµРЅРµ!
 
           if not PlanFrame.CurrentWorkload.Locate(JobID) then
-            RusMessageDlg('Не удалось найти заданную работу', mtError, [mbOk], 0);
+            RusMessageDlg('РќРµ СѓРґР°Р»РѕСЃСЊ РЅР°Р№С‚Рё Р·Р°РґР°РЅРЅСѓСЋ СЂР°Р±РѕС‚Сѓ', mtError, [mbOk], 0);
         end;
       end;
     end;
@@ -3033,7 +3049,7 @@ begin
   end;
 end;
 
-// Ищет начало следующей смены, если все пусто
+// РС‰РµС‚ РЅР°С‡Р°Р»Рѕ СЃР»РµРґСѓСЋС‰РµР№ СЃРјРµРЅС‹, РµСЃР»Рё РІСЃРµ РїСѓСЃС‚Рѕ
 function TPlanController.GetNextShiftStart(w: TWorkload; DT: TDateTime): TDateTime;
 var
   I: Integer;
@@ -3054,8 +3070,8 @@ begin
   end;
 end;
 
-// Возвращает время, где есть свободное место без учета длительности работы.
-// В режиме просмотра дня или смены может вернуть false, если работу разместить не удалось.
+// Р’РѕР·РІСЂР°С‰Р°РµС‚ РІСЂРµРјСЏ, РіРґРµ РµСЃС‚СЊ СЃРІРѕР±РѕРґРЅРѕРµ РјРµСЃС‚Рѕ Р±РµР· СѓС‡РµС‚Р° РґР»РёС‚РµР»СЊРЅРѕСЃС‚Рё СЂР°Р±РѕС‚С‹.
+// Р’ СЂРµР¶РёРјРµ РїСЂРѕСЃРјРѕС‚СЂР° РґРЅСЏ РёР»Рё СЃРјРµРЅС‹ РјРѕР¶РµС‚ РІРµСЂРЅСѓС‚СЊ false, РµСЃР»Рё СЂР°Р±РѕС‚Сѓ СЂР°Р·РјРµСЃС‚РёС‚СЊ РЅРµ СѓРґР°Р»РѕСЃСЊ.
 function TPlanController.FindAvailableStart(w: TWorkload; var StartTime: TDateTime; FromCurrent: boolean): boolean;
 var
   StartFound: Boolean;
@@ -3072,7 +3088,7 @@ begin
     begin
       w.DataSet.Last;
       StartTime := w.AnyFinishDateTime;
-      // Если выходит за пределы дня
+      // Р•СЃР»Рё РІС‹С…РѕРґРёС‚ Р·Р° РїСЂРµРґРµР»С‹ РґРЅСЏ
       if StartTime > w.RangeEnd then
         StartFound := false;
     end;
@@ -3080,7 +3096,7 @@ begin
   else
   if w.IsEmpty then
     StartTime := Now
-  else // непрерывный график. Начинаем с текущего места.
+  else // РЅРµРїСЂРµСЂС‹РІРЅС‹Р№ РіСЂР°С„РёРє. РќР°С‡РёРЅР°РµРј СЃ С‚РµРєСѓС‰РµРіРѕ РјРµСЃС‚Р°.
   begin
     Job := w.CurrentJob;
     if Job = nil then
@@ -3092,7 +3108,7 @@ begin
     else
     begin
       LastFinishTime := Job.AnyFinish;
-      // Если одна из следующих работ не начиналась фактически, то ставим перед ней
+      // Р•СЃР»Рё РѕРґРЅР° РёР· СЃР»РµРґСѓСЋС‰РёС… СЂР°Р±РѕС‚ РЅРµ РЅР°С‡РёРЅР°Р»Р°СЃСЊ С„Р°РєС‚РёС‡РµСЃРєРё, С‚Рѕ СЃС‚Р°РІРёРј РїРµСЂРµРґ РЅРµР№
       CurJobIndex := w.JobList.IndexOf(Job);
       for I := CurJobIndex + 1 to w.JobList.Count - 1 do
       begin
@@ -3134,14 +3150,14 @@ begin
   Result := AddToPlan(WorkloadRowKey);
 end;
 
-// перемещение работы на другое оборудование
+// РїРµСЂРµРјРµС‰РµРЅРёРµ СЂР°Р±РѕС‚С‹ РЅР° РґСЂСѓРіРѕРµ РѕР±РѕСЂСѓРґРѕРІР°РЅРёРµ
 procedure TPlanController.HandleChangeEquip(NewEquipCode: integer);
 var
   I{, SavedJobID}: Integer;
   WSource, WTarget: TWorkload;
   CurJob, SavedJobParams: TJobParams;
 begin
-  // Работы, разбитые на интервалы, пока переносить не разрешаем
+  // Р Р°Р±РѕС‚С‹, СЂР°Р·Р±РёС‚С‹Рµ РЅР° РёРЅС‚РµСЂРІР°Р»С‹, РїРѕРєР° РїРµСЂРµРЅРѕСЃРёС‚СЊ РЅРµ СЂР°Р·СЂРµС€Р°РµРј
   WSource := PlanFrame.CurrentWorkload;
   CurJob := WSource.CurrentJob;
   SavedJobParams := CurJob.Copy;
@@ -3150,7 +3166,7 @@ begin
     if not CurJob.HasSplitMode(smQuantity) and not CurJob.HasSplitMode(smMultiplier)
       and not CurJob.HasSplitMode(smSide) then
     begin
-      // находим план для нового оборудования
+      // РЅР°С…РѕРґРёРј РїР»Р°РЅ РґР»СЏ РЅРѕРІРѕРіРѕ РѕР±РѕСЂСѓРґРѕРІР°РЅРёСЏ
       for I := 0 to FWorkloads.Count - 1 do    // Iterate
       begin
         if TWorkload(FWorkloads[i]).EquipCode = NewEquipCode then
@@ -3160,21 +3176,21 @@ begin
         end;
       end;
       if WTarget = nil then
-        raise Exception.Create('План оборудования не найден');
+        raise Exception.Create('РџР»Р°РЅ РѕР±РѕСЂСѓРґРѕРІР°РЅРёСЏ РЅРµ РЅР°Р№РґРµРЅ');
 
-      // проверяем блокировку одного из планов
+      // РїСЂРѕРІРµСЂСЏРµРј Р±Р»РѕРєРёСЂРѕРІРєСѓ РѕРґРЅРѕРіРѕ РёР· РїР»Р°РЅРѕРІ
       if CheckLocked(WSource) or CheckLocked(WTarget) then
         Exit;
 
       BeginUpdates(WSource);
-      // помещаем работу сначала в незапланированные...
+      // РїРѕРјРµС‰Р°РµРј СЂР°Р±РѕС‚Сѓ СЃРЅР°С‡Р°Р»Р° РІ РЅРµР·Р°РїР»Р°РЅРёСЂРѕРІР°РЅРЅС‹Рµ...
       GetAdapter(WSource).UnPlanJob(CurJob);
       CommitUpdates(WSource);
 
       Plan.Reload;
       if not Plan.DataSet.Locate('JobID', SavedJobParams.JobID, []) then
-        raise Exception.Create('Работа на найдена');
-      // переключаем на новый план и добавляем в него
+        raise Exception.Create('Р Р°Р±РѕС‚Р° РЅР° РЅР°Р№РґРµРЅР°');
+      // РїРµСЂРµРєР»СЋС‡Р°РµРј РЅР° РЅРѕРІС‹Р№ РїР»Р°РЅ Рё РґРѕР±Р°РІР»СЏРµРј РІ РЅРµРіРѕ
       PlanFrame.CurrentWorkload := WTarget;
       if AddToPlan(0) then
       begin
@@ -3194,7 +3210,7 @@ begin
       end;
     end
     else
-      RusMessageDlg('Пока не реализован перенос одного интервала на другое оборудование. Sorry...',
+      RusMessageDlg('РџРѕРєР° РЅРµ СЂРµР°Р»РёР·РѕРІР°РЅ РїРµСЂРµРЅРѕСЃ РѕРґРЅРѕРіРѕ РёРЅС‚РµСЂРІР°Р»Р° РЅР° РґСЂСѓРіРѕРµ РѕР±РѕСЂСѓРґРѕРІР°РЅРёРµ. Sorry...',
         mtError, [mbOk], 0);
   finally
     SavedJobParams.Free;
@@ -3215,7 +3231,7 @@ var
   begin
     CurOrder := AppController.CreateWorkOrder;
     try
-      // Открываем заказ, чтобы увидеть комментарии и пометки
+      // РћС‚РєСЂС‹РІР°РµРј Р·Р°РєР°Р·, С‡С‚РѕР±С‹ СѓРІРёРґРµС‚СЊ РєРѕРјРјРµРЅС‚Р°СЂРёРё Рё РїРѕРјРµС‚РєРё
       FFilter := TOrderFilterObj.Create;
       try
         CurOrder.Criteria := FFilter as TOrderFilterObj;
@@ -3223,7 +3239,7 @@ var
         CurOrder.UseWaitCursor := true;
         FFilter.SetSingleOrderFilter(Job.OrderID);
         CurOrder.Reload;
-        Result := ExecEditJobComment(CurOrder, 'Примечания', TempComment, TempAlert);
+        Result := ExecEditJobComment(CurOrder, 'РџСЂРёРјРµС‡Р°РЅРёСЏ', TempComment, TempAlert);
       finally
         FFilter.Free;
       end;
@@ -3234,7 +3250,7 @@ var
 
   function DoEditSpecialJobComment: boolean;
   begin
-    Result := ExecEditJobComment(nil, 'Примечания', TempComment, TempAlert);
+    Result := ExecEditJobComment(nil, 'РџСЂРёРјРµС‡Р°РЅРёСЏ', TempComment, TempAlert);
   end;
 
 begin
@@ -3351,18 +3367,18 @@ begin
     LockerInfo := AccessManager.UserInfo(LockerName);
     if LockerInfo <> nil then
       LockerName := LockerInfo.Name;
-    RusMessageDlg('План редактируется пользователем ' + QuotedStr(LockerName), mtInformation, [mbok], 0);
+    RusMessageDlg('РџР»Р°РЅ СЂРµРґР°РєС‚РёСЂСѓРµС‚СЃСЏ РїРѕР»СЊР·РѕРІР°С‚РµР»РµРј ' + QuotedStr(LockerName), mtInformation, [mbok], 0);
   end
   else
   begin
-    // Сначала проверяем, были ли изменения с момента последнего обновления
+    // РЎРЅР°С‡Р°Р»Р° РїСЂРѕРІРµСЂСЏРµРј, Р±С‹Р»Рё Р»Рё РёР·РјРµРЅРµРЅРёСЏ СЃ РјРѕРјРµРЅС‚Р° РїРѕСЃР»РµРґРЅРµРіРѕ РѕР±РЅРѕРІР»РµРЅРёСЏ
     if CheckModified(w) then
       w.Reload;
-    // блокируем
+    // Р±Р»РѕРєРёСЂСѓРµРј
     TLockManager.Lock(TLockManager.Workload, w.EquipCode);
-    // включаем таймер подтверждения блокировки
+    // РІРєР»СЋС‡Р°РµРј С‚Р°Р№РјРµСЂ РїРѕРґС‚РІРµСЂР¶РґРµРЅРёСЏ Р±Р»РѕРєРёСЂРѕРІРєРё
     FEditLockTimer.Enabled := true;
-    // обновляем состояние кнопок
+    // РѕР±РЅРѕРІР»СЏРµРј СЃРѕСЃС‚РѕСЏРЅРёРµ РєРЅРѕРїРѕРє
     w.Locked := true;
     PlanFrame.UpdateLockState;
   end;
@@ -3382,18 +3398,18 @@ var
 begin
   if EntSettings.EditLock then
   begin
-    // Отключаем таймер
+    // РћС‚РєР»СЋС‡Р°РµРј С‚Р°Р№РјРµСЂ
     FEditLockTimer.Enabled := false;
-    // разблокируем
+    // СЂР°Р·Р±Р»РѕРєРёСЂСѓРµРј
     TLockManager.Unlock(TLockManager.Workload, w.EquipCode);
-    // очищаем историю изменений
+    // РѕС‡РёС‰Р°РµРј РёСЃС‚РѕСЂРёСЋ РёР·РјРµРЅРµРЅРёР№
     a := GetAdapter(w) as TCachedScheduleAdapter;
     a.ClearHistory;
-    // обновляем состояние кнопок
+    // РѕР±РЅРѕРІР»СЏРµРј СЃРѕСЃС‚РѕСЏРЅРёРµ РєРЅРѕРїРѕРє
     w.Locked := false;
     PlanFrame.UpdateLockState;
 
-    // Включаем таймер, если хоть один план заблокирован
+    // Р’РєР»СЋС‡Р°РµРј С‚Р°Р№РјРµСЂ, РµСЃР»Рё С…РѕС‚СЊ РѕРґРёРЅ РїР»Р°РЅ Р·Р°Р±Р»РѕРєРёСЂРѕРІР°РЅ
     LockFound := false;
     for I := 0 to FWorkloads.Count - 1 do
     begin
@@ -3439,7 +3455,7 @@ var
 begin
   CurOrder := AppController.CreateWorkOrder;
   try
-    // Открываем заказ, чтобы увидеть комментарии и пометки
+    // РћС‚РєСЂС‹РІР°РµРј Р·Р°РєР°Р·, С‡С‚РѕР±С‹ СѓРІРёРґРµС‚СЊ РєРѕРјРјРµРЅС‚Р°СЂРёРё Рё РїРѕРјРµС‚РєРё
     FFilter := TOrderFilterObj.Create;
     try
       CurOrder.Criteria := FFilter as TOrderFilterObj;
@@ -3469,7 +3485,7 @@ begin
   CommitUpdates(Sender as TWorkload);
 end;
 
-// Сдвигает работы начиная с JobID на место NewStart
+// РЎРґРІРёРіР°РµС‚ СЂР°Р±РѕС‚С‹ РЅР°С‡РёРЅР°СЏ СЃ JobID РЅР° РјРµСЃС‚Рѕ NewStart
 {procedure TPlanView.MoveJobs(NewStart: TDateTime; JobID: integer);
 var
   w: TWorkload;
@@ -3484,7 +3500,7 @@ begin
     begin
       while not w.DataSet.eof do
       begin
-        // не показывать сообщение о том что сдвинуть нельзя
+        // РЅРµ РїРѕРєР°Р·С‹РІР°С‚СЊ СЃРѕРѕР±С‰РµРЅРёРµ Рѕ С‚РѕРј С‡С‚Рѕ СЃРґРІРёРЅСѓС‚СЊ РЅРµР»СЊР·СЏ
         if CheckCanMove(w, false) then
         begin
           NewFinish := NewStart + (w.PlanFinishDateTime - w.PlanStartDateTime);
@@ -3493,7 +3509,7 @@ begin
           NewStart := NewFinish;
         end
         else
-          break; // если одну нельзя сдвинуть, то и остальные тоже
+          break; // РµСЃР»Рё РѕРґРЅСѓ РЅРµР»СЊР·СЏ СЃРґРІРёРЅСѓС‚СЊ, С‚Рѕ Рё РѕСЃС‚Р°Р»СЊРЅС‹Рµ С‚РѕР¶Рµ
         w.DataSet.Next;
       end;
       w.Locate(JobID);
@@ -3509,7 +3525,7 @@ function TPlanController.SameDay(DayStart, Date1, Date2: TDateTime): Boolean;
 var
   NextDay: TDateTime;
 begin
-  ReplaceTime(Date1, DayStart);  // дата-время начала текущего дня
+  ReplaceTime(Date1, DayStart);  // РґР°С‚Р°-РІСЂРµРјСЏ РЅР°С‡Р°Р»Р° С‚РµРєСѓС‰РµРіРѕ РґРЅСЏ
   NextDay := IncDay(Date1, 1);
   Result := (Date2 < NextDay) and (Date2 >= Date1);
 end;
@@ -3523,8 +3539,8 @@ begin
   PlanFrame.BeforeOpenData;
   try
     if AccessManager.CurUser.ViewNotPlanned and not Plan.DataSet.Active then
-      Plan.Reload; // чтобы прыгнуло в конец надо вызывать релоад
-    // Во всех режимах, кроме диаграммы, обновляем только загрузку только по одному оборудованию.
+      Plan.Reload; // С‡С‚РѕР±С‹ РїСЂС‹РіРЅСѓР»Рѕ РІ РєРѕРЅРµС† РЅР°РґРѕ РІС‹Р·С‹РІР°С‚СЊ СЂРµР»РѕР°Рґ
+    // Р’Рѕ РІСЃРµС… СЂРµР¶РёРјР°С…, РєСЂРѕРјРµ РґРёР°РіСЂР°РјРјС‹, РѕР±РЅРѕРІР»СЏРµРј С‚РѕР»СЊРєРѕ Р·Р°РіСЂСѓР·РєСѓ С‚РѕР»СЊРєРѕ РїРѕ РѕРґРЅРѕРјСѓ РѕР±РѕСЂСѓРґРѕРІР°РЅРёСЋ.
     for i := 0 to FWorkloads.Count - 1 do
     begin
       w := TWorkload(FWorkloads[i]);
@@ -3559,7 +3575,7 @@ begin
   else
     CurID := 0;
 
-  // перезагружаем, если были изменения и нет блокировки
+  // РїРµСЂРµР·Р°РіСЂСѓР¶Р°РµРј, РµСЃР»Рё Р±С‹Р»Рё РёР·РјРµРЅРµРЅРёСЏ Рё РЅРµС‚ Р±Р»РѕРєРёСЂРѕРІРєРё
   if FNeedRefresh or not w.Active or (CheckModified(w) and not w.Locked) then
     w.Reload;
 
@@ -3571,7 +3587,7 @@ begin
     UpdateOverlaps(w);
 end;
 
-// проверяет работы на предмет просроченности отметок
+// РїСЂРѕРІРµСЂСЏРµС‚ СЂР°Р±РѕС‚С‹ РЅР° РїСЂРµРґРјРµС‚ РїСЂРѕСЃСЂРѕС‡РµРЅРЅРѕСЃС‚Рё РѕС‚РјРµС‚РѕРє
 procedure TPlanController.CheckOverdueJobs(w: TWorkload);
 var
   //JobID: integer;
@@ -3604,9 +3620,9 @@ begin
         Inc(i);
       end;
       if OverdueFinish then
-        (FFrame as TPlanFrame).ShowWarning(w.EquipCode, 'Отсутствуют отметки об завершении некоторых работ');
+        (FFrame as TPlanFrame).ShowWarning(w.EquipCode, 'РћС‚СЃСѓС‚СЃС‚РІСѓСЋС‚ РѕС‚РјРµС‚РєРё РѕР± Р·Р°РІРµСЂС€РµРЅРёРё РЅРµРєРѕС‚РѕСЂС‹С… СЂР°Р±РѕС‚');
       if OverdueStart then
-        (FFrame as TPlanFrame).ShowWarning(w.EquipCode, 'Отсутствуют отметки об начале некоторых работ');
+        (FFrame as TPlanFrame).ShowWarning(w.EquipCode, 'РћС‚СЃСѓС‚СЃС‚РІСѓСЋС‚ РѕС‚РјРµС‚РєРё РѕР± РЅР°С‡Р°Р»Рµ РЅРµРєРѕС‚РѕСЂС‹С… СЂР°Р±РѕС‚');
       if not OverdueStart and not OverdueFinish then
         (FFrame as TPlanFrame).HideWarnings(w.EquipCode);
       //w.Locate(JobID);
@@ -3644,7 +3660,7 @@ begin
     or (w.Criteria.RangeType = PlanRange_Week);
 end;
 
-// проверяет, закрыты ли все предшествующие в этой смене.
+// РїСЂРѕРІРµСЂСЏРµС‚, Р·Р°РєСЂС‹С‚С‹ Р»Рё РІСЃРµ РїСЂРµРґС€РµСЃС‚РІСѓСЋС‰РёРµ РІ СЌС‚РѕР№ СЃРјРµРЅРµ.
 function TPlanController.CheckSetFactOrder(Job: TJobParams): boolean;
 var
   Shift: TShiftInfo;
@@ -3655,7 +3671,7 @@ var
 begin
   Result := true;
   w := CurrentWorkload;
-  // становимся на первую работу смены
+  // СЃС‚Р°РЅРѕРІРёРјСЃСЏ РЅР° РїРµСЂРІСѓСЋ СЂР°Р±РѕС‚Сѓ СЃРјРµРЅС‹
   if ContinuousMode(w) then
   begin
     Shift := w.GetJobShift(Job.JobID);
@@ -3666,7 +3682,7 @@ begin
   for I := 0 to JList.Count - 1 do
   begin
     CurJob := JList[I];
-    if Job.JobID = CurJob.JobID then break;  // дошли до текущей
+    if Job.JobID = CurJob.JobID then break;  // РґРѕС€Р»Рё РґРѕ С‚РµРєСѓС‰РµР№
     if VarIsNull(CurJob.FactStart) or VarIsNull(CurJob.FactFinish) then
     begin
       Result := false;
@@ -3675,7 +3691,7 @@ begin
   end;
 end;
 
-// проверяет, открыты ли все последующие в этой смене.
+// РїСЂРѕРІРµСЂСЏРµС‚, РѕС‚РєСЂС‹С‚С‹ Р»Рё РІСЃРµ РїРѕСЃР»РµРґСѓСЋС‰РёРµ РІ СЌС‚РѕР№ СЃРјРµРЅРµ.
 function TPlanController.CheckRemoveFactOrder(Job: TJobParams): boolean;
 var
   Shift: TShiftInfo;
@@ -3724,7 +3740,7 @@ begin
     for I := Low(JobIDs) to High(JobIDs) do
     begin
       if AccessManager.CurUser.DescribeUnScheduleJob then
-        // заменяем на спец работу с описанием
+        // Р·Р°РјРµРЅСЏРµРј РЅР° СЃРїРµС† СЂР°Р±РѕС‚Сѓ СЃ РѕРїРёСЃР°РЅРёРµРј
         GetAdapter(w).ReplaceJobWithSpecial(JobIDs[I], TStandardDics.SpecialJob_Unscheduled,
           GetRemovedJobDesc(Job) + #13#10 + ReasonText);
     end;
@@ -3733,7 +3749,7 @@ begin
   Result := not Cancelled;
 end;
 
-// возвращает ключ второй половинки работы
+// РІРѕР·РІСЂР°С‰Р°РµС‚ РєР»СЋС‡ РІС‚РѕСЂРѕР№ РїРѕР»РѕРІРёРЅРєРё СЂР°Р±РѕС‚С‹
 function TPlanController.SplitJobByQuantity(w: TWorkload; Job: TJobParams; AutoSplit: boolean): integer;
 var
   StartTime, FinishTime: TDateTime;
@@ -3743,42 +3759,42 @@ var
 begin
   StartTime := Job.AnyStart;
   FinishTime := Job.PlanFinish;
-  // Делим пополам - округляя до минуты
+  // Р”РµР»РёРј РїРѕРїРѕР»Р°Рј - РѕРєСЂСѓРіР»СЏСЏ РґРѕ РјРёРЅСѓС‚С‹
   m := MinuteSpan(FinishTime, StartTime);
   if m >= 2 then
   begin
     Half1 := IncMinute(StartTime, Trunc(m / 2));
-    // Первая половина, достаточно только здесь обновить режим разбивки
-    // возвращает номер разбивки
+    // РџРµСЂРІР°СЏ РїРѕР»РѕРІРёРЅР°, РґРѕСЃС‚Р°С‚РѕС‡РЅРѕ С‚РѕР»СЊРєРѕ Р·РґРµСЃСЊ РѕР±РЅРѕРІРёС‚СЊ СЂРµР¶РёРј СЂР°Р·Р±РёРІРєРё
+    // РІРѕР·РІСЂР°С‰Р°РµС‚ РЅРѕРјРµСЂ СЂР°Р·Р±РёРІРєРё
     sn := GetAdapter(w).UpdateJobSplitMode(Job, StartTime, Half1, smQuantity, AutoSplit);
-    // Вторая половина
+    // Р’С‚РѕСЂР°СЏ РїРѕР»РѕРІРёРЅР°
     Result := GetAdapter(w).AddSplitJob(Job, Half1, FinishTime, sn);
-    // Чтобы обновить параметра, общие для всех работ одного процесса
+    // Р§С‚РѕР±С‹ РѕР±РЅРѕРІРёС‚СЊ РїР°СЂР°РјРµС‚СЂР°, РѕР±С‰РёРµ РґР»СЏ РІСЃРµС… СЂР°Р±РѕС‚ РѕРґРЅРѕРіРѕ РїСЂРѕС†РµСЃСЃР°
     GetAdapter(w).UpdatePlan(Job);
-    // Только после этого перенумеровать
+    // РўРѕР»СЊРєРѕ РїРѕСЃР»Рµ СЌС‚РѕРіРѕ РїРµСЂРµРЅСѓРјРµСЂРѕРІР°С‚СЊ
     RenumberItemJobs(w, Job, sn);
   end
   else
-    ExceptionHandler.Raise_('Работа длится меньше двух минут');
+    ExceptionHandler.Raise_('Р Р°Р±РѕС‚Р° РґР»РёС‚СЃСЏ РјРµРЅСЊС€Рµ РґРІСѓС… РјРёРЅСѓС‚');
 end;
 
-// возвращает ключ второй половинки работы
+// РІРѕР·РІСЂР°С‰Р°РµС‚ РєР»СЋС‡ РІС‚РѕСЂРѕР№ РїРѕР»РѕРІРёРЅРєРё СЂР°Р±РѕС‚С‹
 function TPlanController.SplitJobByQuantityEx(w: TWorkload; Job: TJobParams; AutoSplit: boolean;
   NewStartTime1, NewFinishTime1, NewStartTime2, NewFinishTime2: TDateTime): integer;
 var
   sn: Integer;
 begin
-  // Первая половина, достаточно только здесь обновить режим разбивки
-  // (возвращает номер разбивки)
+  // РџРµСЂРІР°СЏ РїРѕР»РѕРІРёРЅР°, РґРѕСЃС‚Р°С‚РѕС‡РЅРѕ С‚РѕР»СЊРєРѕ Р·РґРµСЃСЊ РѕР±РЅРѕРІРёС‚СЊ СЂРµР¶РёРј СЂР°Р·Р±РёРІРєРё
+  // (РІРѕР·РІСЂР°С‰Р°РµС‚ РЅРѕРјРµСЂ СЂР°Р·Р±РёРІРєРё)
   sn := GetAdapter(w).UpdateJobSplitMode(Job, NewStartTime1, NewFinishTime1, smQuantity, AutoSplit);
-  // Вторая половина
+  // Р’С‚РѕСЂР°СЏ РїРѕР»РѕРІРёРЅР°
   {Result := GetAdapter(w).AddSplitJob(Job.ItemID, NewStartTime2, NewFinishTime2, null,
     w.EquipCode, Job.Executor, Job.JobComment, Job.SplitPart1, Job.SplitPart2, sn,
     Job.JobAlert);}
   Result := GetAdapter(w).AddSplitJob(Job, NewStartTime2, NewFinishTime2, sn);
-  // Чтобы обновить параметра, общие для всех работ одного процесса
+  // Р§С‚РѕР±С‹ РѕР±РЅРѕРІРёС‚СЊ РїР°СЂР°РјРµС‚СЂР°, РѕР±С‰РёРµ РґР»СЏ РІСЃРµС… СЂР°Р±РѕС‚ РѕРґРЅРѕРіРѕ РїСЂРѕС†РµСЃСЃР°
   GetAdapter(w).UpdatePlan(Job);
-  // Только после этого перенумеровать
+  // РўРѕР»СЊРєРѕ РїРѕСЃР»Рµ СЌС‚РѕРіРѕ РїРµСЂРµРЅСѓРјРµСЂРѕРІР°С‚СЊ
   RenumberItemJobs(w, Job, sn);
 end;
 
@@ -3806,35 +3822,35 @@ begin
   begin
     if Job.SideCount = 2 then
     begin
-      // Делим пополам - округляя до минуты
+      // Р”РµР»РёРј РїРѕРїРѕР»Р°Рј - РѕРєСЂСѓРіР»СЏСЏ РґРѕ РјРёРЅСѓС‚С‹
       m := MinuteSpan(FinishTime, StartTime);
       if m >= 2 then
       begin
         //Half1 := (FinishTime - StartTime) / 2;
         Half1 := IncMinute(StartTime, Trunc(m / 2));
-        // Первая половина
+        // РџРµСЂРІР°СЏ РїРѕР»РѕРІРёРЅР°
         {Job := w.GetJobParams;
         try}
-          // возвращает номер разбивки
+          // РІРѕР·РІСЂР°С‰Р°РµС‚ РЅРѕРјРµСЂ СЂР°Р·Р±РёРІРєРё
           sn := GetAdapter(w).UpdateJobSplitMode(Job, StartTime, Half1, smSide, AutoSplit);
-          // Вторая половина
+          // Р’С‚РѕСЂР°СЏ РїРѕР»РѕРІРёРЅР°
           Result := GetAdapter(w).AddSplitJob(Job, Half1, FinishTime, sn);
-          // Чтобы обновить параметра, общие для всех работ одного процесса
+          // Р§С‚РѕР±С‹ РѕР±РЅРѕРІРёС‚СЊ РїР°СЂР°РјРµС‚СЂР°, РѕР±С‰РёРµ РґР»СЏ РІСЃРµС… СЂР°Р±РѕС‚ РѕРґРЅРѕРіРѕ РїСЂРѕС†РµСЃСЃР°
           GetAdapter(w).UpdatePlan(Job);
-          // Только после этого перенумеровать
+          // РўРѕР»СЊРєРѕ РїРѕСЃР»Рµ СЌС‚РѕРіРѕ РїРµСЂРµРЅСѓРјРµСЂРѕРІР°С‚СЊ
           RenumberItemJobs(w, Job, sn);
         {finally
           Job.Free;
         end;}
       end
       else
-        ExceptionHandler.Raise_('Работа длится меньше двух минут');
+        ExceptionHandler.Raise_('Р Р°Р±РѕС‚Р° РґР»РёС‚СЃСЏ РјРµРЅСЊС€Рµ РґРІСѓС… РјРёРЅСѓС‚');
     end
     else
-      ExceptionHandler.Raise_('Рабивка при количестве сторон больше двух не реализована. Сообщите разработчику.');
+      ExceptionHandler.Raise_('Р Р°Р±РёРІРєР° РїСЂРё РєРѕР»РёС‡РµСЃС‚РІРµ СЃС‚РѕСЂРѕРЅ Р±РѕР»СЊС€Рµ РґРІСѓС… РЅРµ СЂРµР°Р»РёР·РѕРІР°РЅР°. РЎРѕРѕР±С‰РёС‚Рµ СЂР°Р·СЂР°Р±РѕС‚С‡РёРєСѓ.');
   end
   else
-    ExceptionHandler.Raise_('Не указано количество сторон в работе');
+    ExceptionHandler.Raise_('РќРµ СѓРєР°Р·Р°РЅРѕ РєРѕР»РёС‡РµСЃС‚РІРѕ СЃС‚РѕСЂРѕРЅ РІ СЂР°Р±РѕС‚Рµ');
 end;
 
 {function TPlanView.SplitJobByMultiplier(w: TWorkload; AutoSplit: boolean): TIntArray;
@@ -3849,7 +3865,7 @@ begin
   end;
 end;}
 
-// возвращает ключи всех интервалов работы, кроме первого
+// РІРѕР·РІСЂР°С‰Р°РµС‚ РєР»СЋС‡Рё РІСЃРµС… РёРЅС‚РµСЂРІР°Р»РѕРІ СЂР°Р±РѕС‚С‹, РєСЂРѕРјРµ РїРµСЂРІРѕРіРѕ
 function TPlanController.SplitJobByMultiplier(w: TWorkload; Job: TJobParams; AutoSplit: boolean): TIntArray;
 var
   StartTime, FinishTime: TDateTime;
@@ -3859,7 +3875,7 @@ var
 begin
   StartTime := Job.AnyStart;
   FinishTime := Job.PlanFinish;
-  // Делим по множителю работы - округляя до минуты
+  // Р”РµР»РёРј РїРѕ РјРЅРѕР¶РёС‚РµР»СЋ СЂР°Р±РѕС‚С‹ - РѕРєСЂСѓРіР»СЏСЏ РґРѕ РјРёРЅСѓС‚С‹
   IMult := Round(Job.Multiplier);
   SetLength(Result, IMult);
   if IMult > 1 then
@@ -3871,39 +3887,39 @@ begin
       //Half1 := (FinishTime - StartTime) / IMult;
       {Job := w.GetJobParams;
       try}
-        // возвращает номер разбивки
+        // РІРѕР·РІСЂР°С‰Р°РµС‚ РЅРѕРјРµСЂ СЂР°Р·Р±РёРІРєРё
         sn := GetAdapter(w).UpdateJobSplitMode(Job, StartTime, Half1, smMultiplier, AutoSplit);
-        // первый кусочек
+        // РїРµСЂРІС‹Р№ РєСѓСЃРѕС‡РµРє
         Result[0] := Job.JobID;
         for I := 1 to IMult - 2 do
-        // со второго интервала до предпоследнего
+        // СЃРѕ РІС‚РѕСЂРѕРіРѕ РёРЅС‚РµСЂРІР°Р»Р° РґРѕ РїСЂРµРґРїРѕСЃР»РµРґРЅРµРіРѕ
         begin
           EndHalf1 := IncMinute(Half1, Trunc(m / IMult));
           Result[I] := GetAdapter(w).AddSplitJob(Job, Half1, EndHalf1, sn);
           Half1 := EndHalf1;
         end;
-        // последний кусочек
+        // РїРѕСЃР»РµРґРЅРёР№ РєСѓСЃРѕС‡РµРє
         Result[IMult - 1] := GetAdapter(w).AddSplitJob(Job, Half1, FinishTime, sn);
-        // Чтобы обновить параметра, общие для всех работ одного процесса
+        // Р§С‚РѕР±С‹ РѕР±РЅРѕРІРёС‚СЊ РїР°СЂР°РјРµС‚СЂР°, РѕР±С‰РёРµ РґР»СЏ РІСЃРµС… СЂР°Р±РѕС‚ РѕРґРЅРѕРіРѕ РїСЂРѕС†РµСЃСЃР°
         GetAdapter(w).UpdatePlan(Job);
-        // Только после этого перенумеровать
+        // РўРѕР»СЊРєРѕ РїРѕСЃР»Рµ СЌС‚РѕРіРѕ РїРµСЂРµРЅСѓРјРµСЂРѕРІР°С‚СЊ
         RenumberItemJobs(w, Job, sn);
       {finally
         Job.Free;
       end;}
     end
     else
-      ExceptionHandler.Raise_('Работа длится меньше ' + IntToStr(IMult) + ' минут');
+      ExceptionHandler.Raise_('Р Р°Р±РѕС‚Р° РґР»РёС‚СЃСЏ РјРµРЅСЊС€Рµ ' + IntToStr(IMult) + ' РјРёРЅСѓС‚');
   end
   else
-    ExceptionHandler.Raise_('Работа не разбита. Не на что разбивать...');
+    ExceptionHandler.Raise_('Р Р°Р±РѕС‚Р° РЅРµ СЂР°Р·Р±РёС‚Р°. РќРµ РЅР° С‡С‚Рѕ СЂР°Р·Р±РёРІР°С‚СЊ...');
 end;
 
 procedure TPlanController.RenumberItemJobs(w: TWorkload; Job: TJobParams; SplitModeNum: integer);
 var
   WasAdded: boolean;
 begin
-  // Временно ставим работу на место, если ее нет в списке, чтобы перенумерация прошла правильно
+  // Р’СЂРµРјРµРЅРЅРѕ СЃС‚Р°РІРёРј СЂР°Р±РѕС‚Сѓ РЅР° РјРµСЃС‚Рѕ, РµСЃР»Рё РµРµ РЅРµС‚ РІ СЃРїРёСЃРєРµ, С‡С‚РѕР±С‹ РїРµСЂРµРЅСѓРјРµСЂР°С†РёСЏ РїСЂРѕС€Р»Р° РїСЂР°РІРёР»СЊРЅРѕ
   if w.JobList.IndexOf(Job) = -1 then
   begin
     w.JobList.Add(Job);
@@ -3997,7 +4013,7 @@ begin
     begin
       s := s + #13 + errors[i];
     end;
-    RusMessageDlg('Обнаружены некорректные данные. Изменения не могут быть сохранены:'
+    RusMessageDlg('РћР±РЅР°СЂСѓР¶РµРЅС‹ РЅРµРєРѕСЂСЂРµРєС‚РЅС‹Рµ РґР°РЅРЅС‹Рµ. РР·РјРµРЅРµРЅРёСЏ РЅРµ РјРѕРіСѓС‚ Р±С‹С‚СЊ СЃРѕС…СЂР°РЅРµРЅС‹:'
       + s, mtError, [mbOk], 0);
   end;
 end;
@@ -4012,7 +4028,7 @@ var
 begin
   a := GetAdapter(w) as TCachedScheduleAdapter;
 
-  // если текущая работа не найдется после обновления, то надо встать на смену этой работы
+  // РµСЃР»Рё С‚РµРєСѓС‰Р°СЏ СЂР°Р±РѕС‚Р° РЅРµ РЅР°Р№РґРµС‚СЃСЏ РїРѕСЃР»Рµ РѕР±РЅРѕРІР»РµРЅРёСЏ, С‚Рѕ РЅР°РґРѕ РІСЃС‚Р°С‚СЊ РЅР° СЃРјРµРЅСѓ СЌС‚РѕР№ СЂР°Р±РѕС‚С‹
   if w.Active and ContinuousMode(w) then
   begin
     CurID := w.KeyValue;
@@ -4021,13 +4037,13 @@ begin
       CurJob := w.JobList.GetJob(CurID);
       if CurJob = nil then
       begin
-        // работа могла быть удалена либо снята
+        // СЂР°Р±РѕС‚Р° РјРѕРіР»Р° Р±С‹С‚СЊ СѓРґР°Р»РµРЅР° Р»РёР±Рѕ СЃРЅСЏС‚Р°
         CurJob := a.UnPlannedJobList.GetJob(CurID);
         if CurJob = nil then
           CurJob := a.RemovedJobList.GetJob(CurID);
       end;
       if CurJob <> nil then
-        CurJobDate := CurJob.AnyStart  // запоминаем время начала текущей работы
+        CurJobDate := CurJob.AnyStart  // Р·Р°РїРѕРјРёРЅР°РµРј РІСЂРµРјСЏ РЅР°С‡Р°Р»Р° С‚РµРєСѓС‰РµР№ СЂР°Р±РѕС‚С‹
       else
         CurID := null;
     end;
@@ -4038,7 +4054,7 @@ begin
 
   a.CommitUpdates;
 
-  //w.SaveJobs := EnableUndo;  // чтобы сохранялась копия для отката
+  //w.SaveJobs := EnableUndo;  // С‡С‚РѕР±С‹ СЃРѕС…СЂР°РЅСЏР»Р°СЃСЊ РєРѕРїРёСЏ РґР»СЏ РѕС‚РєР°С‚Р°
   //try
     w.Reload;
   //finally
@@ -4047,8 +4063,8 @@ begin
 
   if w.Active and ContinuousMode(w) and not VarIsNull(CurID) and (w.KeyValue <> CurID) then
   begin
-    // Если стоим на другой работе, значит
-    // текущая работа не нашлась после обновления, становимся на текущую смену.
+    // Р•СЃР»Рё СЃС‚РѕРёРј РЅР° РґСЂСѓРіРѕР№ СЂР°Р±РѕС‚Рµ, Р·РЅР°С‡РёС‚
+    // С‚РµРєСѓС‰Р°СЏ СЂР°Р±РѕС‚Р° РЅРµ РЅР°С€Р»Р°СЃСЊ РїРѕСЃР»Рµ РѕР±РЅРѕРІР»РµРЅРёСЏ, СЃС‚Р°РЅРѕРІРёРјСЃСЏ РЅР° С‚РµРєСѓС‰СѓСЋ СЃРјРµРЅСѓ.
     CurShift := w.GetShiftByDate(CurJobDate);
     if CurShift = nil then
       CurShift := w.GetShiftByDate(Now);
@@ -4060,7 +4076,7 @@ begin
   if ContinuousMode(w) then
     UpdateOverlaps(w);
 
-  PlanFrame.UpdateLockState;  // обновить состояние отмены
+  PlanFrame.UpdateLockState;  // РѕР±РЅРѕРІРёС‚СЊ СЃРѕСЃС‚РѕСЏРЅРёРµ РѕС‚РјРµРЅС‹
 end;
 
 procedure TPlanController.RollbackUpdates(w: TWorkload);
@@ -4078,14 +4094,14 @@ begin
   a := GetAdapter(w) as TCachedScheduleAdapter;
   if a.UndoLastEdit then
   begin
-    a.EnableUndo := false;  // можно beginupdates не делать
+    a.EnableUndo := false;  // РјРѕР¶РЅРѕ beginupdates РЅРµ РґРµР»Р°С‚СЊ
     try
       CommitUpdates(w);
     finally
       a.EnableUndo := true;
     end;
     if a.UndoRestored or a.UndoRemoved then
-      Plan.Reload; // это нужно, только если снимается или добавляется работа
+      Plan.Reload; // СЌС‚Рѕ РЅСѓР¶РЅРѕ, С‚РѕР»СЊРєРѕ РµСЃР»Рё СЃРЅРёРјР°РµС‚СЃСЏ РёР»Рё РґРѕР±Р°РІР»СЏРµС‚СЃСЏ СЂР°Р±РѕС‚Р°
   end;
   PlanFrame.UpdateLockState;
 end;
@@ -4121,7 +4137,7 @@ begin
   AllowLeave := not LockedFound;
   if not AllowLeave then
   begin
-    Res := RusMessageDlg('Завершить планирование?', mtConfirmation,
+    Res := RusMessageDlg('Р—Р°РІРµСЂС€РёС‚СЊ РїР»Р°РЅРёСЂРѕРІР°РЅРёРµ?', mtConfirmation,
       mbYesNoCancel, 0);
     if Res = mrYes then
     begin
