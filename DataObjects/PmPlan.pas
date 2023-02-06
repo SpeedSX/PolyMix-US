@@ -10,20 +10,20 @@ uses Classes, DB, ADODB, DBClient,
   NotifyEvent, PmProcessEntity, PmJobParams, PmShiftEmployees;
 
 const
-  // Вид просмотра загрузки оборудования
-  PlanRange_Day = 0;            // день
-  PlanRange_Continuous = 1;     // непрерывный
-  PlanRange_Week = 2;           // неделя вперед
-  PlanRange_Gantt = 3;          // диаграмма Гантта
-  PlanRange_FirstShift = 4;     // первая смена, если больше, то номер смены + 1
+  // Р’РёРґ РїСЂРѕСЃРјРѕС‚СЂР° Р·Р°РіСЂСѓР·РєРё РѕР±РѕСЂСѓРґРѕРІР°РЅРёСЏ
+  PlanRange_Day = 0;            // РґРµРЅСЊ
+  PlanRange_Continuous = 1;     // РЅРµРїСЂРµСЂС‹РІРЅС‹Р№
+  PlanRange_Week = 2;           // РЅРµРґРµР»СЏ РІРїРµСЂРµРґ
+  PlanRange_Gantt = 3;          // РґРёР°РіСЂР°РјРјР° Р“Р°РЅС‚С‚Р°
+  PlanRange_FirstShift = 4;     // РїРµСЂРІР°СЏ СЃРјРµРЅР°, РµСЃР»Рё Р±РѕР»СЊС€Рµ, С‚Рѕ РЅРѕРјРµСЂ СЃРјРµРЅС‹ + 1
 
   JobType_ShiftMarker = -1;
   JobType_Work = 0;
-  JobType_Special = 1;  // тип специальной работы, проверяем на >=
+  JobType_Special = 1;  // С‚РёРї СЃРїРµС†РёР°Р»СЊРЅРѕР№ СЂР°Р±РѕС‚С‹, РїСЂРѕРІРµСЂСЏРµРј РЅР° >=
 
-  CONTINUOUS_RANGE = 14;  // 'захват' дней назад-вперед в непрерывном режиме
-  WEEK_RANGE_FORWARD = 7; // 'захват' дней вперед в режиме недели
-  WEEK_RANGE_BACKWARD = 1;    // 'захват' дней назад в режиме недели
+  CONTINUOUS_RANGE = 14;  // 'Р·Р°С…РІР°С‚' РґРЅРµР№ РЅР°Р·Р°Рґ-РІРїРµСЂРµРґ РІ РЅРµРїСЂРµСЂС‹РІРЅРѕРј СЂРµР¶РёРјРµ
+  WEEK_RANGE_FORWARD = 7; // 'Р·Р°С…РІР°С‚' РґРЅРµР№ РІРїРµСЂРµРґ РІ СЂРµР¶РёРјРµ РЅРµРґРµР»Рё
+  WEEK_RANGE_BACKWARD = 1;    // 'Р·Р°С…РІР°С‚' РґРЅРµР№ РЅР°Р·Р°Рґ РІ СЂРµР¶РёРјРµ РЅРµРґРµР»Рё
   
 type
   TPlan = class(TProcessEntity)
@@ -38,6 +38,7 @@ type
     function GetEquipCode: Variant;
     procedure SetEquipCode(_EquipCode: Variant);
     function GetKindID: Variant;
+    function GetCreatorName: string;
     function GetNotPlannedSQL(var HasWhere: boolean): TQueryObject;
     function GetHasComment: boolean;
     function GetHasTechNotes: boolean;
@@ -65,9 +66,10 @@ type
     //property OrderID: Integer read GetOrderID;
     property EquipCode: variant read GetEquipCode write SetEquipCode;
     property KindID: variant read GetKindID;
-    // Признак есть ли комментарий к работе (JobComment)
+    property CreatorName: string read GetCreatorName;
+    // РџСЂРёР·РЅР°Рє РµСЃС‚СЊ Р»Рё РєРѕРјРјРµРЅС‚Р°СЂРёР№ Рє СЂР°Р±РѕС‚Рµ (JobComment)
     property HasComment: boolean read GetHasComment;
-    // Признак есть ли технологические примечания к заказу
+    // РџСЂРёР·РЅР°Рє РµСЃС‚СЊ Р»Рё С‚РµС…РЅРѕР»РѕРіРёС‡РµСЃРєРёРµ РїСЂРёРјРµС‡Р°РЅРёСЏ Рє Р·Р°РєР°Р·Сѓ
     property HasTechNotes: boolean read GetHasTechNotes;
     property JobComment: variant read GetJobComment;
   end;
@@ -95,9 +97,9 @@ type
     Start, Finish: TDateTime;
     Number: integer;
     ID: integer;
-    ShiftEmployeeID: integer;  // исполнитель для смены
-    EquipEmployeeID: integer;  // исполнитель для оборудования
-    EquipAssistantID: integer;  // Помошник исполнителя для оборудования
+    ShiftEmployeeID: integer;  // РёСЃРїРѕР»РЅРёС‚РµР»СЊ РґР»СЏ СЃРјРµРЅС‹
+    EquipEmployeeID: integer;  // РёСЃРїРѕР»РЅРёС‚РµР»СЊ РґР»СЏ РѕР±РѕСЂСѓРґРѕРІР°РЅРёСЏ
+    EquipAssistantID: integer;  // РџРѕРјРѕС€РЅРёРє РёСЃРїРѕР»РЅРёС‚РµР»СЏ РґР»СЏ РѕР±РѕСЂСѓРґРѕРІР°РЅРёСЏ
     JobList: TJobList;
     Cost: extended;
     constructor Create(_Start, _Finish: TDateTime; _Number, _ID: integer);
@@ -138,6 +140,7 @@ type
     function GetAnyFinishDateTime: TDateTime;
     function GetAnyStartDateTime: TDateTime;
     function GetCustomerName: string;
+    function GetCreatorName: string;
     function GetDayStart: TDateTime;
     procedure GetDayStartTime;
     function GetIsPaused: boolean;
@@ -160,18 +163,18 @@ type
     function GetJobColor: variant;
     function GetKindID: variant;
 
-    // Возвращает начало указанной смены для текущей группы оборудования в справочнике
+    // Р’РѕР·РІСЂР°С‰Р°РµС‚ РЅР°С‡Р°Р»Рѕ СѓРєР°Р·Р°РЅРЅРѕР№ СЃРјРµРЅС‹ РґР»СЏ С‚РµРєСѓС‰РµР№ РіСЂСѓРїРїС‹ РѕР±РѕСЂСѓРґРѕРІР°РЅРёСЏ РІ СЃРїСЂР°РІРѕС‡РЅРёРєРµ
     function GetShiftStartTime(ShiftNum: integer): TDateTime;
-    // Возвращает окончание указанной смены для текущей группы оборудования в справочнике
+    // Р’РѕР·РІСЂР°С‰Р°РµС‚ РѕРєРѕРЅС‡Р°РЅРёРµ СѓРєР°Р·Р°РЅРЅРѕР№ СЃРјРµРЅС‹ РґР»СЏ С‚РµРєСѓС‰РµР№ РіСЂСѓРїРїС‹ РѕР±РѕСЂСѓРґРѕРІР°РЅРёСЏ РІ СЃРїСЂР°РІРѕС‡РЅРёРєРµ
     function GetShiftFinishTime(ShiftNum: integer): TDateTime;
-    // Ищет начало первой смены для текущей группы оборудования в справочнике
+    // РС‰РµС‚ РЅР°С‡Р°Р»Рѕ РїРµСЂРІРѕР№ СЃРјРµРЅС‹ РґР»СЏ С‚РµРєСѓС‰РµР№ РіСЂСѓРїРїС‹ РѕР±РѕСЂСѓРґРѕРІР°РЅРёСЏ РІ СЃРїСЂР°РІРѕС‡РЅРёРєРµ
     function GetFirstShiftStartTime: TDateTime;
-    // Возвращает указанное поле для смены для текущей группы оборудования в справочнике,
-    // количество смен и ключ записи
+    // Р’РѕР·РІСЂР°С‰Р°РµС‚ СѓРєР°Р·Р°РЅРЅРѕРµ РїРѕР»Рµ РґР»СЏ СЃРјРµРЅС‹ РґР»СЏ С‚РµРєСѓС‰РµР№ РіСЂСѓРїРїС‹ РѕР±РѕСЂСѓРґРѕРІР°РЅРёСЏ РІ СЃРїСЂР°РІРѕС‡РЅРёРєРµ,
+    // РєРѕР»РёС‡РµСЃС‚РІРѕ СЃРјРµРЅ Рё РєР»СЋС‡ Р·Р°РїРёСЃРё
     function GetShiftFieldValue(ShiftNum, FieldNum: integer; var ShiftCount, ID: integer): TDateTime;
-    // Возвращает количество смен для данной группы оборудования
+    // Р’РѕР·РІСЂР°С‰Р°РµС‚ РєРѕР»РёС‡РµСЃС‚РІРѕ СЃРјРµРЅ РґР»СЏ РґР°РЅРЅРѕР№ РіСЂСѓРїРїС‹ РѕР±РѕСЂСѓРґРѕРІР°РЅРёСЏ
     function GetShiftCount: integer;
-    // Возвращает ключ смены для текущей группы оборудования в справочнике смен
+    // Р’РѕР·РІСЂР°С‰Р°РµС‚ РєР»СЋС‡ СЃРјРµРЅС‹ РґР»СЏ С‚РµРєСѓС‰РµР№ РіСЂСѓРїРїС‹ РѕР±РѕСЂСѓРґРѕРІР°РЅРёСЏ РІ СЃРїСЂР°РІРѕС‡РЅРёРєРµ СЃРјРµРЅ
     function GetShiftID(ShiftNum: integer): integer;
     function GetTimeLocked: boolean;
     function GetProductOut: integer;
@@ -193,10 +196,10 @@ type
     procedure SetEquipmentAssistant(val: variant);
     procedure FreeShiftList;
     procedure CreateShiftList;
-    // Используется для фильтрации при построении списка работ для каждой смены
+    // РСЃРїРѕР»СЊР·СѓРµС‚СЃСЏ РґР»СЏ С„РёР»СЊС‚СЂР°С†РёРё РїСЂРё РїРѕСЃС‚СЂРѕРµРЅРёРё СЃРїРёСЃРєР° СЂР°Р±РѕС‚ РґР»СЏ РєР°Р¶РґРѕР№ СЃРјРµРЅС‹
     //procedure ShiftFilter(DataSet: TDataSet; var Accept: Boolean);
     function CreateShiftJobs(CurShiftStart, NextShiftStart: TDateTime): TJobList;
-    // Строит список работ для каждой смены
+    // РЎС‚СЂРѕРёС‚ СЃРїРёСЃРѕРє СЂР°Р±РѕС‚ РґР»СЏ РєР°Р¶РґРѕР№ СЃРјРµРЅС‹
     procedure BuildShiftJobLists;
     procedure CalcShiftCost;
   protected
@@ -209,7 +212,7 @@ type
     procedure DefaultCalcFields;
     procedure DefaultCreateDataSet;
     function DefaultGetWorkloadSQL: TCustomSQL;
-    // Для режима непрерывного отображения: вставляет в план маркеры смен
+    // Р”Р»СЏ СЂРµР¶РёРјР° РЅРµРїСЂРµСЂС‹РІРЅРѕРіРѕ РѕС‚РѕР±СЂР°Р¶РµРЅРёСЏ: РІСЃС‚Р°РІР»СЏРµС‚ РІ РїР»Р°РЅ РјР°СЂРєРµСЂС‹ СЃРјРµРЅ
     procedure InsertShiftMarkers;
     procedure SetFactStartDateTime(_Value: variant);
     procedure SetFactFinishDateTime(_Value: variant);
@@ -240,32 +243,32 @@ type
     procedure ChangeOrderState(Job: TJobParams; NewOrderState: integer);
     function GetSQL: TQueryObject;
 
-    // Является ли строка маркером смены
+    // РЇРІР»СЏРµС‚СЃСЏ Р»Рё СЃС‚СЂРѕРєР° РјР°СЂРєРµСЂРѕРј СЃРјРµРЅС‹
     function IsShiftMarker: boolean;
-    // Возвращает список смен TShiftInfo
+    // Р’РѕР·РІСЂР°С‰Р°РµС‚ СЃРїРёСЃРѕРє СЃРјРµРЅ TShiftInfo
     function ShiftList: TShiftList;
-    // становится на маркер смены для работы с заданным началом
+    // СЃС‚Р°РЅРѕРІРёС‚СЃСЏ РЅР° РјР°СЂРєРµСЂ СЃРјРµРЅС‹ РґР»СЏ СЂР°Р±РѕС‚С‹ СЃ Р·Р°РґР°РЅРЅС‹Рј РЅР°С‡Р°Р»РѕРј
     //function LocateShift(JobStart: TDateTime): boolean;
-    // становится на маркер смены для текущей работы
+    // СЃС‚Р°РЅРѕРІРёС‚СЃСЏ РЅР° РјР°СЂРєРµСЂ СЃРјРµРЅС‹ РґР»СЏ С‚РµРєСѓС‰РµР№ СЂР°Р±РѕС‚С‹
     function LocateShift: boolean;
     procedure SortJobs;
     function CurrentJob: TJobParams;
     function CurrentShift: TShiftInfo;
-    // Смена по ид. работы
+    // РЎРјРµРЅР° РїРѕ РёРґ. СЂР°Р±РѕС‚С‹
     function GetJobShift(JobID: integer): TShiftInfo;
-    // Смена по ид. смены
+    // РЎРјРµРЅР° РїРѕ РёРґ. СЃРјРµРЅС‹
     function GetShiftByID(ShiftID: integer): TShiftInfo;
-    // Смена по дате
+    // РЎРјРµРЅР° РїРѕ РґР°С‚Рµ
     function GetShiftByDate(DT: TDateTime): TShiftInfo;
-    // перенести в набор данных в текущую запись параметры работы Job
+    // РїРµСЂРµРЅРµСЃС‚Рё РІ РЅР°Р±РѕСЂ РґР°РЅРЅС‹С… РІ С‚РµРєСѓС‰СѓСЋ Р·Р°РїРёСЃСЊ РїР°СЂР°РјРµС‚СЂС‹ СЂР°Р±РѕС‚С‹ Job
     //procedure SetJobParams(Job: TJobParams);
-    // Строит общий список работ
+    // РЎС‚СЂРѕРёС‚ РѕР±С‰РёР№ СЃРїРёСЃРѕРє СЂР°Р±РѕС‚
     function BuildJobList: TJobList;
 
     //property OnScriptError: TScriptError read FOnScriptError write FOnScriptError;
     property DataSource: TDataSource read FDataSource;
-    // Конец диапазона просмотра = начало первой смены следующего дня
-    // (недели, или следующей смены)
+    // РљРѕРЅРµС† РґРёР°РїР°Р·РѕРЅР° РїСЂРѕСЃРјРѕС‚СЂР° = РЅР°С‡Р°Р»Рѕ РїРµСЂРІРѕР№ СЃРјРµРЅС‹ СЃР»РµРґСѓСЋС‰РµРіРѕ РґРЅСЏ
+    // (РЅРµРґРµР»Рё, РёР»Рё СЃР»РµРґСѓСЋС‰РµР№ СЃРјРµРЅС‹)
     property RangeEnd: TDateTime read GetNextDayStart;
     property EquipCode: integer read FEquipCode;
     property EquipName: string read GetEquipName;
@@ -282,26 +285,27 @@ type
     property FactStartDateTime: Variant read GetFactStartDateTime;
     property JobType: Integer read GetJobType;
     property KindID: Variant read GetKindID;
+    property CreatorName: string read GetCreatorName;
     //property OrderID: Variant read GetOrderID;
-    // Начало диапазона просмотра (начало первой смены или указанной смены)
+    // РќР°С‡Р°Р»Рѕ РґРёР°РїР°Р·РѕРЅР° РїСЂРѕСЃРјРѕС‚СЂР° (РЅР°С‡Р°Р»Рѕ РїРµСЂРІРѕР№ СЃРјРµРЅС‹ РёР»Рё СѓРєР°Р·Р°РЅРЅРѕР№ СЃРјРµРЅС‹)
     property RangeStart: TDateTime read GetDayStart;
     property JobComment: variant read GetJobComment write SetJobComment;
     property JobAlert: boolean read GetJobAlert write SetJobAlert;
-    // Признак есть ли комментарий к работе (JobComment)
+    // РџСЂРёР·РЅР°Рє РµСЃС‚СЊ Р»Рё РєРѕРјРјРµРЅС‚Р°СЂРёР№ Рє СЂР°Р±РѕС‚Рµ (JobComment)
     property HasComment: boolean read GetHasComment;
-    // Признак есть ли технологические примечания к заказу
+    // РџСЂРёР·РЅР°Рє РµСЃС‚СЊ Р»Рё С‚РµС…РЅРѕР»РѕРіРёС‡РµСЃРєРёРµ РїСЂРёРјРµС‡Р°РЅРёСЏ Рє Р·Р°РєР°Р·Сѓ
     property HasTechNotes: boolean read GetHasTechNotes;
-    // Признак того, что работа была разбита автоматически при разнесении по сменам (CheckShifts)
+    // РџСЂРёР·РЅР°Рє С‚РѕРіРѕ, С‡С‚Рѕ СЂР°Р±РѕС‚Р° Р±С‹Р»Р° СЂР°Р·Р±РёС‚Р° Р°РІС‚РѕРјР°С‚РёС‡РµСЃРєРё РїСЂРё СЂР°Р·РЅРµСЃРµРЅРёРё РїРѕ СЃРјРµРЅР°Рј (CheckShifts)
     property AutoSplit: boolean read GetAutoSplit;
-    // Признак фиксации
+    // РџСЂРёР·РЅР°Рє С„РёРєСЃР°С†РёРё
     property TimeLocked: boolean read GetTimeLocked;
-    // Плановая выработка с учетом разбивки
+    // РџР»Р°РЅРѕРІР°СЏ РІС‹СЂР°Р±РѕС‚РєР° СЃ СѓС‡РµС‚РѕРј СЂР°Р·Р±РёРІРєРё
     property ProductOut: integer read GetProductOut;
-    // Плановая выработка по всей работе
+    // РџР»Р°РЅРѕРІР°СЏ РІС‹СЂР°Р±РѕС‚РєР° РїРѕ РІСЃРµР№ СЂР°Р±РѕС‚Рµ
     property ItemProductOut: integer read GetItemProductOut;
-    // Цвет строки в режиме ручной раскраски
+    // Р¦РІРµС‚ СЃС‚СЂРѕРєРё РІ СЂРµР¶РёРјРµ СЂСѓС‡РЅРѕР№ СЂР°СЃРєСЂР°СЃРєРё
     property JobColor: variant read GetJobColor write SetJobColor;
-    // Длительность всех интервалов работы
+    // Р”Р»РёС‚РµР»СЊРЅРѕСЃС‚СЊ РІСЃРµС… РёРЅС‚РµСЂРІР°Р»РѕРІ СЂР°Р±РѕС‚С‹
     property ItemDuration: integer read GetItemDuration;
 
     property Criteria: TWorkloadCriteria read FCriteria write FCriteria;
@@ -314,12 +318,12 @@ type
     property ShiftEmployee: variant read GetShiftEmployee write SetShiftEmployee;
     property ShiftAssistant: variant read GetShiftAssistant write SetShiftAssistant;
     property OperatorName: variant read GetEquipmentEmployeeName;// write SetEquipmentEmployeeName;
-    // Возможно нужно сделать отдельную процедуру для помошника
+    // Р’РѕР·РјРѕР¶РЅРѕ РЅСѓР¶РЅРѕ СЃРґРµР»Р°С‚СЊ РѕС‚РґРµР»СЊРЅСѓСЋ РїСЂРѕС†РµРґСѓСЂСѓ РґР»СЏ РїРѕРјРѕС€РЅРёРєР°
     property AssistantName: variant read GetEquipmentAssistantName;// write SetEquipmentAssistantName;
     property EquipmentEmployee: variant read GetEquipmentEmployee write SetEquipmentEmployee;
     property EquipmentAssistant: variant read GetEquipmentAssistant write SetEquipmentAssistant;
     property JobList: TJobList read FJobList;
-    // Заблокировано для редактирования
+    // Р—Р°Р±Р»РѕРєРёСЂРѕРІР°РЅРѕ РґР»СЏ СЂРµРґР°РєС‚РёСЂРѕРІР°РЅРёСЏ
     property Locked: boolean read FLocked write FLocked;
   end;
 
@@ -341,7 +345,7 @@ uses Forms, SysUtils, Variants, DateUtils,
   PmContragent, PmOrderProcessItems, PmEntSettings;
 
 const
-  SHIFTMARKER_EXCEPTION = 'Маркер смены не найден';
+  SHIFTMARKER_EXCEPTION = 'РњР°СЂРєРµСЂ СЃРјРµРЅС‹ РЅРµ РЅР°Р№РґРµРЅ';
 
 {$REGION 'TEstimateDurationCode' }
 type
@@ -374,7 +378,7 @@ end;
 procedure TEstimateDurationCode.DoPrgSetValue(Sender: TObject; Identifer: String;
   const Value: Variant; Args: TJvInterpreterArgs; var Done: Boolean);
 begin
-  // Нам не надо менять набор данных поэтому не вызываем предка
+  // РќР°Рј РЅРµ РЅР°РґРѕ РјРµРЅСЏС‚СЊ РЅР°Р±РѕСЂ РґР°РЅРЅС‹С… РїРѕСЌС‚РѕРјСѓ РЅРµ РІС‹Р·С‹РІР°РµРј РїСЂРµРґРєР°
   if CompareText(Identifer, 'Duration') = 0 then
   begin
     Duration := Value;
@@ -498,7 +502,7 @@ end;
 
 {$ENDREGION}
 
-{$REGION 'TPlan - работы, которые надо планировать'}
+{$REGION 'TPlan - СЂР°Р±РѕС‚С‹, РєРѕС‚РѕСЂС‹Рµ РЅР°РґРѕ РїР»Р°РЅРёСЂРѕРІР°С‚СЊ'}
 
 constructor TPlan.Create(_EquipGroupCode: integer);
 var
@@ -517,13 +521,13 @@ begin
   inherited Create('NoPlan_' + IntToStr(_EquipGroupCode){_Process.TableName}, 
     F_ItemID, _DataSet, _EquipGroupCode, {RequireEquipDic=} true);
 
-  //FDataSource.Free;  // меняем на свой
+  //FDataSource.Free;  // РјРµРЅСЏРµРј РЅР° СЃРІРѕР№
   FDataSource := _DataSource;
   DataSetProvider := _Provider;
   DefaultLastRecord := true;
 
   RefreshAfterApply := true;
-  FCalcFieldsScriptOK := true;  // иначе не будет работать calcfields
+  FCalcFieldsScriptOK := true;  // РёРЅР°С‡Рµ РЅРµ Р±СѓРґРµС‚ СЂР°Р±РѕС‚Р°С‚СЊ calcfields
 end;
 
 destructor TPlan.Destroy;
@@ -546,14 +550,14 @@ begin
   f.FieldName := TOrder.F_OrderState;
   f.DataSet := DataSet;
   f.Name := DataSet.Name + f.FieldName;
-  //f.Origin := 'opi.ExecState';  // Это надо для корректной выборки
+  //f.Origin := 'opi.ExecState';  // Р­С‚Рѕ РЅР°РґРѕ РґР»СЏ РєРѕСЂСЂРµРєС‚РЅРѕР№ РІС‹Р±РѕСЂРєРё
   //f.FieldKind := fkInternalCalc;
 
   f := TIntegerField.Create(DataSet.Owner);
   f.FieldName := 'OrderID';
   f.DataSet := DataSet;
   f.Name := DataSet.Name + f.FieldName;
-  //f.Origin := 'opi.OrderID';  // Это надо для корректной выборки
+  //f.Origin := 'opi.OrderID';  // Р­С‚Рѕ РЅР°РґРѕ РґР»СЏ РєРѕСЂСЂРµРєС‚РЅРѕР№ РІС‹Р±РѕСЂРєРё
 
   f := TIntegerField.Create(DataSet.Owner);
   f.FieldName := F_ItemID;
@@ -686,7 +690,13 @@ begin
   f.DataSet := DataSet;
   f.Name := DataSet.Name + f.FieldName;
 
-  // Теперь вычисляемые поля
+  f := TStringField.Create(DataSet.Owner);
+  f.FieldName := TOrder.F_CreatorName;
+  f.Size := TOrder.CreatorNameSize;
+  f.DataSet := DataSet;
+  f.Name := DataSet.Name + f.FieldName;
+
+  // РўРµРїРµСЂСЊ РІС‹С‡РёСЃР»СЏРµРјС‹Рµ РїРѕР»СЏ
 
   f := TBooleanField.Create(DataSet.Owner);
   f.FieldName := F_HasComment;
@@ -719,7 +729,7 @@ end;
 
 procedure TPlan.DoAfterOpen;
 begin
-  // Поля, по которым можно сортировать
+  // РџРѕР»СЏ, РїРѕ РєРѕС‚РѕСЂС‹Рј РјРѕР¶РЅРѕ СЃРѕСЂС‚РёСЂРѕРІР°С‚СЊ
   TClientDataSet(DataSet).AddIndex('iOrderState', TOrder.F_OrderState, []);
   TClientDataSet(DataSet).AddIndex('i' + TOrder.F_OrderNumber, TOrder.F_OrderNumber, []);
   TClientDataSet(DataSet).AddIndex('iCustomerName', 'CustomerName', [ixCaseInsensitive]);
@@ -742,7 +752,7 @@ begin
     if FCalcFieldsScriptOK then
     begin
       //ExecCode(PlanScr_OnNotPlannedCalcFields);
-      // Ищем процесс у которого есть сценарий вычисления полей
+      // РС‰РµРј РїСЂРѕС†РµСЃСЃ Сѓ РєРѕС‚РѕСЂРѕРіРѕ РµСЃС‚СЊ СЃС†РµРЅР°СЂРёР№ РІС‹С‡РёСЃР»РµРЅРёСЏ РїРѕР»РµР№
       if FindScript(FProcess, PlanScr_OnNotPlannedCalcFields) then
       begin
         DataSetCode := TPlanCalcFieldsCode.Create(DataSet, FProcess, PlanScr_OnNotPlannedCalcFields);
@@ -758,7 +768,7 @@ begin
         end;
       end
       else
-        FCalcFieldsScriptOK := false; // не нашли сценарий
+        FCalcFieldsScriptOK := false; // РЅРµ РЅР°С€Р»Рё СЃС†РµРЅР°СЂРёР№
     end;
   end;
 end;
@@ -770,7 +780,7 @@ end;
 
 procedure TPlan.DefaultPlanCalcFields;
 begin
-  // вычисляемые поля, по которым можно сортировать
+  // РІС‹С‡РёСЃР»СЏРµРјС‹Рµ РїРѕР»СЏ, РїРѕ РєРѕС‚РѕСЂС‹Рј РјРѕР¶РЅРѕ СЃРѕСЂС‚РёСЂРѕРІР°С‚СЊ
   //if DataSet.State = dsCalcFields then
   //begin
     if VarIsNull(DataSet[F_Part]) then DataSet[F_PartName] := ''
@@ -796,16 +806,16 @@ function TPlan.DefaultGetNotPlannedSQL: TCustomSQL;
 var
   DefaultSQL: TCustomSQL;
 begin
-{ Не должны попадать
-  - запланированные заказы
-  - заказы в завершающем состоянии,
-  - заказы у которых есть отметка о фактич. завершении }
+{ РќРµ РґРѕР»Р¶РЅС‹ РїРѕРїР°РґР°С‚СЊ
+  - Р·Р°РїР»Р°РЅРёСЂРѕРІР°РЅРЅС‹Рµ Р·Р°РєР°Р·С‹
+  - Р·Р°РєР°Р·С‹ РІ Р·Р°РІРµСЂС€Р°СЋС‰РµРј СЃРѕСЃС‚РѕСЏРЅРёРё,
+  - Р·Р°РєР°Р·С‹ Сѓ РєРѕС‚РѕСЂС‹С… РµСЃС‚СЊ РѕС‚РјРµС‚РєР° Рѕ С„Р°РєС‚РёС‡. Р·Р°РІРµСЂС€РµРЅРёРё }
 
   DefaultSQL.Select := 'opi.OrderID, opi.CustomerName, opi.JobID,'#13#10 +
     ' opi.Part, opi.EquipCode, opi.Comment, opi.ID_Number, opi.ItemDesc, opi.ProductOut,'#13#10 +
     ' opi.FinishDate, opi.PlanStartDate, opi.PlanFinishDate, opi.FactStartDate, opi.FactFinishDate,'#13#10 +
     ' opi.ItemID, opi.OrderState, opi.EstimatedDuration, opi.ProcessID, opi.OwnCost + opi.ItemProfit as Cost,'#13#10 +
-    ' opi.SideCount, opi.Multiplier, opi.JobComment, opi.JobAlert, opi.KindID,'#13#10 +
+    ' opi.SideCount, opi.Multiplier, opi.JobComment, opi.JobAlert, opi.KindID, opi.CreatorName,'#13#10 +
     ' ' + GetHasTechNotesExpr('opi.OrderID') + #13#10;
   {DefaultSQL.Select := 'opi.OrderID, cc.Name as CustomerName, j.JobID,'#13#10 +
     ' opi.Part, j.EquipCode, wo.Comment, wo.ID_Number, opi.ItemDesc, opi.ProductOut,'#13#10 +
@@ -838,7 +848,7 @@ begin
     '  and opi.PlanFinishDate is null and opi.FactFinishDate is null' +
     #13#10 +
     '  and dos.A7 <> 1 and (deq.A2 <> 1 or deq.A2 is null))';
-    // deq.A2 <> 1 проверяет исключение из плана для этого оборудования
+    // deq.A2 <> 1 РїСЂРѕРІРµСЂСЏРµС‚ РёСЃРєР»СЋС‡РµРЅРёРµ РёР· РїР»Р°РЅР° РґР»СЏ СЌС‚РѕРіРѕ РѕР±РѕСЂСѓРґРѕРІР°РЅРёСЏ
   Result := DefaultSQL;
 end;
 
@@ -849,7 +859,7 @@ begin
   if not VarIsNull(_Date) then
   begin
     dt := _Date;
-    // время 12:00:33:333 означает, что поле пустое (при непустой дате)
+    // РІСЂРµРјСЏ 12:00:33:333 РѕР·РЅР°С‡Р°РµС‚, С‡С‚Рѕ РїРѕР»Рµ РїСѓСЃС‚РѕРµ (РїСЂРё РЅРµРїСѓСЃС‚РѕР№ РґР°С‚Рµ)
     if VarIsNull(_Time) then _Time := EncodeTime(0, 0, 33, 333);
     ReplaceTime(dt, _Time);
     DateField.DataSet.Edit;
@@ -919,6 +929,11 @@ begin
   Result := DataSet['KindID'];
 end;
 
+function TPlan.GetCreatorName: string;
+begin
+  Result := VarToStr(DataSet[TOrder.F_CreatorName]);
+end;
+
 function TPlan.GetHasTechNotes: boolean;
 begin
   Result := NvlBoolean(DataSet[F_HasTechNotes]);
@@ -936,7 +951,7 @@ end;
 
 {$ENDREGION}
 
-{$REGION 'TWorkload - загрузка машины'}
+{$REGION 'TWorkload - Р·Р°РіСЂСѓР·РєР° РјР°С€РёРЅС‹'}
 
 constructor TWorkload.Create(_EquipCode: integer);
 var
@@ -953,23 +968,23 @@ begin
     upWhereKeyOnly, true {ResolveToDataSet}, Database.Connection, _Provider);
   _DataSet := _DataSource.DataSet;
 
-  // Вычисляем группу оборудования по коду оборудования
+  // Р’С‹С‡РёСЃР»СЏРµРј РіСЂСѓРїРїСѓ РѕР±РѕСЂСѓРґРѕРІР°РЅРёСЏ РїРѕ РєРѕРґСѓ РѕР±РѕСЂСѓРґРѕРІР°РЅРёСЏ
   _EquipGroupCode := TConfigManager.Instance.StandardDics.deEquip.ItemValue[_EquipCode, 1];
 
   inherited Create('DayPlan_' + IntToStr(_EquipCode){_Process.TableName},
     'JobID', _DataSet, _EquipGroupCode, {RequireEquipDic=} true);
 
-  //FDataSource.Free;  // меняем на свой
+  //FDataSource.Free;  // РјРµРЅСЏРµРј РЅР° СЃРІРѕР№
   FDataSource := _DataSource;
   DataSetProvider := _Provider;
 
   FEquipCode := _EquipCode;
   RefreshAfterApply := true;
-  FCalcFieldsScriptOK := true;  // иначе не будет работать calcfields
+  FCalcFieldsScriptOK := true;  // РёРЅР°С‡Рµ РЅРµ Р±СѓРґРµС‚ СЂР°Р±РѕС‚Р°С‚СЊ calcfields
 
-  // создаем списки сотрудников для оборудования
+  // СЃРѕР·РґР°РµРј СЃРїРёСЃРєРё СЃРѕС‚СЂСѓРґРЅРёРєРѕРІ РґР»СЏ РѕР±РѕСЂСѓРґРѕРІР°РЅРёСЏ
   FEquipEmployees := TEquipEmployees.Create(_EquipCode);
-  // создаем списки помошников для оборудования
+  // СЃРѕР·РґР°РµРј СЃРїРёСЃРєРё РїРѕРјРѕС€РЅРёРєРѕРІ РґР»СЏ РѕР±РѕСЂСѓРґРѕРІР°РЅРёСЏ
   FEquipAssistants := TEquipAssistants.Create(_EquipCode);
 
 
@@ -978,7 +993,7 @@ end;
 
 destructor TWorkload.Destroy;
 begin
-  //FShiftEmployees.Free; не удаляем, т.к. это общее для нескольких машин
+  //FShiftEmployees.Free; РЅРµ СѓРґР°Р»СЏРµРј, С‚.Рє. СЌС‚Рѕ РѕР±С‰РµРµ РґР»СЏ РЅРµСЃРєРѕР»СЊРєРёС… РјР°С€РёРЅ
   FEquipEmployees.Free;
   FEquipAssistants.Free;
   inherited Destroy;
@@ -1035,7 +1050,7 @@ begin
   f.FieldName := 'OrderID';
   f.DataSet := DataSet;
   f.Name := DataSet.Name + f.FieldName;
-  //f.Origin := 'sp.N';  // Это надо для корректной выборки
+  //f.Origin := 'sp.N';  // Р­С‚Рѕ РЅР°РґРѕ РґР»СЏ РєРѕСЂСЂРµРєС‚РЅРѕР№ РІС‹Р±РѕСЂРєРё
 
   f := TIntegerField.Create(DataSet.Owner);
   f.FieldName := F_ItemID;
@@ -1115,7 +1130,7 @@ begin
   f.Name := DataSet.Name + f.FieldName;
   TDateTimeField(f).DisplayFormat := 'dd.mm';
 
-  // дата желаемой сдачи заказа
+  // РґР°С‚Р° Р¶РµР»Р°РµРјРѕР№ СЃРґР°С‡Рё Р·Р°РєР°Р·Р°
   f := TDateTimeField.Create(DataSet.Owner);
   f.FieldName := 'FinishDate';
   f.DataSet := DataSet;
@@ -1255,6 +1270,12 @@ begin
   f.DataSet := DataSet;
   f.Name := DataSet.Name + f.FieldName;
 
+  f := TStringField.Create(DataSet.Owner);
+  f.FieldName := TOrder.F_CreatorName;
+  f.Size := TOrder.CreatorNameSize;
+  f.DataSet := DataSet;
+  f.Name := DataSet.Name + f.FieldName;
+
   {f := TIntegerField.Create(DataSet.Owner);
   f.FieldName := 'SplitCount1';
   f.DataSet := DataSet;
@@ -1270,7 +1291,7 @@ begin
   f.DataSet := DataSet;
   f.Name := DataSet.Name + f.FieldName;}
 
-  // Теперь вычисляемые поля
+  // РўРµРїРµСЂСЊ РІС‹С‡РёСЃР»СЏРµРјС‹Рµ РїРѕР»СЏ
 
   f := TDateTimeField.Create(DataSet.Owner);
   f.FieldName := F_AnyStart;
@@ -1405,7 +1426,7 @@ begin
     ' wo.OrderState, wo.ID_Number, opi.ItemID, wo.FinishDate, opi.EstimatedDuration, j.IsPaused,'#13#10 +
     ' j.Executor, j.FactProductOut, opi.ProcessID, j.JobID, j.JobComment, j.JobAlert, opi.AutoSplit,'#13#10 +
     ' j.SplitPart1, j.SplitPart2, j.SplitPart3, opi.SplitMode1, opi.SplitMode2, opi.SplitMode3,'#13#10 +
-    ' j.JobColor, wo.KindID,'#13#10 +
+    ' j.JobColor, wo.KindID, wo.CreatorName,'#13#10 +
     ' ' + GetHasTechNotesExpr('wo.N') + ','#13#10;
   //Result.Select := Result.Select + 'cast(0 as decimal(18, 2)) as Cost'#13#10;
   if EntSettings.NativeCurrency then
@@ -1441,7 +1462,7 @@ begin
     if FCalcFieldsScriptOK then
     begin
       //ExecCode(PlanScr_OnNotPlannedCalcFields);
-      // Ищем процесс у которого есть сценарий вычисляения полей
+      // РС‰РµРј РїСЂРѕС†РµСЃСЃ Сѓ РєРѕС‚РѕСЂРѕРіРѕ РµСЃС‚СЊ СЃС†РµРЅР°СЂРёР№ РІС‹С‡РёСЃР»СЏРµРЅРёСЏ РїРѕР»РµР№
       if FindScript(FProcess, PlanScr_OnNotPlannedCalcFields) then
       begin
         ScheduleCodeContext.JobEntity := Self;
@@ -1476,7 +1497,7 @@ begin
 
     if not IsShiftMarker then
     begin
-      // Состояние выполнения
+      // РЎРѕСЃС‚РѕСЏРЅРёРµ РІС‹РїРѕР»РЅРµРЅРёСЏ
       DataSet[TOrderProcessItems.F_ExecState] := PlanUtils.CalcExecState(DataSet);
 
       //TLogger.GetInstance.Info('PlanStart = ' + DateTimeToStr(DataSet[F_PlanStart]));
@@ -1486,7 +1507,7 @@ begin
       begin
         AnyDur := PlanUtils.FormatTimeValue(PlanUtils.RoundMinutesBetween(DataSet[TOrderProcessItems.F_PlanStart], DataSet[TOrderProcessItems.F_PlanFinish]));
       end else
-        AnyDur := ''; // вообще-то не должно быть тут таких записей, но мало ли...
+        AnyDur := ''; // РІРѕРѕР±С‰Рµ-С‚Рѕ РЅРµ РґРѕР»Р¶РЅРѕ Р±С‹С‚СЊ С‚СѓС‚ С‚Р°РєРёС… Р·Р°РїРёСЃРµР№, РЅРѕ РјР°Р»Рѕ Р»Рё...
       DataSet[TOrderProcessItems.F_PlanDuration] := AnyDur;
 
       if not VarIsNull(DataSet[TOrderProcessItems.F_FactStart]) and not VarIsNull(DataSet[TOrderProcessItems.F_FactFinish]) then
@@ -1508,7 +1529,7 @@ begin
       DataSet[F_AnyStart] := AnyStartDateTime;
       DataSet[F_AnyFinish] := AnyFinishDateTime;
 
-      // Стоимость с поправкой на количество
+      // РЎС‚РѕРёРјРѕСЃС‚СЊ СЃ РїРѕРїСЂР°РІРєРѕР№ РЅР° РєРѕР»РёС‡РµСЃС‚РІРѕ
       {if ItemProductOut > 0 then
       begin
         if not VarIsNull(FactProductOut) then
@@ -1533,8 +1554,8 @@ begin
     end
     else
     begin
-      // Для смены берем по плановой, т.к. она сдвинута на 1 сек назад для
-      // правильного упорядочения. 
+      // Р”Р»СЏ СЃРјРµРЅС‹ Р±РµСЂРµРј РїРѕ РїР»Р°РЅРѕРІРѕР№, С‚.Рє. РѕРЅР° СЃРґРІРёРЅСѓС‚Р° РЅР° 1 СЃРµРє РЅР°Р·Р°Рґ РґР»СЏ
+      // РїСЂР°РІРёР»СЊРЅРѕРіРѕ СѓРїРѕСЂСЏРґРѕС‡РµРЅРёСЏ. 
       DataSet[F_AnyStart] := DataSet[TOrderProcessItems.F_PlanStart];
       DataSet[F_AnyFinish] := DataSet[TOrderProcessItems.F_PlanFinish];
     end;
@@ -1584,7 +1605,7 @@ var
   //CheckedCount, k, CheckedCode: integer;
   _DayStart, _NextDayStart: TDateTime;
 
-  // Выбираем по плановой дате если фактическая не установлена, или по фактической
+  // Р’С‹Р±РёСЂР°РµРј РїРѕ РїР»Р°РЅРѕРІРѕР№ РґР°С‚Рµ РµСЃР»Рё С„Р°РєС‚РёС‡РµСЃРєР°СЏ РЅРµ СѓСЃС‚Р°РЅРѕРІР»РµРЅР°, РёР»Рё РїРѕ С„Р°РєС‚РёС‡РµСЃРєРѕР№
   function GetDateFilter(fPlan, fFact: string): string;
   begin
     Result := '(' + fPlan + ' between ' + FormatSQLDateTime(_DayStart) + ' and ' + FormatSQLDateTime(_NextDayStart) + ')'
@@ -1602,8 +1623,8 @@ begin
      + ', DayStart = ' + DateTimeToStr(_DayStart) + ' NextDayStart = ' + DateTimeToStr(_NextDayStart));
 
   //DecodeDate(WorkDate, _Year, Month, Day);
-  // Проверка на попадание даты начала или конца в диапазон или покрытие диапазона
-  // Если есть фактическая дата, то учитывается вместо плановой
+  // РџСЂРѕРІРµСЂРєР° РЅР° РїРѕРїР°РґР°РЅРёРµ РґР°С‚С‹ РЅР°С‡Р°Р»Р° РёР»Рё РєРѕРЅС†Р° РІ РґРёР°РїР°Р·РѕРЅ РёР»Рё РїРѕРєСЂС‹С‚РёРµ РґРёР°РїР°Р·РѕРЅР°
+  // Р•СЃР»Рё РµСЃС‚СЊ С„Р°РєС‚РёС‡РµСЃРєР°СЏ РґР°С‚Р°, С‚Рѕ СѓС‡РёС‚С‹РІР°РµС‚СЃСЏ РІРјРµСЃС‚Рѕ РїР»Р°РЅРѕРІРѕР№
   FilterExpr := '(' + GetDateFilter(fnPlanStartDate, fnFactStartDate)
     + ' or ' + GetDateFilter(fnPlanFinishDate, fnFactFinishDate)
     + ' or ((' + fnPlanStartDate + ' < ' + FormatSQLDateTime(_DayStart)
@@ -1652,12 +1673,12 @@ begin
   //LastShiftStart := 0;
   FreeShiftList;
   CreateShiftList;
-  // уже отсортировано по времени
+  // СѓР¶Рµ РѕС‚СЃРѕСЂС‚РёСЂРѕРІР°РЅРѕ РїРѕ РІСЂРµРјРµРЅРё
   DataSet.DisableControls;
   FCalcFieldsScriptOK := false;
   k := KeyValue;
   try
-    ShiftCount := GetShiftCount;   // кол-во смен в сутках
+    ShiftCount := GetShiftCount;   // РєРѕР»-РІРѕ СЃРјРµРЅ РІ СЃСѓС‚РєР°С…
     CurDate := RangeStart;
     ShiftNum := 1;
     while CurDate < RangeEnd do
@@ -1671,13 +1692,13 @@ begin
         DataSet.Append;
         SetShiftMarker;
         DataSet[KeyField] := -ShiftNum;
-        // сдвигаем на секунду назад чтобы упорядочение было правильным
+        // СЃРґРІРёРіР°РµРј РЅР° СЃРµРєСѓРЅРґСѓ РЅР°Р·Р°Рґ С‡С‚РѕР±С‹ СѓРїРѕСЂСЏРґРѕС‡РµРЅРёРµ Р±С‹Р»Рѕ РїСЂР°РІРёР»СЊРЅС‹Рј
         SetPlanStartDateTime(IncSecond(CurShiftStart, -1));
         SetPlanFinishDateTime(CurShiftStart);
         SetFactStartDateTime(CurShiftStart);
         SetFactFinishDateTime(CurShiftStart);
-        SetComment(DateToStr(CurShiftStart) + '  ' + IntToStr(I) + ' cмена');
-        // определяем конец смены
+        SetComment(DateToStr(CurShiftStart) + '  ' + IntToStr(I) + ' cРјРµРЅР°');
+        // РѕРїСЂРµРґРµР»СЏРµРј РєРѕРЅРµС† СЃРјРµРЅС‹
         if I < ShiftCount then
         begin
           ShiftEnd := GetShiftStartTime(I + 1);
@@ -1689,7 +1710,7 @@ begin
           CurShiftEnd := IncDay(CurDate, 1);
         end;
         ReplaceTime(CurShiftEnd, ShiftEnd);
-        // регистрируем смену в списке смен
+        // СЂРµРіРёСЃС‚СЂРёСЂСѓРµРј СЃРјРµРЅСѓ РІ СЃРїРёСЃРєРµ СЃРјРµРЅ
         si := TShiftInfo.Create(CurShiftStart, CurShiftEnd, ShiftNum, ShiftID);
         si.ShiftEmployeeID := NvlInteger(FShiftEmployees.GetEmployee(CurShiftStart));
         si.EquipAssistantID := NvlInteger(FEquipAssistants.GetEmployee(CurShiftStart));
@@ -1731,7 +1752,7 @@ var
   ds: TClientDataSet;
   NewCriteria: TShiftEmployeeCriteria;
 begin
-  // Поля, по которым можно сортировать - ПЕРЕДЕЛАНО. ТОЛЬКО ПО ВРЕМЕНИ СОРТИРОВКА.
+  // РџРѕР»СЏ, РїРѕ РєРѕС‚РѕСЂС‹Рј РјРѕР¶РЅРѕ СЃРѕСЂС‚РёСЂРѕРІР°С‚СЊ - РџР•Р Р•Р”Р•Р›РђРќРћ. РўРћР›Р¬РљРћ РџРћ Р’Р Р•РњР•РќР РЎРћР РўРР РћР’РљРђ.
   ds := TClientDataSet(DataSet);
   //ds.AddIndex('iExecState', 'ExecState', []);
   //ds.AddIndex('iID_Number', 'ID_Number', []);
@@ -1743,7 +1764,7 @@ begin
   ds.IndexDefs.Update;
   ds.IndexFieldNames := F_AnyStart;
 
-  // строим список объектов
+  // СЃС‚СЂРѕРёРј СЃРїРёСЃРѕРє РѕР±СЉРµРєС‚РѕРІ
   if FJobList <> nil then
   begin
     FJobList.FreeJobs;
@@ -1754,7 +1775,7 @@ begin
   if (Criteria.RangeType = PlanRange_Continuous)
     or (Criteria.RangeType = PlanRange_Week) then
   begin
-    // открываем списки сотрудников для смен
+    // РѕС‚РєСЂС‹РІР°РµРј СЃРїРёСЃРєРё СЃРѕС‚СЂСѓРґРЅРёРєРѕРІ РґР»СЏ СЃРјРµРЅ
     NewCriteria.StartTime := RangeStart;
     NewCriteria.FinishTime := RangeEnd;
     FShiftEmployees.Criteria := NewCriteria;
@@ -1766,9 +1787,9 @@ begin
     FEquipAssistants.Criteria := NewCriteria;
     FEquipAssistants.Reload;
 
-    // добавляем строки с информацией о сменах
+    // РґРѕР±Р°РІР»СЏРµРј СЃС‚СЂРѕРєРё СЃ РёРЅС„РѕСЂРјР°С†РёРµР№ Рѕ СЃРјРµРЅР°С…
     InsertShiftMarkers;
-    // Строим список работ по сменам
+    // РЎС‚СЂРѕРёРј СЃРїРёСЃРѕРє СЂР°Р±РѕС‚ РїРѕ СЃРјРµРЅР°Рј
     BuildShiftJobLists;
     CalcShiftCost;
     //ds.IndexName := '';
@@ -1854,6 +1875,11 @@ begin
   Result := VarToStr(DataSet['CustomerName']);
 end;
 
+function TWorkload.GetCreatorName: string;
+begin
+  Result := VarToStr(DataSet[TOrder.F_CreatorName]);
+end;
+
 function TWorkload.GetDayStart: TDateTime;
 var
   ShiftStart: TDateTime;
@@ -1864,16 +1890,16 @@ begin
   else
   if FCriteria.RangeType = PlanRange_Continuous then
   begin
-    // ищем начало смены, которая была ContinuousRange дней назад
+    // РёС‰РµРј РЅР°С‡Р°Р»Рѕ СЃРјРµРЅС‹, РєРѕС‚РѕСЂР°СЏ Р±С‹Р»Р° ContinuousRange РґРЅРµР№ РЅР°Р·Р°Рґ
     Result := IncDay(Result, -CONTINUOUS_RANGE);
-    ShiftStart := GetShiftStartTime(1);  // 1-я смена
+    ShiftStart := GetShiftStartTime(1);  // 1-СЏ СЃРјРµРЅР°
     ReplaceTime(Result, ShiftStart);
   end
   else if Criteria.RangeType = PlanRange_Week then
   begin
-    // ищем начало смены, которая была WEEK_RANGE день назад
+    // РёС‰РµРј РЅР°С‡Р°Р»Рѕ СЃРјРµРЅС‹, РєРѕС‚РѕСЂР°СЏ Р±С‹Р»Р° WEEK_RANGE РґРµРЅСЊ РЅР°Р·Р°Рґ
     Result := IncDay(Result, -WEEK_RANGE_BACKWARD);
-    ShiftStart := GetShiftStartTime(1);  // 1-я смена
+    ShiftStart := GetShiftStartTime(1);  // 1-СЏ СЃРјРµРЅР°
     ReplaceTime(Result, ShiftStart);
   end
   else
@@ -1894,7 +1920,7 @@ var
   ds: TDataSet;
 begin
   ds := de.DicItems;
-  // находим мин. код - это первая смена
+  // РЅР°С…РѕРґРёРј РјРёРЅ. РєРѕРґ - СЌС‚Рѕ РїРµСЂРІР°СЏ СЃРјРµРЅР°
   MinCode := 0;
   while not ds.eof do
   begin
@@ -1912,7 +1938,7 @@ begin
     Result := EncodeTime(0, 0, 0, 0);
 end;
 
-// Ищет начало первой смены для текущей группы оборудования в справочнике
+// РС‰РµС‚ РЅР°С‡Р°Р»Рѕ РїРµСЂРІРѕР№ СЃРјРµРЅС‹ РґР»СЏ С‚РµРєСѓС‰РµР№ РіСЂСѓРїРїС‹ РѕР±РѕСЂСѓРґРѕРІР°РЅРёСЏ РІ СЃРїСЂР°РІРѕС‡РЅРёРєРµ
 function TWorkload.GetFirstShiftStartTime: TDateTime;
 var
   ds: TDataSet;
@@ -1920,17 +1946,17 @@ var
 begin
   de := TConfigManager.Instance.StandardDics.deEquipTime;
   ds := de.DicItems;
-  // Фильтруем справочник по коду оборудования
+  // Р¤РёР»СЊС‚СЂСѓРµРј СЃРїСЂР°РІРѕС‡РЅРёРє РїРѕ РєРѕРґСѓ РѕР±РѕСЂСѓРґРѕРІР°РЅРёСЏ
   ds.Filter := 'A1 = ' + IntToStr(EquipCode);
   ds.Filtered := true;
   try
-    if ds.RecordCount > 0 then  // Если есть данные, то берем мз этого справочника
+    if ds.RecordCount > 0 then  // Р•СЃР»Рё РµСЃС‚СЊ РґР°РЅРЅС‹Рµ, С‚Рѕ Р±РµСЂРµРј РјР· СЌС‚РѕРіРѕ СЃРїСЂР°РІРѕС‡РЅРёРєР°
       Result := GetStartDic(de)
-    else                       // иначе ищем в справочнике смен для групп
+    else                       // РёРЅР°С‡Рµ РёС‰РµРј РІ СЃРїСЂР°РІРѕС‡РЅРёРєРµ СЃРјРµРЅ РґР»СЏ РіСЂСѓРїРї
     begin
       de := TConfigManager.Instance.StandardDics.deEquipGroupTime;
       ds := de.DicItems;
-      // Фильтруем справочник по коду группы
+      // Р¤РёР»СЊС‚СЂСѓРµРј СЃРїСЂР°РІРѕС‡РЅРёРє РїРѕ РєРѕРґСѓ РіСЂСѓРїРїС‹
       ds.Filter := 'A1 = ' + IntToStr(EquipGroupCode);
       ds.Filtered := true;
       try
@@ -1945,7 +1971,7 @@ begin
   end;
 end;
 
-// Возвращает начало указанной смены для текущей группы оборудования в справочнике
+// Р’РѕР·РІСЂР°С‰Р°РµС‚ РЅР°С‡Р°Р»Рѕ СѓРєР°Р·Р°РЅРЅРѕР№ СЃРјРµРЅС‹ РґР»СЏ С‚РµРєСѓС‰РµР№ РіСЂСѓРїРїС‹ РѕР±РѕСЂСѓРґРѕРІР°РЅРёСЏ РІ СЃРїСЂР°РІРѕС‡РЅРёРєРµ
 function TWorkload.GetShiftStartTime(ShiftNum: integer): TDateTime;
 var
   ShiftCount, ID: integer;
@@ -1953,7 +1979,7 @@ begin
   Result := GetShiftFieldValue(ShiftNum, 2, ShiftCount, ID);
 end;
 
-// Возвращает окончание указанной смены для текущей группы оборудования в справочнике
+// Р’РѕР·РІСЂР°С‰Р°РµС‚ РѕРєРѕРЅС‡Р°РЅРёРµ СѓРєР°Р·Р°РЅРЅРѕР№ СЃРјРµРЅС‹ РґР»СЏ С‚РµРєСѓС‰РµР№ РіСЂСѓРїРїС‹ РѕР±РѕСЂСѓРґРѕРІР°РЅРёСЏ РІ СЃРїСЂР°РІРѕС‡РЅРёРєРµ
 function TWorkload.GetShiftFinishTime(ShiftNum: integer): TDateTime;
 var
   ShiftCount, ID: integer;
@@ -1961,7 +1987,7 @@ begin
   Result := GetShiftFieldValue(ShiftNum, 3, ShiftCount, ID);
 end;
 
-// Возвращает ключ смены для текущей группы оборудования в справочнике смен
+// Р’РѕР·РІСЂР°С‰Р°РµС‚ РєР»СЋС‡ СЃРјРµРЅС‹ РґР»СЏ С‚РµРєСѓС‰РµР№ РіСЂСѓРїРїС‹ РѕР±РѕСЂСѓРґРѕРІР°РЅРёСЏ РІ СЃРїСЂР°РІРѕС‡РЅРёРєРµ СЃРјРµРЅ
 function TWorkload.GetShiftID(ShiftNum: integer): integer;
 var
   Count: integer;
@@ -1969,14 +1995,14 @@ begin
   GetShiftFieldValue(-1, 2, Count, Result);
 end;
 
-// вспомогательная
+// РІСЃРїРѕРјРѕРіР°С‚РµР»СЊРЅР°СЏ
 function GetShiftFieldValueDic(de: TDictionary; ShiftNum, FieldNum: integer; var ID: integer): TDateTime;
 var
   ds: TDataSet;
   RecNum: integer;
 begin
   ds := de.DicItems;
-  // номер записи соотв. номеру смены, пропускаем нужное кол-во записей
+  // РЅРѕРјРµСЂ Р·Р°РїРёСЃРё СЃРѕРѕС‚РІ. РЅРѕРјРµСЂСѓ СЃРјРµРЅС‹, РїСЂРѕРїСѓСЃРєР°РµРј РЅСѓР¶РЅРѕРµ РєРѕР»-РІРѕ Р·Р°РїРёСЃРµР№
   RecNum := 1;
   while not ds.eof and (RecNum < ShiftNum) do
   begin
@@ -1991,7 +2017,7 @@ begin
   end;
 end;
 
-// Возвращает указанное поле для смены для текущей группы оборудования в справочнике
+// Р’РѕР·РІСЂР°С‰Р°РµС‚ СѓРєР°Р·Р°РЅРЅРѕРµ РїРѕР»Рµ РґР»СЏ СЃРјРµРЅС‹ РґР»СЏ С‚РµРєСѓС‰РµР№ РіСЂСѓРїРїС‹ РѕР±РѕСЂСѓРґРѕРІР°РЅРёСЏ РІ СЃРїСЂР°РІРѕС‡РЅРёРєРµ
 function TWorkload.GetShiftFieldValue(ShiftNum, FieldNum: integer; var ShiftCount, ID: integer): TDateTime;
 var
   ds: TDataSet;
@@ -1999,18 +2025,18 @@ var
 begin
   de := TConfigManager.Instance.StandardDics.deEquipTime;
   ds := de.DicItems;
-  // Фильтруем справочник по коду оборудования
+  // Р¤РёР»СЊС‚СЂСѓРµРј СЃРїСЂР°РІРѕС‡РЅРёРє РїРѕ РєРѕРґСѓ РѕР±РѕСЂСѓРґРѕРІР°РЅРёСЏ
   ds.Filter := 'A1 = ' + IntToStr(EquipCode);
   ds.Filtered := true;
   try
     ShiftCount := ds.RecordCount;
-    if ShiftCount > 0 then  // Еси что-то есть, то
+    if ShiftCount > 0 then  // Р•СЃРё С‡С‚Рѕ-С‚Рѕ РµСЃС‚СЊ, С‚Рѕ
       Result := GetShiftFieldValueDic(de, ShiftNum, FieldNum, ID)
     else
     begin
       de := TConfigManager.Instance.StandardDics.deEquipGroupTime;
       ds := de.DicItems;
-      // Фильтруем справочник по коду группы
+      // Р¤РёР»СЊС‚СЂСѓРµРј СЃРїСЂР°РІРѕС‡РЅРёРє РїРѕ РєРѕРґСѓ РіСЂСѓРїРїС‹
       ds.Filter := 'A1 = ' + IntToStr(EquipGroupCode);
       ds.Filtered := true;
       try
@@ -2018,7 +2044,7 @@ begin
         if ShiftCount <> 0 then
           Result := GetShiftFieldValueDic(de, ShiftNum, FieldNum, ID)
         else
-          ExceptionHandler.Raise_('Отсутствует расписание смен для оборудования '
+          ExceptionHandler.Raise_('РћС‚СЃСѓС‚СЃС‚РІСѓРµС‚ СЂР°СЃРїРёСЃР°РЅРёРµ СЃРјРµРЅ РґР»СЏ РѕР±РѕСЂСѓРґРѕРІР°РЅРёСЏ '
             + TConfigManager.Instance.StandardDics.deEquip.ItemName[EquipCode]);
       finally
         ds.Filtered := false;
@@ -2029,7 +2055,7 @@ begin
   end;
 end;
 
-// Возвращает количество смен для данной группы оборудования
+// Р’РѕР·РІСЂР°С‰Р°РµС‚ РєРѕР»РёС‡РµСЃС‚РІРѕ СЃРјРµРЅ РґР»СЏ РґР°РЅРЅРѕР№ РіСЂСѓРїРїС‹ РѕР±РѕСЂСѓРґРѕРІР°РЅРёСЏ
 function TWorkload.GetShiftCount: integer;
 var
   ID: integer;
@@ -2147,7 +2173,7 @@ begin
   Result.OrderID := OrderID;
   Result.JobColor := DataSet['JobColor'];
   Result.JobCost := DataSet[F_JobCost];
-  // Только для нормальных работ
+  // РўРѕР»СЊРєРѕ РґР»СЏ РЅРѕСЂРјР°Р»СЊРЅС‹С… СЂР°Р±РѕС‚
   if JobType = JobType_Work then
     Result.FactProductOut := FactProductOut;
   Result.ClearChanges;
@@ -2193,7 +2219,7 @@ begin
   DataSet['IsPaused'] := Job.IsPaused;
   DataSet['Multiplier'] := Job.Multiplier;
   DataSet['SideCount'] := Job.SideCount;
-  // Только для нормальных работ
+  // РўРѕР»СЊРєРѕ РґР»СЏ РЅРѕСЂРјР°Р»СЊРЅС‹С… СЂР°Р±РѕС‚
   if JobType = JobType_Work then
     DataSet[TOrderProcessItems.F_FactProductOut] := Job.FactProductOut;
 end;}
@@ -2213,22 +2239,22 @@ begin
   else
   if FCriteria.RangeType = PlanRange_Continuous then
   begin
-    // находим начало смены, которая будет через CONTINUOUS_RANGE дней
+    // РЅР°С…РѕРґРёРј РЅР°С‡Р°Р»Рѕ СЃРјРµРЅС‹, РєРѕС‚РѕСЂР°СЏ Р±СѓРґРµС‚ С‡РµСЂРµР· CONTINUOUS_RANGE РґРЅРµР№
     Result := IncDay(Criteria.Date, CONTINUOUS_RANGE);
-    ShiftStart := GetShiftStartTime(1);  // 1-я смена
+    ShiftStart := GetShiftStartTime(1);  // 1-СЏ СЃРјРµРЅР°
     ReplaceTime(Result, ShiftStart);
   end
   else
   if FCriteria.RangeType = PlanRange_Week then
   begin
-    // находим начало смены, которая будет через WEEK_RANGE дней
+    // РЅР°С…РѕРґРёРј РЅР°С‡Р°Р»Рѕ СЃРјРµРЅС‹, РєРѕС‚РѕСЂР°СЏ Р±СѓРґРµС‚ С‡РµСЂРµР· WEEK_RANGE РґРЅРµР№
     Result := IncDay(Criteria.Date, WEEK_RANGE_FORWARD);
-    ShiftStart := GetShiftStartTime(1);  // 1-я смена
+    ShiftStart := GetShiftStartTime(1);  // 1-СЏ СЃРјРµРЅР°
     ReplaceTime(Result, ShiftStart);
   end
   else
   begin
-    // Вычисляет окончание текущей смены
+    // Р’С‹С‡РёСЃР»СЏРµС‚ РѕРєРѕРЅС‡Р°РЅРёРµ С‚РµРєСѓС‰РµР№ СЃРјРµРЅС‹
     ShiftStart := GetShiftStartTime(FCriteria.RangeType - PlanRange_FirstShift + 1);
     ShiftFinish := GetShiftFinishTime(FCriteria.RangeType - PlanRange_FirstShift + 1);
     Result := RangeStart;
@@ -2237,7 +2263,7 @@ begin
     else
     begin
       Result := IncDay(RangeStart, 1);
-      // если время окончания меньше или = то это означает следующие сутки
+      // РµСЃР»Рё РІСЂРµРјСЏ РѕРєРѕРЅС‡Р°РЅРёСЏ РјРµРЅСЊС€Рµ РёР»Рё = С‚Рѕ СЌС‚Рѕ РѕР·РЅР°С‡Р°РµС‚ СЃР»РµРґСѓСЋС‰РёРµ СЃСѓС‚РєРё
       ReplaceTime(Result, ShiftFinish);
     end;
   end;
@@ -2352,7 +2378,7 @@ begin
   JobComment := NvlString(ShiftEmployeeName) + EMP_SEPARATOR + NvlString(val);
 end;}
 
-// возвращает список смен TShiftInfo
+// РІРѕР·РІСЂР°С‰Р°РµС‚ СЃРїРёСЃРѕРє СЃРјРµРЅ TShiftInfo
 function TWorkload.ShiftList: TShiftList;
 begin
   Result := FShiftList;
@@ -2441,7 +2467,7 @@ begin
   Result := false;
 end;
 
-// Используется для фильтрации при построении списка работ для каждой смены
+// РСЃРїРѕР»СЊР·СѓРµС‚СЃСЏ РґР»СЏ С„РёР»СЊС‚СЂР°С†РёРё РїСЂРё РїРѕСЃС‚СЂРѕРµРЅРёРё СЃРїРёСЃРєР° СЂР°Р±РѕС‚ РґР»СЏ РєР°Р¶РґРѕР№ СЃРјРµРЅС‹
 {procedure TWorkload.ShiftFilter(DataSet: TDataSet; var Accept: Boolean);
 var
   AnyStartDate: TDateTime;
@@ -2460,7 +2486,7 @@ begin
     Accept := false;
 end;}
 
-// Строит список работ для каждой смены
+// РЎС‚СЂРѕРёС‚ СЃРїРёСЃРѕРє СЂР°Р±РѕС‚ РґР»СЏ РєР°Р¶РґРѕР№ СЃРјРµРЅС‹
 {procedure TWorkload.BuildJobLists;
 var
   I: Integer;
@@ -2493,8 +2519,8 @@ begin
       while not DataSet.eof do
       begin
         Job := CreateJobParams;
-        ShiftJobList.Add(Job);  // Добавляем в список работ для смены
-        FJobList.Add(Job);  // Добавляем в общий список работ
+        ShiftJobList.Add(Job);  // Р”РѕР±Р°РІР»СЏРµРј РІ СЃРїРёСЃРѕРє СЂР°Р±РѕС‚ РґР»СЏ СЃРјРµРЅС‹
+        FJobList.Add(Job);  // Р”РѕР±Р°РІР»СЏРµРј РІ РѕР±С‰РёР№ СЃРїРёСЃРѕРє СЂР°Р±РѕС‚
         DataSet.Next;
       end;
       FreeAndNil(SI.JobList);
@@ -2524,7 +2550,7 @@ begin
       if not IsShiftMarker then
       begin
         Job := CreateJobParams;
-        Result.Add(Job);  // Добавляем в общий список работ
+        Result.Add(Job);  // Р”РѕР±Р°РІР»СЏРµРј РІ РѕР±С‰РёР№ СЃРїРёСЃРѕРє СЂР°Р±РѕС‚
       end;
       DataSet.Next;
     end;
@@ -2557,7 +2583,7 @@ begin
   end;
 end;
 
-// Строит список работ для каждой смены
+// РЎС‚СЂРѕРёС‚ СЃРїРёСЃРѕРє СЂР°Р±РѕС‚ РґР»СЏ РєР°Р¶РґРѕР№ СЃРјРµРЅС‹
 procedure TWorkload.BuildShiftJobLists;
 var
   I: Integer;
@@ -2612,7 +2638,7 @@ end;
 procedure TWorkload.SortJobs;
 begin
   FJobList.Sort(@CompareJobs);
-  FJobList.GetMaxJobID; // обновляем значени
+  FJobList.GetMaxJobID; // РѕР±РЅРѕРІР»СЏРµРј Р·РЅР°С‡РµРЅРё
   if (Criteria.RangeType = PlanRange_Continuous) or (Criteria.RangeType = PlanRange_Week) then
     BuildShiftJobLists;
 end;

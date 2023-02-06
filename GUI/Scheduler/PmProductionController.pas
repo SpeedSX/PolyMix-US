@@ -53,7 +53,7 @@ begin
   FFilter := TProductionFilterObj.Create;
   Production.Criteria := FFilter as TProductionFilterObj;
   FFilter.RestoreFilter(TSettingsManager.Instance.Storage, iniFilter + FEntity.InternalName);
-  FCaption := 'В работе: ' + TConfigManager.Instance.StandardDics.deEquipGroup.ItemName[TProduction(_Entity).EquipGroupCode];
+  FCaption := 'Р’ СЂР°Р±РѕС‚Рµ: ' + TConfigManager.Instance.StandardDics.deEquipGroup.ItemName[TProduction(_Entity).EquipGroupCode];
   Production.OnScriptError := ScriptError;
 end;
 
@@ -110,7 +110,7 @@ procedure TProductionController.Activate;
 var
   Save_Cursor: TCursor;
 begin
-  // не обновлять если уже открыт
+  // РЅРµ РѕР±РЅРѕРІР»СЏС‚СЊ РµСЃР»Рё СѓР¶Рµ РѕС‚РєСЂС‹С‚
   if not Production.DataSet.Active then
   begin
     //TProductionFrame(FFrame).OpenData;
@@ -151,10 +151,10 @@ var
   FName: string;
   DateTo: TDateTime;
 begin
-  // TODO: Здесь надо было бы выдать предупреждение, если много записей
+  // TODO: Р—РґРµСЃСЊ РЅР°РґРѕ Р±С‹Р»Рѕ Р±С‹ РІС‹РґР°С‚СЊ РїСЂРµРґСѓРїСЂРµР¶РґРµРЅРёРµ, РµСЃР»Рё РјРЅРѕРіРѕ Р·Р°РїРёСЃРµР№
   Production.FetchAllRecords;
   //Plan_GetReportParams(FileName, RptCaption, ReportFields);
-  { TODO: ЗАПЛАТКА, надо где-то брать это имя файла!!!!!!!!!!!!!!!!!! }
+  { TODO: Р—РђРџР›РђРўРљРђ, РЅР°РґРѕ РіРґРµ-С‚Рѕ Р±СЂР°С‚СЊ СЌС‚Рѕ РёРјСЏ С„Р°Р№Р»Р°!!!!!!!!!!!!!!!!!! }
   if Production.EquipGroupCode = 1 then
     FileName := 'Production_Print.xls'
   else
@@ -168,7 +168,7 @@ begin
   Rpt := ScriptManager.OpenReport(ExtractFileDir(ParamStr(0)) + '\' + FileName);
   if Rpt <> nil then
   begin
-    Rpt.WinCaption1 := 'Excel -::- PolyMix'; // Изменение заголовка окна
+    Rpt.WinCaption1 := 'Excel -::- PolyMix'; // РР·РјРµРЅРµРЅРёРµ Р·Р°РіРѕР»РѕРІРєР° РѕРєРЅР°
     Rpt.WinCaption2 := RptCaption; //Plan_GetReportCaption;
     Rpt.FontApplied := false;
     DataSet := Production.DataSet;
@@ -218,11 +218,22 @@ begin
 
 end;
 
-// Открывает текущий заказ для редактирования
+// РћС‚РєСЂС‹РІР°РµС‚ С‚РµРєСѓС‰РёР№ Р·Р°РєР°Р· РґР»СЏ СЂРµРґР°РєС‚РёСЂРѕРІР°РЅРёСЏ
 procedure TProductionController.DoOpenOrder(Sender: TObject);
+var
+  KRec: TKindPerm;
 begin
   if Production.OrderID > 0 then
+  begin
+    // РњР°СЋС‚СЊ Р±СѓС‚Рё РїСЂР°РІР° РЅР° РїРµСЂРµРіР»СЏРґ Р·Р°РјРѕРІР»РµРЅРЅСЏ
+    if AccessManager.CurUser.WorkViewOwnOnly and (CompareText(Production.CreatorName, AccessManager.CurUser.Login) <> 0) then
+      Exit;
+
+    AccessManager.ReadUserKindPermTo(KRec, Production.KindID, AccessManager.CurUser.ID);
+    if not KRec.WorkVisible or not KRec.WorkBrowse then Exit;
+
     AppController.EditWorkOrder(Production.OrderID);
+  end;
 end;
 
 function TProductionController.GetToolbar: TjvSpeedbar;

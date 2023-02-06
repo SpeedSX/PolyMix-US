@@ -2952,22 +2952,28 @@ procedure TPlanController.DoOpenOrder(Sender: TObject);
 var
   OrderID, KindID: Variant;
   KRec: TKindPerm;
+  CreatorName: string;
 begin
   if Sender = Plan then
   begin
     OrderID := Plan.OrderID;
     KindID := Plan.KindID;
+    CreatorName := Plan.CreatorName;
   end
   else
   begin
     OrderID := PlanFrame.CurrentWorkload.OrderID;
     KindID := PlanFrame.CurrentWorkload.KindID;
+    CreatorName := PlanFrame.CurrentWorkload.CreatorName;
   end;
 
   if not VarIsNull(OrderID) then
   begin
     // Мають бути права на перегляд замовлення
-    AccessManager.ReadUserKindPermTo(KRec, Plan.KindID, AccessManager.CurUser.ID);
+    if AccessManager.CurUser.WorkViewOwnOnly and (CompareText(CreatorName, AccessManager.CurUser.Login) <> 0) then
+      Exit;
+
+    AccessManager.ReadUserKindPermTo(KRec, KindID, AccessManager.CurUser.ID);
     if not KRec.WorkVisible or not KRec.WorkBrowse then Exit;
 
     AppController.EditWorkOrder(OrderID);

@@ -22,6 +22,8 @@ type
     function Production_GetProductionSQL(var HasWhere: boolean): TQueryObject;
     procedure GetDurationText(Sender: TField; var Text: String; DisplayText: Boolean);
     function GetIsPaused: boolean;
+    function GetKindID: variant;
+    function GetCreatorName: string;
     //function GetOrderID: Integer;
   protected
     procedure DoOnCalcFields; override;
@@ -39,6 +41,8 @@ type
     property EstimatedDuration: Integer read GetEstimatedDuration;
     property ItemID: Integer read GetItemID;
     property IsPaused: boolean read GetIsPaused;
+    property KindID: variant read GetKindID;
+    property CreatorName: string read GetCreatorName;
     //property OrderID: integer read GetOrderID;
 
     property Criteria: TProductionFilterObj read FCriteria write FCriteria;
@@ -52,7 +56,7 @@ uses Forms, SysUtils, Variants, Provider,
   PlanUtils, StdDic, PmAccessManager, JvInterpreter_Schedule,
   PmContragent, PmConfigManager;
 
-{$REGION 'TProduction - работы по группе оборудования'}
+{$REGION 'TProduction - СЂР°Р±РѕС‚С‹ РїРѕ РіСЂСѓРїРїРµ РѕР±РѕСЂСѓРґРѕРІР°РЅРёСЏ'}
 
 constructor TProduction.Create(_EquipGroupCode: integer);
 var
@@ -71,12 +75,12 @@ begin
   inherited Create('Production_' + IntToStr(_EquipGroupCode),
     F_JobID, _DataSet, _EquipGroupCode, {RequireEquipDic=} false);
 
-  //FDataSource.Free;  // меняем на свой
+  //FDataSource.Free;  // РјРµРЅСЏРµРј РЅР° СЃРІРѕР№
   FDataSource := _DataSource;
   DataSetProvider := _Provider;
 
   RefreshAfterApply := true;
-  FCalcFieldsScriptOK := true;  // иначе не будет работать calcfields
+  FCalcFieldsScriptOK := true;  // РёРЅР°С‡Рµ РЅРµ Р±СѓРґРµС‚ СЂР°Р±РѕС‚Р°С‚СЊ calcfields
 
   SetLength(FDateFields, 5);
   FDateFields[0] := TOrderProcessItems.F_PlanStart;
@@ -95,10 +99,10 @@ end;
 
 procedure TProduction.CreateDataSet;
 begin
-  // создаем стандартные
+  // СЃРѕР·РґР°РµРј СЃС‚Р°РЅРґР°СЂС‚РЅС‹Рµ
   DefaultCreateProductionData;
   //if not ExecCode(PlanScr_OnCreateProduction) then
-  // и добавляем описанные сценарием
+  // Рё РґРѕР±Р°РІР»СЏРµРј РѕРїРёСЃР°РЅРЅС‹Рµ СЃС†РµРЅР°СЂРёРµРј
   ExecCode(PlanScr_OnCreateProduction);
   FDataSetCreated := true;
 end;
@@ -159,7 +163,7 @@ end;}
 
 procedure TProduction.DoAfterOpen;
 begin
-  // Поля, по которым можно сортировать
+  // РџРѕР»СЏ, РїРѕ РєРѕС‚РѕСЂС‹Рј РјРѕР¶РЅРѕ СЃРѕСЂС‚РёСЂРѕРІР°С‚СЊ
   TClientDataSet(DataSet).AddIndex('iOrderState', TOrder.F_OrderState, []);
   TClientDataSet(DataSet).AddIndex('i' + TOrder.F_OrderNumber, TOrder.F_OrderNumber, []);
   TClientDataSet(DataSet).AddIndex('iCustomerName', 'CustomerName', [ixCaseInsensitive]);
@@ -180,10 +184,10 @@ var
 begin
   //if not FCalcFieldsScriptOK then
   DefaultCalcFields;
-  // не выполнять больше если там ошибка
+  // РЅРµ РІС‹РїРѕР»РЅСЏС‚СЊ Р±РѕР»СЊС€Рµ РµСЃР»Рё С‚Р°Рј РѕС€РёР±РєР°
   if FCalcFieldsScriptOK then
   begin
-    // Ищем процесс у которого есть сценарий вычисления полей
+    // РС‰РµРј РїСЂРѕС†РµСЃСЃ Сѓ РєРѕС‚РѕСЂРѕРіРѕ РµСЃС‚СЊ СЃС†РµРЅР°СЂРёР№ РІС‹С‡РёСЃР»РµРЅРёСЏ РїРѕР»РµР№
     if FindScript(FProcess, PlanScr_OnNotPlannedCalcFields) then
     begin
       DataSetCode := TPlanCalcFieldsCode.Create(DataSet, FProcess, PlanScr_OnNotPlannedCalcFields);
@@ -203,7 +207,7 @@ end;
 
 procedure TProduction.DefaultCalcFields;
 begin
-  // вычисляемые поля, по которым можно сортировать
+  // РІС‹С‡РёСЃР»СЏРµРјС‹Рµ РїРѕР»СЏ, РїРѕ РєРѕС‚РѕСЂС‹Рј РјРѕР¶РЅРѕ СЃРѕСЂС‚РёСЂРѕРІР°С‚СЊ
   if DataSet.State = dsCalcFields then
   begin
     if DataSet.FindField('EquipName') <> nil then
@@ -219,7 +223,7 @@ begin
       DataSet[F_PartName] := PlanUtils.GetPartName(Part, SplitMode1, SplitMode2, SplitMode3,
         SplitPart1, SplitPart2, SplitPart3, true);
 
-    // Состояние выполнения
+    // РЎРѕСЃС‚РѕСЏРЅРёРµ РІС‹РїРѕР»РЅРµРЅРёСЏ
     DataSet['ExecState'] := CalcExecState(DataSet);
     //CalcDuration(DataSet);
 
@@ -248,13 +252,13 @@ begin
   f.FieldName := TOrder.F_OrderState;
   f.DataSet := DataSet;
   f.Name := DataSet.Name + f.FieldName;
-  //f.Origin := 'opi.ExecState';  // Это надо для корректной выборки
+  //f.Origin := 'opi.ExecState';  // Р­С‚Рѕ РЅР°РґРѕ РґР»СЏ РєРѕСЂСЂРµРєС‚РЅРѕР№ РІС‹Р±РѕСЂРєРё
 
   f := TIntegerField.Create(DataSet.Owner);
   f.FieldName := 'ExecState';
   f.DataSet := DataSet;
   f.Name := DataSet.Name + f.FieldName;
-  //f.Origin := 'opi.ExecState';  // Это надо для корректной выборки
+  //f.Origin := 'opi.ExecState';  // Р­С‚Рѕ РЅР°РґРѕ РґР»СЏ РєРѕСЂСЂРµРєС‚РЅРѕР№ РІС‹Р±РѕСЂРєРё
   f.FieldKind := fkInternalCalc;
 
   f := TIntegerField.Create(DataSet.Owner);
@@ -272,10 +276,10 @@ begin
   f.DataSet := DataSet;
   f.Name := DataSet.Name + f.FieldName;
 
-  {f := TIntegerField.Create(DataSet.Owner);
+  f := TIntegerField.Create(DataSet.Owner);
   f.FieldName := 'KindID';
   f.DataSet := DataSet;
-  f.Name := DataSet.Name + f.FieldName;}
+  f.Name := DataSet.Name + f.FieldName;
 
   f := TIntegerField.Create(DataSet.Owner);
   f.FieldName := TOrder.F_OrderNumber;
@@ -377,7 +381,7 @@ begin
   f.DataSet := DataSet;
   f.Name := DataSet.Name + f.FieldName;
   TDateTimeField(f).DisplayFormat := 'dd.mm';
-  //f.Origin := 'wo.FactFinishDate';  // Это надо для корректной выборки
+  //f.Origin := 'wo.FactFinishDate';  // Р­С‚Рѕ РЅР°РґРѕ РґР»СЏ РєРѕСЂСЂРµРєС‚РЅРѕР№ РІС‹Р±РѕСЂРєРё
 
   f := TIntegerField.Create(DataSet.Owner);
   f.FieldName := 'Customer';
@@ -431,7 +435,13 @@ begin
   f.DataSet := DataSet;
   f.Name := DataSet.Name + f.FieldName;
 
-  // Теперь вычисляемые поля
+  f := TStringField.Create(DataSet.Owner);
+  f.FieldName := TOrder.F_CreatorName;
+  f.Size := TOrder.CreatorNameSize;
+  f.DataSet := DataSet;
+  f.Name := DataSet.Name + f.FieldName;
+
+  // РўРµРїРµСЂСЊ РІС‹С‡РёСЃР»СЏРµРјС‹Рµ РїРѕР»СЏ
 
   {f := TStringField.Create(DataSet.Owner);
   f.FieldName := 'PrinterName';
@@ -573,7 +583,7 @@ begin
     GetSplitCountExpr('opi.ProductOut', 'ProductOut', TOrderProcessItems.F_FactProductOut, 'opi', true) + ','#13#10 +
     ' opi.FinishDate, opi.FactFinishDate as FactOrderFinishDate, opi.Customer,'#13#10 +
     ' opi.PlanStartDate, opi.PlanFinishDate, opi.FactStartDate, opi.FactFinishDate,'#13#10 +
-    ' opi.ProcessID, opi.ItemID, opi.OrderState, opi.EstimatedDuration, opi.IsPaused, opi.Executor, opi.FactProductOut,'#13#10 +
+    ' opi.ProcessID, opi.ItemID, opi.OrderState, opi.EstimatedDuration, opi.IsPaused, opi.Executor, opi.FactProductOut, opi.KindID, opi.CreatorName,'#13#10 +
     //' dbo.SplitCost(opi.SplitMode1, opi.SplitMode3, opi.SplitMode3, opi.OwnCost + opi.ItemProfit, opi.PlanStartDate, opi.PlanFinishDate, ' +
     //    ' (select sum(datediff(second, j3.PlanStartDate, j3.PlanFinishDate)) from Job j3 where j3.ItemID = opi.ItemID)) as Cost';
     ' opi.OwnCost + opi.ItemProfit as Cost';
@@ -605,6 +615,16 @@ begin
   Result := KeyValue;
 end;
 
+function TProduction.GetKindID: variant;
+begin
+  Result := DataSet['KindID'];
+end;
+
+function TProduction.GetCreatorName: string;
+begin
+  Result := VarToStr(DataSet[TOrder.F_CreatorName]);
+end;
+
 {procedure TProduction.SetViewRange(MakeActive: boolean);
 var
   wl, S, OldSQL: string;
@@ -630,7 +650,7 @@ begin
     DataSet.Filtered := false;
 
   if MakeActive then
-    if OldSQL <> FProductionSQL then  // мог поменяться только локальный фильтр
+    if OldSQL <> FProductionSQL then  // РјРѕРі РїРѕРјРµРЅСЏС‚СЊСЃСЏ С‚РѕР»СЊРєРѕ Р»РѕРєР°Р»СЊРЅС‹Р№ С„РёР»СЊС‚СЂ
       Reload;
 end;}
 

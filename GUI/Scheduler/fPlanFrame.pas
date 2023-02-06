@@ -138,7 +138,7 @@ type
     //FPlan: TPlan;
     FWorkloads: TList;
     FWorkloadGrids: TList;
-    FSettingsLoaded: boolean; // TODO: надо утсановить в true когда закончится загрузка контролов
+    FSettingsLoaded: boolean; // TODO: РЅР°РґРѕ СѓС‚СЃР°РЅРѕРІРёС‚СЊ РІ true РєРѕРіРґР° Р·Р°РєРѕРЅС‡РёС‚СЃСЏ Р·Р°РіСЂСѓР·РєР° РєРѕРЅС‚СЂРѕР»РѕРІ
     dgDayFrom: TMyDBGridEh;
     FOnRemoveFromPlan, FOnMoveJobDown, FOnMoveJobUp,
     FOnMoveJobLast, FOnMoveJobFirst, FOnLaunchReport, FOnOpenOrder, FOnUndo, FOnLock, FOnUnlock: TNotifyEvent;
@@ -174,7 +174,7 @@ type
     FSavedDayControlsHeight: integer;
     FBeforeOpenDataRunning: boolean;
     FOnTimeLineBlockSelected: TNotifyEvent;
-    FMovedJobID: integer;  // перетаскиваемая работа
+    FMovedJobID: integer;  // РїРµСЂРµС‚Р°СЃРєРёРІР°РµРјР°СЏ СЂР°Р±РѕС‚Р°
     FOnViewNotPlannedJob: TNotifyEvent;
     FOnEditNotPlannedJobComment: TNotifyEvent;
     FHint: TMyHintWindow;
@@ -187,7 +187,7 @@ type
     procedure Plan_NotPlannedCreateGridColumns(dg: TMyDBGridEh);
     procedure CheckDataSources;
 
-    //procedure CheckDayApply;  // для плана смены
+    //procedure CheckDayApply;  // РґР»СЏ РїР»Р°РЅР° СЃРјРµРЅС‹
     //procedure ApplyDayPlan;
     procedure BuildChangeEquipMenu;
     procedure BuildSpecialJobMenu;
@@ -224,13 +224,13 @@ type
     procedure OperatorClick(Sender: TObject);
     procedure AssistantClick(Sender: TObject);
     function GetCurrentShift: TShiftInfo;
-    // Обновляет диаграмму работ. FullRebuild означает, что не надо проверять,
-    // была ли она уже построена для текущего оборудования и смены.
+    // РћР±РЅРѕРІР»СЏРµС‚ РґРёР°РіСЂР°РјРјСѓ СЂР°Р±РѕС‚. FullRebuild РѕР·РЅР°С‡Р°РµС‚, С‡С‚Рѕ РЅРµ РЅР°РґРѕ РїСЂРѕРІРµСЂСЏС‚СЊ,
+    // Р±С‹Р»Р° Р»Рё РѕРЅР° СѓР¶Рµ РїРѕСЃС‚СЂРѕРµРЅР° РґР»СЏ С‚РµРєСѓС‰РµРіРѕ РѕР±РѕСЂСѓРґРѕРІР°РЅРёСЏ Рё СЃРјРµРЅС‹.
     procedure UpdateTimeLine(FullRebuild: boolean); overload;
     procedure UpdateTimeLine; overload;
     procedure UpdateRangeTimeLine(_TimeLine: TSingleTimeLine; w: TWorkload; FullRebuild: boolean);
     procedure UpdateShiftTimeLine(_TimeLine: TSingleTimeLine; w: TWorkload; FullRebuild: boolean);
-    // Строит элементы интерфейса в соответствии с текущей конфигурацией
+    // РЎС‚СЂРѕРёС‚ СЌР»РµРјРµРЅС‚С‹ РёРЅС‚РµСЂС„РµР№СЃР° РІ СЃРѕРѕС‚РІРµС‚СЃС‚РІРёРё СЃ С‚РµРєСѓС‰РµР№ РєРѕРЅС„РёРіСѓСЂР°С†РёРµР№
     procedure ProcessConfiguration;
     procedure BuildRangeTypeBox;
     function GetCurrentWorkloadGrid: TScheduleGrid;
@@ -238,14 +238,14 @@ type
     procedure SetWorkDate(_WorkDate: TDateTime);
     procedure SetDateCriteriaType(_Type: integer);
     function GetDateCriteriaType: integer;
-    procedure RollOutNotPlanned;  // развернуть очередь заказов
-    procedure RollUpNotPlanned;   // свернуть очередь заказов
-    procedure HideNotPlanned;     // спрятать очередь заказов совсем
+    procedure RollOutNotPlanned;  // СЂР°Р·РІРµСЂРЅСѓС‚СЊ РѕС‡РµСЂРµРґСЊ Р·Р°РєР°Р·РѕРІ
+    procedure RollUpNotPlanned;   // СЃРІРµСЂРЅСѓС‚СЊ РѕС‡РµСЂРµРґСЊ Р·Р°РєР°Р·РѕРІ
+    procedure HideNotPlanned;     // СЃРїСЂСЏС‚Р°С‚СЊ РѕС‡РµСЂРµРґСЊ Р·Р°РєР°Р·РѕРІ СЃРѕРІСЃРµРј
     procedure SettingsChanged; override;
     procedure UpdateFontSize;
     //procedure UpdateCriteriaAndReload(w: TWorkload);
     //procedure UpdateCriteria(w: TWorkload; _Reload: boolean);
-    // обработка добавления работы (при перетаскивании передается ключ записи, на которую упало)
+    // РѕР±СЂР°Р±РѕС‚РєР° РґРѕР±Р°РІР»РµРЅРёСЏ СЂР°Р±РѕС‚С‹ (РїСЂРё РїРµСЂРµС‚Р°СЃРєРёРІР°РЅРёРё РїРµСЂРµРґР°РµС‚СЃСЏ РєР»СЋС‡ Р·Р°РїРёСЃРё, РЅР° РєРѕС‚РѕСЂСѓСЋ СѓРїР°Р»Рѕ)
     procedure AddJobClicked(WorkloadRowKey: integer);
     function IsShiftMarker(Grid: TScheduleGrid; CellY: integer): boolean;
     function OverShiftForeman(Grid: TScheduleGrid; Cell: TGridCoord; X: integer): boolean; overload;
@@ -278,7 +278,7 @@ type
     property WorkDate: TDateTime read GetWorkDate write SetWorkDate;
     property DateCriteriaType: integer read GetDateCriteriaType write SetDateCriteriaType;
 
-    // обработчики манипуляций с планом смены
+    // РѕР±СЂР°Р±РѕС‚С‡РёРєРё РјР°РЅРёРїСѓР»СЏС†РёР№ СЃ РїР»Р°РЅРѕРј СЃРјРµРЅС‹
     property OnAddToPlan: TBooleanIntNotifyEvent read FOnAddToPlan write FOnAddToPlan;
     property OnDivideJob: TNotifyEvent read FOnDivideJob write FOnDivideJob;
     property OnRemoveFromPlan: TNotifyEvent read FOnRemoveFromPlan write FOnRemoveFromPlan;
@@ -319,9 +319,9 @@ type
     procedure LoadSettings; override;
     function GetWorkloadColumnFields: string;
     procedure Activate;
-    // возвращает false, если не найдена закладка для этого оборудования
+    // РІРѕР·РІСЂР°С‰Р°РµС‚ false, РµСЃР»Рё РЅРµ РЅР°Р№РґРµРЅР° Р·Р°РєР»Р°РґРєР° РґР»СЏ СЌС‚РѕРіРѕ РѕР±РѕСЂСѓРґРѕРІР°РЅРёСЏ
     function ActivateWorkload(_EquipCode: integer): boolean;
-    procedure EditJob;  // открыть диалог редактирования параметров текущей работы
+    procedure EditJob;  // РѕС‚РєСЂС‹С‚СЊ РґРёР°Р»РѕРі СЂРµРґР°РєС‚РёСЂРѕРІР°РЅРёСЏ РїР°СЂР°РјРµС‚СЂРѕРІ С‚РµРєСѓС‰РµР№ СЂР°Р±РѕС‚С‹
     procedure BeforeOpenData;
     procedure AfterOpenData;
     procedure ShowWarning(_EquipCode: integer; MessageText: string);
@@ -333,7 +333,7 @@ type
     function GetColumnTag(Grid: TGridClass; FieldName: string): integer;
   end;
 
-// Специальные тэги для столбцов с нестандартной отрисовкой
+// РЎРїРµС†РёР°Р»СЊРЅС‹Рµ С‚СЌРіРё РґР»СЏ СЃС‚РѕР»Р±С†РѕРІ СЃ РЅРµСЃС‚Р°РЅРґР°СЂС‚РЅРѕР№ РѕС‚СЂРёСЃРѕРІРєРѕР№
 const
   CellTag_Customer = 1;
   CellTag_BigBool = 2;
@@ -411,7 +411,7 @@ begin
   FStateCodeList.Free;
   FOrderStateTextList.Free;
   FOrderStateCodeList.Free;
-  // отписываемся от событий
+  // РѕС‚РїРёСЃС‹РІР°РµРјСЃСЏ РѕС‚ СЃРѕР±С‹С‚РёР№
   if (FAfterScrollList <> nil) and (FWorkloads <> nil) then
   begin
     for I := 0 to FAfterScrollList.Count - 1 do
@@ -437,7 +437,7 @@ begin
   Plan_NotPlannedCreateGridColumns(dgNoPlan);
 end;
 
-// Странички плана смены.
+// РЎС‚СЂР°РЅРёС‡РєРё РїР»Р°РЅР° СЃРјРµРЅС‹.
 procedure TPlanFrame.CreateDayPages;
 var
   ts: TTabSheet;
@@ -482,10 +482,10 @@ begin
     dg.Flat := true;
     dg.RowHeight := 16;
     dg.VTitleMargin := 5;
-    dg.TitleLines := 1;   // иначе драгдроп будет мешать изменению ширины столбцов (см. mousemove)
+    dg.TitleLines := 1;   // РёРЅР°С‡Рµ РґСЂР°РіРґСЂРѕРї Р±СѓРґРµС‚ РјРµС€Р°С‚СЊ РёР·РјРµРЅРµРЅРёСЋ С€РёСЂРёРЅС‹ СЃС‚РѕР»Р±С†РѕРІ (СЃРј. mousemove)
     dg.RowSizingAllowed := true;
     dg.SumList.Active := false;//true;
-    dg.AutoFitColWidths := true; // т.к. сейчас есть проблемы с отрисовкой при гориз. скролле
+    dg.AutoFitColWidths := true; // С‚.Рє. СЃРµР№С‡Р°СЃ РµСЃС‚СЊ РїСЂРѕР±Р»РµРјС‹ СЃ РѕС‚СЂРёСЃРѕРІРєРѕР№ РїСЂРё РіРѕСЂРёР·. СЃРєСЂРѕР»Р»Рµ
     dg.OnDragOver := dgWorkloadDragOver;
     dg.OnDragDrop := dgWorkloadDragDrop;
     dg.OnDblClick := dgWorkloadDblClick;
@@ -505,12 +505,12 @@ procedure TPlanFrame.Plan_DayCreateGridColumns(dg: TMyDBGridEh);
 var
   col: TColumnEh;
 begin
-  // Сначала создаем все стандартные столбцы, потом запускаем скрипт
+  // РЎРЅР°С‡Р°Р»Р° СЃРѕР·РґР°РµРј РІСЃРµ СЃС‚Р°РЅРґР°СЂС‚РЅС‹Рµ СЃС‚РѕР»Р±С†С‹, РїРѕС‚РѕРј Р·Р°РїСѓСЃРєР°РµРј СЃРєСЂРёРїС‚
   Default_DayCreateGridColumns(dg);
   ExecGridCode(PmProcess.PlanScr_OnCreateDayPlanColumns, dg, PlanQueue);
   if Options.ScheduleShowCost then
-    CreateCostColumn(dg); // отдельно, чтобы была последней
-  // Назначаем обработчики на некоторые столбцы
+    CreateCostColumn(dg); // РѕС‚РґРµР»СЊРЅРѕ, С‡С‚РѕР±С‹ Р±С‹Р»Р° РїРѕСЃР»РµРґРЅРµР№
+  // РќР°Р·РЅР°С‡Р°РµРј РѕР±СЂР°Р±РѕС‚С‡РёРєРё РЅР° РЅРµРєРѕС‚РѕСЂС‹Рµ СЃС‚РѕР»Р±С†С‹
   col := dg.FieldColumns['AnyStartDate'];
   col.OnGetCellParams := PlanDate_GetCellParams;
   col := dg.FieldColumns['AnyFinishDate'];
@@ -533,11 +533,11 @@ begin
   begin
     if (CurrentWorkload.Criteria.RangeType = PlanRange_Continuous)
       or (CurrentWorkload.Criteria.RangeType = PlanRange_Week) then
-      // в этом режиме уже написаны даты на строках со сменами
+      // РІ СЌС‚РѕРј СЂРµР¶РёРјРµ СѓР¶Рµ РЅР°РїРёСЃР°РЅС‹ РґР°С‚С‹ РЅР° СЃС‚СЂРѕРєР°С… СЃРѕ СЃРјРµРЅР°РјРё
       Params.Text := FormatDateTime(FmtOnlyTime, f.Value)
     else
     begin
-      // Если текущая смена то только время иначе дата + время
+      // Р•СЃР»Рё С‚РµРєСѓС‰Р°СЏ СЃРјРµРЅР° С‚Рѕ С‚РѕР»СЊРєРѕ РІСЂРµРјСЏ РёРЅР°С‡Рµ РґР°С‚Р° + РІСЂРµРјСЏ
       DecodeDate(WorkDate, WorkYear, WorkMonth, WorkDay);
       DecodeDate(f.Value, FieldYear, FieldMonth, FieldDay);
       if (WorkYear = FieldYear) and (WorkMonth = FieldMonth) and (WorkDay = FieldDay) then
@@ -550,7 +550,7 @@ end;
 
 procedure TPlanFrame.Plan_NotPlannedCreateGridColumns(dg: TMyDBGridEh);
 begin
-  // Сначала создаем все стандартные столбцы, потом запускаем скрипт
+  // РЎРЅР°С‡Р°Р»Р° СЃРѕР·РґР°РµРј РІСЃРµ СЃС‚Р°РЅРґР°СЂС‚РЅС‹Рµ СЃС‚РѕР»Р±С†С‹, РїРѕС‚РѕРј Р·Р°РїСѓСЃРєР°РµРј СЃРєСЂРёРїС‚
   Default_NotPlannedCreateGridColumns(dg);
   ExecGridCode(PmProcess.PlanScr_OnCreateNotPlannedColumns, dg, PlanQueue);
 end;
@@ -572,9 +572,9 @@ begin
   if FSettingsLoaded then
   begin
     //CheckDayApply;
-    FSavedPageIndex := pcJobEquip.ActivePageIndex; // запоминаем текущую страницу
+    FSavedPageIndex := pcJobEquip.ActivePageIndex; // Р·Р°РїРѕРјРёРЅР°РµРј С‚РµРєСѓС‰СѓСЋ СЃС‚СЂР°РЅРёС†Сѓ
     NeedOpen := true;
-    // Проверяем переключение в другой режим просмотра
+    // РџСЂРѕРІРµСЂСЏРµРј РїРµСЂРµРєР»СЋС‡РµРЅРёРµ РІ РґСЂСѓРіРѕР№ СЂРµР¶РёРј РїСЂРѕСЃРјРѕС‚СЂР°
     if (cbDateType.ItemIndex = PlanRange_Gantt) and (FGanttFrame = nil) then
     begin
       OpenData;
@@ -623,7 +623,7 @@ begin
   OpenData;
 end;
 
-(*procedure TPlanFrame.CheckDayApply;  // для плана смены
+(*procedure TPlanFrame.CheckDayApply;  // РґР»СЏ РїР»Р°РЅР° СЃРјРµРЅС‹
 var
   i: integer;
   IsChanged: boolean;
@@ -635,7 +635,7 @@ begin
     if IsChanged then break;
   end;
   if IsChanged then begin
-    if RusMessageDlg('Применить изменения плана смены?', mtConfirmation, [mbYes, mbNo], 0) = mrYes then
+    if RusMessageDlg('РџСЂРёРјРµРЅРёС‚СЊ РёР·РјРµРЅРµРЅРёСЏ РїР»Р°РЅР° СЃРјРµРЅС‹?', mtConfirmation, [mbYes, mbNo], 0) = mrYes then
       ApplyDayPlan
     else
       CancelDayPlan;
@@ -672,7 +672,7 @@ end;}
 
 procedure TPlanFrame.BeforeOpenData;
 begin
-  // Если не установлена, ставим в текущую дату
+  // Р•СЃР»Рё РЅРµ СѓСЃС‚Р°РЅРѕРІР»РµРЅР°, СЃС‚Р°РІРёРј РІ С‚РµРєСѓС‰СѓСЋ РґР°С‚Сѓ
   if NvlDateTime(deJobDate.Value) = 0 then
   begin
     FSettingsLoaded := false;
@@ -690,7 +690,7 @@ begin
   CheckDataSources;
   if (FSavedPageIndex < FWorkloads.Count) and (FSavedPageIndex <> -1) then
   begin
-    FBeforeOpenDataRunning := true; // чтобы не обновляло TimeLine
+    FBeforeOpenDataRunning := true; // С‡С‚РѕР±С‹ РЅРµ РѕР±РЅРѕРІР»СЏР»Рѕ TimeLine
     try
       CurrentWorkload := FWorkloads[FSavedPageIndex];
       FSavedPageIndex := -1;
@@ -748,7 +748,7 @@ begin
   AddJobClicked(NvlInteger(CurrentWorkload.KeyValue));
 end;
 
-// обработка добавления работы (при перетаскивании передается ключ записи, на которую упало)
+// РѕР±СЂР°Р±РѕС‚РєР° РґРѕР±Р°РІР»РµРЅРёСЏ СЂР°Р±РѕС‚С‹ (РїСЂРё РїРµСЂРµС‚Р°СЃРєРёРІР°РЅРёРё РїРµСЂРµРґР°РµС‚СЃСЏ РєР»СЋС‡ Р·Р°РїРёСЃРё, РЅР° РєРѕС‚РѕСЂСѓСЋ СѓРїР°Р»Рѕ)
 procedure TPlanFrame.AddJobClicked(WorkloadRowKey: integer);
 begin
   if FOnAddToPlan(WorkloadRowKey) and EntSettings.NewPlanInterface then
@@ -760,19 +760,19 @@ end;
 
 procedure TPlanFrame.RollOutNotPlanned;
 begin
-  //btToggleNotPlanned.Caption := '<< Скрыть';
-  lbToggleNotPlanned.Caption := 'Очередь работ | <link=hide>Скрыть</link>';
+  //btToggleNotPlanned.Caption := '<< РЎРєСЂС‹С‚СЊ';
+  lbToggleNotPlanned.Caption := 'РћС‡РµСЂРµРґСЊ СЂР°Р±РѕС‚ | <link=hide>РЎРєСЂС‹С‚СЊ</link>';
   spJobDay.Maximized := false;
 end;
 
 procedure TPlanFrame.RollUpNotPlanned;
 begin
-  //btToggleNotPlanned.Caption := 'Показать >>';
-  lbToggleNotPlanned.Caption := 'Очередь работ | <link=show>Показать</link>';
+  //btToggleNotPlanned.Caption := 'РџРѕРєР°Р·Р°С‚СЊ >>';
+  lbToggleNotPlanned.Caption := 'РћС‡РµСЂРµРґСЊ СЂР°Р±РѕС‚ | <link=show>РџРѕРєР°Р·Р°С‚СЊ</link>';
   spJobDay.Maximized := true;
 end;
 
-procedure TPlanFrame.HideNotPlanned;     // спрятать очередь заказов совсем
+procedure TPlanFrame.HideNotPlanned;     // СЃРїСЂСЏС‚Р°С‚СЊ РѕС‡РµСЂРµРґСЊ Р·Р°РєР°Р·РѕРІ СЃРѕРІСЃРµРј
 begin
   paNotPlanned.Visible := false;
   spJobDay.Visible := false;
@@ -851,7 +851,7 @@ begin
   if {not w.Active and }not FBeforeOpenDataRunning then
     FOnUpdateWorkloadCriteria(Self);//(w, true);
 
-  // При переключении табчиков присваиваем ширину столбцов и высоту строк
+  // РџСЂРё РїРµСЂРµРєР»СЋС‡РµРЅРёРё С‚Р°Р±С‡РёРєРѕРІ РїСЂРёСЃРІР°РёРІР°РµРј С€РёСЂРёРЅСѓ СЃС‚РѕР»Р±С†РѕРІ Рё РІС‹СЃРѕС‚Сѓ СЃС‚СЂРѕРє
   dgTo := CurrentWorkloadGrid;
   if (dgDayFrom <> nil) and (dgDayFrom <> dgTo) then
   begin
@@ -931,8 +931,8 @@ begin
 //    dgDayFrom := nil;
     index := TSettingsManager.Instance.Storage.ReadInteger(GetStoragePath + 'DayPageIndex', 0);
     if (index >= 0) and (index < pcJobEquip.PageCount) then
-      // настройки ширины помнит только текущая таблица
-      FSavedPageIndex := index  // будет использовано позже
+      // РЅР°СЃС‚СЂРѕР№РєРё С€РёСЂРёРЅС‹ РїРѕРјРЅРёС‚ С‚РѕР»СЊРєРѕ С‚РµРєСѓС‰Р°СЏ С‚Р°Р±Р»РёС†Р°
+      FSavedPageIndex := index  // Р±СѓРґРµС‚ РёСЃРїРѕР»СЊР·РѕРІР°РЅРѕ РїРѕР·Р¶Рµ
       //pcJobEquip.ActivePageIndex := index
     else
       pcJobEquip.ActivePageIndex := 0;
@@ -953,25 +953,25 @@ var
   i: integer;
   CurWorkload: TWorkload;
 begin
-  // Присваиваем источники данных из объектов гридам.
+  // РџСЂРёСЃРІР°РёРІР°РµРј РёСЃС‚РѕС‡РЅРёРєРё РґР°РЅРЅС‹С… РёР· РѕР±СЉРµРєС‚РѕРІ РіСЂРёРґР°Рј.
   for i := 0 to FWorkloads.Count - 1 do
   begin
     Application.ProcessMessages;
     CurWorkload := FWorkloads[i];
-    // Если хоть один уже присвоен правильно, то значит уже присваивали
+    // Р•СЃР»Рё С…РѕС‚СЊ РѕРґРёРЅ СѓР¶Рµ РїСЂРёСЃРІРѕРµРЅ РїСЂР°РІРёР»СЊРЅРѕ, С‚Рѕ Р·РЅР°С‡РёС‚ СѓР¶Рµ РїСЂРёСЃРІР°РёРІР°Р»Рё
     if TDBGridEh(FWorkloadGrids[i]).DataSource = CurWorkload.DataSource then
-      Exit;      // уходим
+      Exit;      // СѓС…РѕРґРёРј
 
     TDBGridEh(FWorkloadGrids[i]).DataSource := CurWorkload.DataSource;
 
     if FAfterScrollList = nil then FAfterScrollList := TStringList.Create;
     if FAfterOpenList = nil then FAfterOpenList := TStringList.Create;
-    // добавляем обработчики в список чтобы потом освободить
+    // РґРѕР±Р°РІР»СЏРµРј РѕР±СЂР°Р±РѕС‚С‡РёРєРё РІ СЃРїРёСЃРѕРє С‡С‚РѕР±С‹ РїРѕС‚РѕРј РѕСЃРІРѕР±РѕРґРёС‚СЊ
     FAfterScrollList.Add(CurWorkload.AfterScrollNotifier.RegisterHandler(WorkloadAfterScroll));
     FAfterOpenList.Add(CurWorkload.OpenNotifier.RegisterHandler(WorkloadAfterOpen));
 
   end;
-  // загрузка настроек таблицы работает только если есть datasource поэтому здесь
+  // Р·Р°РіСЂСѓР·РєР° РЅР°СЃС‚СЂРѕРµРє С‚Р°Р±Р»РёС†С‹ СЂР°Р±РѕС‚Р°РµС‚ С‚РѕР»СЊРєРѕ РµСЃР»Рё РµСЃС‚СЊ datasource РїРѕСЌС‚РѕРјСѓ Р·РґРµСЃСЊ
   dgDayFrom := TMyDBGridEh(FWorkloadGrids[pcJobEquip.ActivePageIndex]);
   TSettingsManager.Instance.LoadGridLayout(dgDayFrom,
     GetStoragePath + 'DayPlan_' + IntToStr(PlanQueue.EquipGroupCode));
@@ -1009,7 +1009,7 @@ end;
 procedure DrawBooleanCell(Grid: TGridClass; const Rect: TRect;
   DataCol: Integer; Column: TColumnEh; State: TGridDrawState);
 begin
-  if Column.Tag = CellTag_Customer then   // картинка заказчика
+  if Column.Tag = CellTag_Customer then   // РєР°СЂС‚РёРЅРєР° Р·Р°РєР°Р·С‡РёРєР°
   begin
     Grid.Canvas.FillRect(Rect);
     if NvlBoolean(Column.Field.Value) then
@@ -1017,7 +1017,7 @@ begin
         clFuchsia, taCenter);
   end
   else
-  if Column.Tag = CellTag_BigBool then    // яркая галочка или крестик
+  if Column.Tag = CellTag_BigBool then    // СЏСЂРєР°СЏ РіР°Р»РѕС‡РєР° РёР»Рё РєСЂРµСЃС‚РёРє
   begin
     Grid.Canvas.FillRect(Rect);
     if NvlBoolean(Column.Field.Value) then
@@ -1028,19 +1028,19 @@ begin
       DrawGridCellBitmap(Grid.Canvas, Rect, bmpError16, clFuchsia, taCenter);
   end
   else
-  if Column.Tag = CellTag_Alert then    // крестик если false или ничего
+  if Column.Tag = CellTag_Alert then    // РєСЂРµСЃС‚РёРє РµСЃР»Рё false РёР»Рё РЅРёС‡РµРіРѕ
   begin
     Grid.Canvas.FillRect(Rect);
     if not VarIsNull(Column.Field.Value) and Column.Field.Value then
       DrawGridCellBitmap(Grid.Canvas, Rect, bmpError16, clFuchsia, taCenter);
   end
-  else if Column.Tag = CellTag_Contractor then    // субподряд
+  else if Column.Tag = CellTag_Contractor then    // СЃСѓР±РїРѕРґСЂСЏРґ
   begin
     Grid.Canvas.FillRect(Rect);
     if NvlBoolean(Column.Field.Value) then
       DrawGridCellBitmap(Grid.Canvas, Rect, bmpContractor, clFuchsia, taCenter);
   end
-  else   // обычная галочка
+  else   // РѕР±С‹С‡РЅР°СЏ РіР°Р»РѕС‡РєР°
     EnablePainter.DrawRedCheck(Grid, Rect, DataCol, Column, State)
 end;
 
@@ -1057,8 +1057,8 @@ begin
         DrawGridCellBitmap(Grid.Canvas, Rect, bmpHasNotes, clOlive, taCenter)
 end;
 
-// Для даты поставки: яркая галочка без текста если 0,
-// минусик если пусто или бледная галочка с текстом, если не пусто.
+// Р”Р»СЏ РґР°С‚С‹ РїРѕСЃС‚Р°РІРєРё: СЏСЂРєР°СЏ РіР°Р»РѕС‡РєР° Р±РµР· С‚РµРєСЃС‚Р° РµСЃР»Рё 0,
+// РјРёРЅСѓСЃРёРє РµСЃР»Рё РїСѓСЃС‚Рѕ РёР»Рё Р±Р»РµРґРЅР°СЏ РіР°Р»РѕС‡РєР° СЃ С‚РµРєСЃС‚РѕРј, РµСЃР»Рё РЅРµ РїСѓСЃС‚Рѕ.
 procedure DrawDateTimeCell(Grid: TGridClass; const Rect: TRect;
   DataCol: Integer; Column: TColumnEh; State: TGridDrawState);
 var
@@ -1243,7 +1243,7 @@ begin
   cbDateType.ItemIndex := _Type;
 end;
 
-// Кнопка должна быть SpeedButton чтобы не менялся ActiveControl
+// РљРЅРѕРїРєР° РґРѕР»Р¶РЅР° Р±С‹С‚СЊ SpeedButton С‡С‚РѕР±С‹ РЅРµ РјРµРЅСЏР»СЃСЏ ActiveControl
 procedure TPlanFrame.sbLocateOrderClick(Sender: TObject);
 var
   OrderNum: integer;
@@ -1262,20 +1262,20 @@ begin
   if e then
     e := CurrentWorkload.DataSet.Active and not CurrentWorkload.IsEmpty;
 
-  // Проверяем право пользователя на изменение плановых дат процесса этого вида в плане
+  // РџСЂРѕРІРµСЂСЏРµРј РїСЂР°РІРѕ РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ РЅР° РёР·РјРµРЅРµРЅРёРµ РїР»Р°РЅРѕРІС‹С… РґР°С‚ РїСЂРѕС†РµСЃСЃР° СЌС‚РѕРіРѕ РІРёРґР° РІ РїР»Р°РЅРµ
   if e and (CurrentWorkload <> nil) and not VarIsNull(CurrentWorkload.KindID) then
   begin
     AccessManager.ReadUserKindProcPermTo(KPRec, CurrentWorkload.KindID, AccessManager.CurUser.ID, CurrentWorkload.ProcessID);
-    // Если план заблокирован или нет прав на планирование и фактич. отметки, то выходим
+    // Р•СЃР»Рё РїР»Р°РЅ Р·Р°Р±Р»РѕРєРёСЂРѕРІР°РЅ РёР»Рё РЅРµС‚ РїСЂР°РІ РЅР° РїР»Р°РЅРёСЂРѕРІР°РЅРёРµ Рё С„Р°РєС‚РёС‡. РѕС‚РјРµС‚РєРё, С‚Рѕ РІС‹С…РѕРґРёРј
     planWorkload := KPRec.PlanDate and KPRec.FactDate;
   end else
     planWorkload := true;
 
-  // Проверяем право пользователя на изменение плановых дат процесса этого вида в незапланированных
-  if e and (CurrentWorkload <> nil) and not VarIsNull(PlanQueue.KindID) then
+  // РџСЂРѕРІРµСЂСЏРµРј РїСЂР°РІРѕ РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ РЅР° РёР·РјРµРЅРµРЅРёРµ РїР»Р°РЅРѕРІС‹С… РґР°С‚ РїСЂРѕС†РµСЃСЃР° СЌС‚РѕРіРѕ РІРёРґР° РІ РЅРµР·Р°РїР»Р°РЅРёСЂРѕРІР°РЅРЅС‹С…
+  if e and (CurrentWorkload <> nil) and PlanQueue.Active and not VarIsNull(PlanQueue.KindID) then
   begin
     AccessManager.ReadUserKindProcPermTo(KPRec, PlanQueue.KindID, AccessManager.CurUser.ID, PlanQueue.ProcessID);
-    // Если план заблокирован или нет прав на планирование и фактич. отметки, то выходим
+    // Р•СЃР»Рё РїР»Р°РЅ Р·Р°Р±Р»РѕРєРёСЂРѕРІР°РЅ РёР»Рё РЅРµС‚ РїСЂР°РІ РЅР° РїР»Р°РЅРёСЂРѕРІР°РЅРёРµ Рё С„Р°РєС‚РёС‡. РѕС‚РјРµС‚РєРё, С‚Рѕ РІС‹С…РѕРґРёРј
     plan := KPRec.PlanDate and KPRec.FactDate;
   end else
     plan := true;
@@ -1287,9 +1287,9 @@ begin
   if e then
   begin
     if CurrentWorkload.ExecState = esPaused then
-      btPause.Caption := 'Продолжить'
+      btPause.Caption := 'РџСЂРѕРґРѕР»Р¶РёС‚СЊ'
     else
-      btPause.Caption := 'Приостановить';
+      btPause.Caption := 'РџСЂРёРѕСЃС‚Р°РЅРѕРІРёС‚СЊ';
   end;
 
   if AccessManager.CurUser.ViewNotPlanned then
@@ -1297,7 +1297,7 @@ begin
     lbMove.Visible := e;
     btRemove.Visible := e and planWorkload;
     if (CurrentWorkload <> nil) and e then
-      // Если процесс уже начался или закончился, то не снимать его и не двигать
+      // Р•СЃР»Рё РїСЂРѕС†РµСЃСЃ СѓР¶Рµ РЅР°С‡Р°Р»СЃСЏ РёР»Рё Р·Р°РєРѕРЅС‡РёР»СЃСЏ, С‚Рѕ РЅРµ СЃРЅРёРјР°С‚СЊ РµРіРѕ Рё РЅРµ РґРІРёРіР°С‚СЊ
       Started := not VarIsNull(CurrentWorkload.FactStartDateTime) or not VarIsNull(CurrentWorkload.FactFinishDateTime)
     else
       Started := false;
@@ -1306,13 +1306,13 @@ begin
     btDivide.Enabled := e and VarIsNull(CurrentWorkload.FactFinishDateTime)
       and (CurrentWorkload.JobType = JobType_Work) and planWorkload;
 
-    sbMoveLast.Enabled := false;//e and not Started; // 13.05.2009 - Временно запрещено, т.к. перемещение мышью часто работает корректнее
+    sbMoveLast.Enabled := false;//e and not Started; // 13.05.2009 - Р’СЂРµРјРµРЅРЅРѕ Р·Р°РїСЂРµС‰РµРЅРѕ, С‚.Рє. РїРµСЂРµРјРµС‰РµРЅРёРµ РјС‹С€СЊСЋ С‡Р°СЃС‚Рѕ СЂР°Р±РѕС‚Р°РµС‚ РєРѕСЂСЂРµРєС‚РЅРµРµ
     sbMoveFirst.Enabled := false;//e and not Started;
     sbMoveDown.Enabled := false;//e and not Started;
     sbMoveUp.Enabled := false;//e and not Started;
     lbMove.Enabled := false;//e and not Started;
   end
-  else  // для режима "без очереди заказов"
+  else  // РґР»СЏ СЂРµР¶РёРјР° "Р±РµР· РѕС‡РµСЂРµРґРё Р·Р°РєР°Р·РѕРІ"
   begin
     lbMove.Visible := false;
     btRemove.Visible := false;
@@ -1395,7 +1395,7 @@ begin
       if th = 0 then
       begin
         if (TDBGridEh(Sender).RowHeight = 0) or (TDBGridEh(Sender).TitleLines = 0) then
-          raise Exception.Create('Внутренняя ошибка: Должна быть установлена высота строки и кол-во строк заголовка.');
+          raise Exception.Create('Р’РЅСѓС‚СЂРµРЅРЅСЏСЏ РѕС€РёР±РєР°: Р”РѕР»Р¶РЅР° Р±С‹С‚СЊ СѓСЃС‚Р°РЅРѕРІР»РµРЅР° РІС‹СЃРѕС‚Р° СЃС‚СЂРѕРєРё Рё РєРѕР»-РІРѕ СЃС‚СЂРѕРє Р·Р°РіРѕР»РѕРІРєР°.');
         th := TDBGridEh(Sender).RowHeight * TDBGridEh(Sender).TitleLines + TDBGridEh(Sender).VTitleMargin * 2;
       end;
       if (Y > th) then
@@ -1444,12 +1444,12 @@ begin
   end;
 end;
 
-// Собирает поля столбцов для экспорта
+// РЎРѕР±РёСЂР°РµС‚ РїРѕР»СЏ СЃС‚РѕР»Р±С†РѕРІ РґР»СЏ СЌРєСЃРїРѕСЂС‚Р°
 function TPlanFrame.GetWorkloadColumnFields: string;
 var
   dgTemp: TMyDBGridEh;
 begin
-  // воссоздаем оригинальные стобцы на случай если они были перемещены
+  // РІРѕСЃСЃРѕР·РґР°РµРј РѕСЂРёРіРёРЅР°Р»СЊРЅС‹Рµ СЃС‚РѕР±С†С‹ РЅР° СЃР»СѓС‡Р°Р№ РµСЃР»Рё РѕРЅРё Р±С‹Р»Рё РїРµСЂРµРјРµС‰РµРЅС‹
   dgTemp := TMyDBGridEh.Create(nil);
   try
     Plan_DayCreateGridColumns(dgTemp);
@@ -1507,11 +1507,11 @@ begin
       else
       if w.JobType >= JobType_Special then
       begin
-        // Специальные работы раскрашиваем согласно справочнику
+        // РЎРїРµС†РёР°Р»СЊРЅС‹Рµ СЂР°Р±РѕС‚С‹ СЂР°СЃРєСЂР°С€РёРІР°РµРј СЃРѕРіР»Р°СЃРЅРѕ СЃРїСЂР°РІРѕС‡РЅРёРєСѓ
         Background := GetSpecialJobBkColor(w.JobType);
         AFont.Color := GetSpecialJobColor(w.JobType);
       end;
-      // подсвечиваем красным номер заказа, в котором есть отметка о проблемах
+      // РїРѕРґСЃРІРµС‡РёРІР°РµРј РєСЂР°СЃРЅС‹Рј РЅРѕРјРµСЂ Р·Р°РєР°Р·Р°, РІ РєРѕС‚РѕСЂРѕРј РµСЃС‚СЊ РѕС‚РјРµС‚РєР° Рѕ РїСЂРѕР±Р»РµРјР°С…
       if (Column.FieldName = TOrder.F_OrderNumber) and w.JobAlert then
       begin
         AFont.Color := clRed;
@@ -1547,7 +1547,7 @@ begin
   Grid := Sender as TGridClass;
   if (DataCol = Grid.LeftCol - 1) and CurrentWorkload.IsShiftMarker then
   begin
-    // рисует одну широкую ячейку в строке с заголовком смены
+    // СЂРёСЃСѓРµС‚ РѕРґРЅСѓ С€РёСЂРѕРєСѓСЋ СЏС‡РµР№РєСѓ РІ СЃС‚СЂРѕРєРµ СЃ Р·Р°РіРѕР»РѕРІРєРѕРј СЃРјРµРЅС‹
     ARect := Rect;
     S := 0;
     for I := DataCol to Grid.Columns.Count - 1 do
@@ -1568,12 +1568,12 @@ begin
     ACanvas.Font.Style := [fsBold];
     {if gdFocused in State then
       ACanvas.Font.Color := clHighlightText;}
-    // название смены
+    // РЅР°Р·РІР°РЅРёРµ СЃРјРµРЅС‹
     TextValue := NvlString(CurrentWorkload.Comment);
     ARect.Left := SHIFT_NAME_OFFSET;
     ACanvas.TextRect(ARect, TextValue, [tfLeft, tfVerticalCenter, tfSingleLine]);
-    // мастер смены
-    I := ACanvas.TextWidth(TextValue);  // ширина названия смены
+    // РјР°СЃС‚РµСЂ СЃРјРµРЅС‹
+    I := ACanvas.TextWidth(TextValue);  // С€РёСЂРёРЅР° РЅР°Р·РІР°РЅРёСЏ СЃРјРµРЅС‹
     ARect.Left := ARect.Left + I + SHIFT_NAME_OFFSET;
     TextValue := GetShiftForeman;
     ACanvas.Font.Style := [fsUnderline];
@@ -1583,8 +1583,8 @@ begin
       ACanvas.Font.Color := clDkGray;
     ACanvas.TextRect(ARect, TextValue, [tfLeft, tfVerticalCenter, tfSingleLine]);
 
-    // исполнитель
-    I := ACanvas.TextWidth(MaxText);  // ширина текста о мастере смены
+    // РёСЃРїРѕР»РЅРёС‚РµР»СЊ
+    I := ACanvas.TextWidth(MaxText);  // С€РёСЂРёРЅР° С‚РµРєСЃС‚Р° Рѕ РјР°СЃС‚РµСЂРµ СЃРјРµРЅС‹
     ARect.Left := ARect.Left + I + SHIFT_NAME_OFFSET;
     TextValue := GetOperator;
     ACanvas.Font.Style := [fsUnderline];
@@ -1594,8 +1594,8 @@ begin
       ACanvas.Font.Color := clBlue;
     ACanvas.TextRect(ARect, TextValue, [tfLeft, tfVerticalCenter, tfSingleLine]);
 
-    // Помошник
-    I := ACanvas.TextWidth(MaxText);  // ширина текста о помошнике
+    // РџРѕРјРѕС€РЅРёРє
+    I := ACanvas.TextWidth(MaxText);  // С€РёСЂРёРЅР° С‚РµРєСЃС‚Р° Рѕ РїРѕРјРѕС€РЅРёРєРµ
     ARect.Left := ARect.Left + I + SHIFT_NAME_OFFSET;
     TextValue := GetAssistOperator;
     ACanvas.Font.Style := [fsUnderline];
@@ -1606,16 +1606,16 @@ begin
     ACanvas.TextRect(ARect, TextValue, [tfLeft, tfVerticalCenter, tfSingleLine]);
 
 
-    // Стоимость работ на смене
+    // РЎС‚РѕРёРјРѕСЃС‚СЊ СЂР°Р±РѕС‚ РЅР° СЃРјРµРЅРµ
     if Options.ScheduleShowCost then
     begin
       SI := CurrentWorkload.GetShiftByID(CurrentWorkload.JobID);
-      // на пустых сменах не пишем
+      // РЅР° РїСѓСЃС‚С‹С… СЃРјРµРЅР°С… РЅРµ РїРёС€РµРј
       if (SI <> nil) and (SI.JobList.Count > 0) then
       begin
-        I := ACanvas.TextWidth(MaxText);  // ширина текста об исполнителе
+        I := ACanvas.TextWidth(MaxText);  // С€РёСЂРёРЅР° С‚РµРєСЃС‚Р° РѕР± РёСЃРїРѕР»РЅРёС‚РµР»Рµ
         ARect.Left := ARect.Left + I + SHIFT_NAME_OFFSET;
-        TextValue := 'Стоимость работ: ' + FormatFloat('#,##0.00', SI.Cost) + ' грн.';
+        TextValue := 'РЎС‚РѕРёРјРѕСЃС‚СЊ СЂР°Р±РѕС‚: ' + FormatFloat('#,##0.00', SI.Cost) + ' РіСЂРЅ.';
         ACanvas.Font.Style := [];
         ACanvas.Font.Color := clWindowText;
         ACanvas.TextRect(ARect, TextValue, [tfLeft, tfVerticalCenter, tfSingleLine]);
@@ -1628,13 +1628,13 @@ begin
     if Column.Field.FieldName = TPlan.F_HasComment then
       DrawHasComment(Grid, Rect, Column)
     else
-    if (Column.Tag = CellTag_DateTimeIcon) // только для обычных работ
+    if (Column.Tag = CellTag_DateTimeIcon) // С‚РѕР»СЊРєРѕ РґР»СЏ РѕР±С‹С‡РЅС‹С… СЂР°Р±РѕС‚
        and (NvlInteger(Column.Field.DataSet['JobType']) = JobType_Work) then
       DrawDateTimeCell(Sender as TGridClass, Rect, DataCol, Column, State)
     else
     if Column.Field is TBooleanField then
     begin
-      IsWork := not Column.Field.DataSet.IsEmpty      // только для обычных работ
+      IsWork := not Column.Field.DataSet.IsEmpty      // С‚РѕР»СЊРєРѕ РґР»СЏ РѕР±С‹С‡РЅС‹С… СЂР°Р±РѕС‚
         and (NvlInteger(Column.Field.DataSet['JobType']) = JobType_Work);
       if IsWork then
         DrawBooleanCell(Grid, Rect, DataCol, Column, State)
@@ -1659,7 +1659,7 @@ function TPlanFrame.GetShiftForeman: string;
 var
   ShiftEmp: variant;
 begin                                    
-  Result := 'Мастер смены';
+  Result := 'РњР°СЃС‚РµСЂ СЃРјРµРЅС‹';
   ShiftEmp := CurrentWorkload.ShiftForemanName;
   if not VarIsNull(ShiftEmp) then
     Result := Result + ': ' + ShiftEmp;
@@ -1669,7 +1669,7 @@ function TPlanFrame.GetOperator: string;
 var
   EqEmp: variant;
 begin
-  Result := 'Печатник';
+  Result := 'РџРµС‡Р°С‚РЅРёРє';
   EqEmp := CurrentWorkload.OperatorName;
   if not VarIsNull(EqEmp) then
     Result := Result + ': ' + EqEmp;
@@ -1679,7 +1679,7 @@ function TPlanFrame.GetAssistOperator: string;
 var
   EqEmp: variant;
 begin
-  Result := 'Помошник';
+  Result := 'РџРѕРјРѕС€РЅРёРє';
   EqEmp := CurrentWorkload.AssistantName;
   if not VarIsNull(EqEmp) then
     Result := Result + ': ' + EqEmp;
@@ -1877,7 +1877,7 @@ begin
   c.FieldName := TWorkload.F_AnyStart;
   c.Alignment := taCenter;
   c.Width := 70;
-  c.Title.Caption := 'Начало';
+  c.Title.Caption := 'РќР°С‡Р°Р»Рѕ';
   c.ButtonStyle := cbsNone;
   c.Font.Size := 10;
 
@@ -1885,7 +1885,7 @@ begin
   c.FieldName := TWorkload.F_AnyFinish;
   c.Alignment := taCenter;
   c.Width := 70;
-  c.Title.Caption := 'Заверш.';
+  c.Title.Caption := 'Р—Р°РІРµСЂС€.';
   c.ButtonStyle := cbsNone;
   c.Font.Size := 10;
 
@@ -1893,33 +1893,33 @@ begin
   c.FieldName := TWorkload.F_AnyDuration;
   c.Alignment := taRightJustify;//taCenter;
   c.Width := 60;
-  c.Title.Caption := 'Длит.';
+  c.Title.Caption := 'Р”Р»РёС‚.';
   c.Font.Size := 10;
 
   c := dg.Columns.Add;
   c.FieldName := TOrder.F_OrderNumber;
   c.Alignment := taRightJustify;
   c.Width := 53;
-  c.Title.Caption := '№ заказа';
+  c.Title.Caption := 'в„– Р·Р°РєР°Р·Р°';
   c.Font.Style := [fsBold];
   {if Options.ScheduleShowCost then
   begin
     c.Footer.ValueType := fvtStaticText;
-    c.Footer.Value := 'Всего:';
+    c.Footer.Value := 'Р’СЃРµРіРѕ:';
   end;}
 
   c := dg.Columns.Add;
   c.FieldName := 'CustomerName';
   c.Alignment := taLeftJustify;
   c.Width := 210;
-  c.Title.Caption := 'Заказчик';
+  c.Title.Caption := 'Р—Р°РєР°Р·С‡РёРє';
   //c.Title.TitleButton := true;
 
   c := dg.Columns.Add;
   c.FieldName := 'Comment';
   c.Alignment := taLeftJustify;
   c.Width := 200;
-  c.Title.Caption := 'Наименование заказа';
+  c.Title.Caption := 'РќР°РёРјРµРЅРѕРІР°РЅРёРµ Р·Р°РєР°Р·Р°';
   c.ReadOnly := true;
   //c.Title.TitleButton := true;
 
@@ -1927,20 +1927,20 @@ begin
   c.FieldName := 'ItemDesc';
   c.Alignment := taLeftJustify;
   c.Width := 200;
-  c.Title.Caption := 'Описание';
+  c.Title.Caption := 'РћРїРёСЃР°РЅРёРµ';
   c.ReadOnly := true;
 
   c := dg.Columns.Add;
   c.FieldName := TOrderProcessItems.F_ProductOut;
   c.Alignment := taRightJustify;
   c.Width := 53;
-  c.Title.Caption := 'Кол-во';
+  c.Title.Caption := 'РљРѕР»-РІРѕ';
 
   c := dg.Columns.Add;
   c.FieldName := F_PartName;
   c.Alignment := taLeftJustify;
   c.Width := 50;
-  c.Title.Caption := 'Часть';
+  c.Title.Caption := 'Р§Р°СЃС‚СЊ';
   c.ReadOnly := true;
   //c.Title.TitleButton := true;
 
@@ -1948,7 +1948,7 @@ begin
   c.FieldName := 'FinishDate';
   c.Alignment := taLeftJustify;
   c.Width := 50;
-  c.Title.Caption := 'Сдача заказа';
+  c.Title.Caption := 'РЎРґР°С‡Р° Р·Р°РєР°Р·Р°';
   c.ButtonStyle := cbsNone;
 end;
 
@@ -1960,7 +1960,7 @@ begin
   c.FieldName := TWorkload.F_JobCost;
   c.Alignment := taRightJustify;
   c.Width := 50;
-  c.Title.Caption := 'Стоимость';
+  c.Title.Caption := 'РЎС‚РѕРёРјРѕСЃС‚СЊ';
   c.ButtonStyle := cbsNone;
   //c.Footer.ValueType := fvtSum;
   //c.Footer.DisplayFormat := NumDisplayFmt;
@@ -2003,7 +2003,7 @@ begin
   c.FieldName := TOrder.F_OrderNumber;
   c.Alignment := taRightJustify;
   c.Width := 53;
-  c.Title.Caption := '№ заказа';
+  c.Title.Caption := 'в„– Р·Р°РєР°Р·Р°';
   //c.PopupMenu := StatePopupMenu;
   c.Title.TitleButton := true;
   c.Title.SortMarker := smDownEh;
@@ -2012,14 +2012,14 @@ begin
   c.FieldName := 'CustomerName';
   c.Alignment := taLeftJustify;
   c.Width := 150;
-  c.Title.Caption := 'Заказчик';
+  c.Title.Caption := 'Р—Р°РєР°Р·С‡РёРє';
   c.Title.TitleButton := true;
 
   c := dg.Columns.Add;
   c.FieldName := 'Comment';
   c.Alignment := taLeftJustify;
   c.Width := 150;
-  c.Title.Caption := 'Наименование заказа';
+  c.Title.Caption := 'РќР°РёРјРµРЅРѕРІР°РЅРёРµ Р·Р°РєР°Р·Р°';
   c.ReadOnly := true;
   c.Title.TitleButton := true;
   //c.WordWrap := true;
@@ -2028,7 +2028,7 @@ begin
   c.FieldName := 'ItemDesc';
   c.Alignment := taLeftJustify;
   c.Width := 150;
-  c.Title.Caption := 'Описание';
+  c.Title.Caption := 'РћРїРёСЃР°РЅРёРµ';
   c.ReadOnly := true;
   c.Title.TitleButton := true;
 
@@ -2036,7 +2036,7 @@ begin
   c.FieldName := F_PartName;
   c.Alignment := taLeftJustify;
   c.Width := 50;
-  c.Title.Caption := 'Часть';
+  c.Title.Caption := 'Р§Р°СЃС‚СЊ';
   c.ReadOnly := true;
   c.Title.TitleButton := true;
 
@@ -2044,14 +2044,14 @@ begin
   c.FieldName := 'EquipName';
   c.Alignment := taLeftJustify;
   c.Width := 50;
-  c.Title.Caption := 'Оборуд.';
+  c.Title.Caption := 'РћР±РѕСЂСѓРґ.';
   c.Title.TitleButton := true;
 
   c := dg.Columns.Add;
   c.FieldName := 'FinishDate';
   c.Alignment := taLeftJustify;
   c.Width := 50;
-  c.Title.Caption := 'Плановая сдача';
+  c.Title.Caption := 'РџР»Р°РЅРѕРІР°СЏ СЃРґР°С‡Р°';
   c.Title.TitleButton := true;
 
   {if Options.ScheduleShowCost then
@@ -2060,7 +2060,7 @@ begin
     c.FieldName := 'Cost';
     c.Alignment := taRightJustify;
     c.Width := 50;
-    c.Title.Caption := 'Стоимость';
+    c.Title.Caption := 'РЎС‚РѕРёРјРѕСЃС‚СЊ';
     c.ButtonStyle := cbsNone;
   end;}
 end;
@@ -2075,24 +2075,24 @@ begin
   pmSpecJob.Popup(Mouse.CursorPos.X, Mouse.CursorPos.Y);
 end;
 
-// заполняет комбобокс с типами диапазона
+// Р·Р°РїРѕР»РЅСЏРµС‚ РєРѕРјР±РѕР±РѕРєСЃ СЃ С‚РёРїР°РјРё РґРёР°РїР°Р·РѕРЅР°
 procedure TPlanFrame.BuildRangeTypeBox;
 var
   ds: TDataSet;
   OldSelected: integer;
 begin
-  // сохраняем текущий выделенный тип
+  // СЃРѕС…СЂР°РЅСЏРµРј С‚РµРєСѓС‰РёР№ РІС‹РґРµР»РµРЅРЅС‹Р№ С‚РёРї
   OldSelected := cbDateType.ItemIndex;
   cbDateType.Items.Clear;
-  cbDateType.Items.Add('День');
-  cbDateType.Items.Add('Непрерывный');
-  cbDateType.Items.Add('Неделя');
-  cbDateType.Items.Add('Диаграмма');
-  // Дальше добавляем смены.
-  // Если для оборудования заданы смены, то для группы должно быть задано столько же смен,
-  // возможно, с другим временем начала-окончания.
+  cbDateType.Items.Add('Р”РµРЅСЊ');
+  cbDateType.Items.Add('РќРµРїСЂРµСЂС‹РІРЅС‹Р№');
+  cbDateType.Items.Add('РќРµРґРµР»СЏ');
+  cbDateType.Items.Add('Р”РёР°РіСЂР°РјРјР°');
+  // Р”Р°Р»СЊС€Рµ РґРѕР±Р°РІР»СЏРµРј СЃРјРµРЅС‹.
+  // Р•СЃР»Рё РґР»СЏ РѕР±РѕСЂСѓРґРѕРІР°РЅРёСЏ Р·Р°РґР°РЅС‹ СЃРјРµРЅС‹, С‚Рѕ РґР»СЏ РіСЂСѓРїРїС‹ РґРѕР»Р¶РЅРѕ Р±С‹С‚СЊ Р·Р°РґР°РЅРѕ СЃС‚РѕР»СЊРєРѕ Р¶Рµ СЃРјРµРЅ,
+  // РІРѕР·РјРѕР¶РЅРѕ, СЃ РґСЂСѓРіРёРј РІСЂРµРјРµРЅРµРј РЅР°С‡Р°Р»Р°-РѕРєРѕРЅС‡Р°РЅРёСЏ.
   ds := TConfigManager.Instance.StandardDics.deEquipGroupTime.DicItems;
-  // Фильтруем справочник по коду группы
+  // Р¤РёР»СЊС‚СЂСѓРµРј СЃРїСЂР°РІРѕС‡РЅРёРє РїРѕ РєРѕРґСѓ РіСЂСѓРїРїС‹
   ds.Filter := 'A1 = ' + IntToStr(PlanQueue.EquipGroupCode);
   ds.Filtered := true;
   try
@@ -2101,7 +2101,7 @@ begin
       cbDateType.Items.Add(ds[F_DicItemName]);
       ds.Next;
     end;
-    // восстанавливаем выделенный тип
+    // РІРѕСЃСЃС‚Р°РЅР°РІР»РёРІР°РµРј РІС‹РґРµР»РµРЅРЅС‹Р№ С‚РёРї
     if OldSelected < cbDateType.Items.Count then
       cbDateType.ItemIndex := OldSelected;
     if cbDateType.ItemIndex = -1 then
@@ -2117,7 +2117,7 @@ var
   mi: TMenuItem;
 begin
   miChangeEquip.Clear;
-  // не нужно тем, кто не планирует
+  // РЅРµ РЅСѓР¶РЅРѕ С‚РµРј, РєС‚Рѕ РЅРµ РїР»Р°РЅРёСЂСѓРµС‚
   if AccessManager.CurUser.ViewNotPlanned then
   begin
     de := TConfigManager.Instance.StandardDics.deEquip;
@@ -2175,10 +2175,10 @@ var
   ShopCode, ProfCode: integer;
   de: TDictionary;
 begin
-  // определяем подразделение
+  // РѕРїСЂРµРґРµР»СЏРµРј РїРѕРґСЂР°Р·РґРµР»РµРЅРёРµ
   ShopCode := TConfigManager.Instance.StandardDics.deEquip.ItemValue[EquipCode, 4];
   RootItem.Clear;
-  // берем всех сотрудников этого подразделения
+  // Р±РµСЂРµРј РІСЃРµС… СЃРѕС‚СЂСѓРґРЅРёРєРѕРІ СЌС‚РѕРіРѕ РїРѕРґСЂР°Р·РґРµР»РµРЅРёСЏ
   de := TConfigManager.Instance.StandardDics.deEmployees;
   ds := de.DicItems;
   OldFilter := ds.Filter;
@@ -2189,7 +2189,7 @@ begin
     ds.First;
     while not ds.Eof do
     begin
-      // проверяем, является ли сотрудник мастером цеха
+      // РїСЂРѕРІРµСЂСЏРµРј, СЏРІР»СЏРµС‚СЃСЏ Р»Рё СЃРѕС‚СЂСѓРґРЅРёРє РјР°СЃС‚РµСЂРѕРј С†РµС…Р°
       ProfCode := de.CurrentValue[4];
       if NvlBoolean(TConfigManager.Instance.StandardDics.deProfessions.ItemValue[ProfCode, 2]) then
       begin
@@ -2208,7 +2208,7 @@ begin
   end;
 
   mi := TMenuItem.Create(Self);
-  mi.Caption := '<не указан>';
+  mi.Caption := '<РЅРµ СѓРєР°Р·Р°РЅ>';
   mi.Tag := EMPLOYEE_NOT_SET;
   mi.OnClick := ClickEvent;
   RootItem.Add(mi);
@@ -2216,7 +2216,7 @@ begin
 
 end;
 
-// В столбце А2 признак того что специальность является ответственным смены
+// Р’ СЃС‚РѕР»Р±С†Рµ Рђ2 РїСЂРёР·РЅР°Рє С‚РѕРіРѕ С‡С‚Рѕ СЃРїРµС†РёР°Р»СЊРЅРѕСЃС‚СЊ СЏРІР»СЏРµС‚СЃСЏ РѕС‚РІРµС‚СЃС‚РІРµРЅРЅС‹Рј СЃРјРµРЅС‹
 procedure TPlanFrame.BuildForemanMenu;
 begin
   if CurrentWorkload.Active then
@@ -2247,7 +2247,7 @@ begin
     while not ds.Eof do
     begin
       EmpCode := de.CurrentValue[1];
-      // берем данные о сотруднике в таблице сотрудников
+      // Р±РµСЂРµРј РґР°РЅРЅС‹Рµ Рѕ СЃРѕС‚СЂСѓРґРЅРёРєРµ РІ С‚Р°Р±Р»РёС†Рµ СЃРѕС‚СЂСѓРґРЅРёРєРѕРІ
       if deEmp.ItemEnabled[EmpCode] then
       begin
         mi := TMenuItem.Create(Self);
@@ -2265,7 +2265,7 @@ begin
   end;
 
   mi := TMenuItem.Create(Self);
-  mi.Caption := '<не указан>';
+  mi.Caption := '<РЅРµ СѓРєР°Р·Р°РЅ>';
   mi.Tag := EMPLOYEE_NOT_SET;
   mi.OnClick := ClickEvent;
   RootItem.Add(mi);
@@ -2296,7 +2296,7 @@ begin
     while not ds.Eof do
     begin
       EmpCode := de.CurrentValue[1];
-      // берем данные о сотруднике в таблице сотрудников
+      // Р±РµСЂРµРј РґР°РЅРЅС‹Рµ Рѕ СЃРѕС‚СЂСѓРґРЅРёРєРµ РІ С‚Р°Р±Р»РёС†Рµ СЃРѕС‚СЂСѓРґРЅРёРєРѕРІ
       if deEmp.ItemEnabled[EmpCode] then
       begin
         mi := TMenuItem.Create(Self);
@@ -2314,7 +2314,7 @@ begin
   end;
 
   mi := TMenuItem.Create(Self);
-  mi.Caption := '<не указан>';
+  mi.Caption := '<РЅРµ СѓРєР°Р·Р°РЅ>';
   mi.Tag := EMPLOYEE_NOT_SET;
   mi.OnClick := ClickEvent;
   RootItem.Add(mi);
@@ -2439,15 +2439,15 @@ begin
   begin
     if CurrentWorkload.HasComment then
     begin
-      // показать примечание
-      // как то хитро определяется позиция хинта, это не надо убирать
+      // РїРѕРєР°Р·Р°С‚СЊ РїСЂРёРјРµС‡Р°РЅРёРµ
+      // РєР°Рє С‚Рѕ С…РёС‚СЂРѕ РѕРїСЂРµРґРµР»СЏРµС‚СЃСЏ РїРѕР·РёС†РёСЏ С…РёРЅС‚Р°, СЌС‚Рѕ РЅРµ РЅР°РґРѕ СѓР±РёСЂР°С‚СЊ
       GridRect := CurrentWorkloadGrid.CellRect(CurrentWorkloadGrid.Col, CurrentWorkloadGrid.Row);
       CellRect.Left := Mouse.CursorPos.X;
       CellRect.Top := Mouse.CursorPos.Y;
       CellRect.Right := CellRect.Left + (GridRect.Right - GridRect.Left) div 2;
       CellRect.Bottom := CellRect.Top + (GridRect.Bottom - GridRect.Top) div 2;
       ShowHint(CellRect, NvlString(CurrentWorkload.JobComment));
-      // как то хитро определяется позиция хинта, это не надо убирать
+      // РєР°Рє С‚Рѕ С…РёС‚СЂРѕ РѕРїСЂРµРґРµР»СЏРµС‚СЃСЏ РїРѕР·РёС†РёСЏ С…РёРЅС‚Р°, СЌС‚Рѕ РЅРµ РЅР°РґРѕ СѓР±РёСЂР°С‚СЊ
       {GridRect := CurrentWorkloadGrid.CellRect(CurrentWorkloadGrid.Col, CurrentWorkloadGrid.Row);
       CellRect.Left := Mouse.CursorPos.X;
       CellRect.Top := Mouse.CursorPos.Y;
@@ -2462,12 +2462,12 @@ begin
   else
   if (Column.Tag = CellTag_HasHintText) then
   begin
-    // хинт находится в поле с добавочкой Text
+    // С…РёРЅС‚ РЅР°С…РѕРґРёС‚СЃСЏ РІ РїРѕР»Рµ СЃ РґРѕР±Р°РІРѕС‡РєРѕР№ Text
     HintText := NvlString(Column.Field.DataSet[Column.Field.FieldName + 'Text']);
     if HintText <> '' then
     begin
-      // показать примечание
-      // как то хитро определяется позиция хинта, это не надо убирать
+      // РїРѕРєР°Р·Р°С‚СЊ РїСЂРёРјРµС‡Р°РЅРёРµ
+      // РєР°Рє С‚Рѕ С…РёС‚СЂРѕ РѕРїСЂРµРґРµР»СЏРµС‚СЃСЏ РїРѕР·РёС†РёСЏ С…РёРЅС‚Р°, СЌС‚Рѕ РЅРµ РЅР°РґРѕ СѓР±РёСЂР°С‚СЊ
       GridRect := CurrentWorkloadGrid.CellRect(CurrentWorkloadGrid.Col, CurrentWorkloadGrid.Row);
       CellRect.Left := Mouse.CursorPos.X;
       CellRect.Top := Mouse.CursorPos.Y;
@@ -2501,7 +2501,7 @@ begin
   ProcessConfiguration;
 end;
 
-// Строит элементы интерфейса в соответствии с текущей конфигурацией
+// РЎС‚СЂРѕРёС‚ СЌР»РµРјРµРЅС‚С‹ РёРЅС‚РµСЂС„РµР№СЃР° РІ СЃРѕРѕС‚РІРµС‚СЃС‚РІРёРё СЃ С‚РµРєСѓС‰РµР№ РєРѕРЅС„РёРіСѓСЂР°С†РёРµР№
 procedure TPlanFrame.ProcessConfiguration;
 begin
   BuildSpecialJobMenu;
@@ -2519,7 +2519,7 @@ end;
 
 procedure TPlanFrame.SpecialJobClick(Sender: TObject);
 begin
-  // передаем код спец работы
+  // РїРµСЂРµРґР°РµРј РєРѕРґ СЃРїРµС† СЂР°Р±РѕС‚С‹
   FOnAddSpecialJob((Sender as TMenuItem).Tag);
   UpdateTimeLine;
 end;
@@ -2531,7 +2531,7 @@ begin
   t := (Sender as TMenuItem).Tag;
   if t = EMPLOYEE_NOT_SET then
     t := null;
-  // передаем код сотрудника для смены (мастера)
+  // РїРµСЂРµРґР°РµРј РєРѕРґ СЃРѕС‚СЂСѓРґРЅРёРєР° РґР»СЏ СЃРјРµРЅС‹ (РјР°СЃС‚РµСЂР°)
   FOnAssignShiftForeman(t);
   CurrentWorkloadGrid.Refresh;
 end;
@@ -2543,7 +2543,7 @@ begin
   t := (Sender as TMenuItem).Tag;
   if t = EMPLOYEE_NOT_SET then
     t := null;
-  // передаем код сотрудника для оборудования (оператора)
+  // РїРµСЂРµРґР°РµРј РєРѕРґ СЃРѕС‚СЂСѓРґРЅРёРєР° РґР»СЏ РѕР±РѕСЂСѓРґРѕРІР°РЅРёСЏ (РѕРїРµСЂР°С‚РѕСЂР°)
   FOnAssignOperator(t);
   CurrentWorkloadGrid.Refresh;
 end;
@@ -2555,7 +2555,7 @@ begin
   t := (Sender as TMenuItem).Tag;
   if t = EMPLOYEE_NOT_SET then
     t := null;
-  // передаем код помошника для оборудования (оператора)
+  // РїРµСЂРµРґР°РµРј РєРѕРґ РїРѕРјРѕС€РЅРёРєР° РґР»СЏ РѕР±РѕСЂСѓРґРѕРІР°РЅРёСЏ (РѕРїРµСЂР°С‚РѕСЂР°)
   FOnAssignAssistant(t);
   CurrentWorkloadGrid.Refresh;
 end;
@@ -2642,12 +2642,12 @@ begin
     end;
 end;
 
-// описание работы для хинта во временной линейке.
+// РѕРїРёСЃР°РЅРёРµ СЂР°Р±РѕС‚С‹ РґР»СЏ С…РёРЅС‚Р° РІРѕ РІСЂРµРјРµРЅРЅРѕР№ Р»РёРЅРµР№РєРµ.
 function GetJobHint(Job: TJobParams): string;
 begin
   if Job.JobType = 0 then
-    Result := Job.ItemDesc + #13'Заказ: ' + Job.OrderNumber
-        + ' (' + VarToStr(Job.Comment) + ')' + #13'Заказчик: ''' + Job.CustomerName + ''''
+    Result := Job.ItemDesc + #13'Р—Р°РєР°Р·: ' + Job.OrderNumber
+        + ' (' + VarToStr(Job.Comment) + ')' + #13'Р—Р°РєР°Р·С‡РёРє: ''' + Job.CustomerName + ''''
   else
   begin
     Result := Result + Job.Comment;
@@ -2681,7 +2681,7 @@ var
   end;
 
 begin
-  // Раскрашиваем разные работы в разные цвета
+  // Р Р°СЃРєСЂР°С€РёРІР°РµРј СЂР°Р·РЅС‹Рµ СЂР°Р±РѕС‚С‹ РІ СЂР°Р·РЅС‹Рµ С†РІРµС‚Р°
   SetLength(SJobOrders, 0);
   JobOrdersCount := 0;
   SetLength(SJobColors, 0);
@@ -2708,22 +2708,22 @@ begin
     b.Comment := GetJobHint(Job);
     b.ShowAlert := Job.JobAlert;
     if Job.JobType >= JobType_Special then
-      // Специальные работы раскрашиваем согласно справочнику
+      // РЎРїРµС†РёР°Р»СЊРЅС‹Рµ СЂР°Р±РѕС‚С‹ СЂР°СЃРєСЂР°С€РёРІР°РµРј СЃРѕРіР»Р°СЃРЅРѕ СЃРїСЂР°РІРѕС‡РЅРёРєСѓ
       b.Color := GetSpecialJobBkColor(Job.JobType)
     else
     begin
       if GetJobColor(Job, Clr) then
         b.Color := Clr//TColor(JobColors.Items[i mod JobColors.Count]);
       else
-        ExceptionHandler.Raise_('UpdateShiftTimeLine: Внутренняя ошибка');
+        ExceptionHandler.Raise_('UpdateShiftTimeLine: Р’РЅСѓС‚СЂРµРЅРЅСЏСЏ РѕС€РёР±РєР°');
     end;
-    {if Job.JobID = CurJobID then  // отмечаем текущую выбранную работу
+    {if Job.JobID = CurJobID then  // РѕС‚РјРµС‡Р°РµРј С‚РµРєСѓС‰СѓСЋ РІС‹Р±СЂР°РЅРЅСѓСЋ СЂР°Р±РѕС‚Сѓ
       b.Selected := true;}
     TimeBlocks.Add(b);
   end;
 end;
 
-// Обновляем диаграмму работ для смены
+// РћР±РЅРѕРІР»СЏРµРј РґРёР°РіСЂР°РјРјСѓ СЂР°Р±РѕС‚ РґР»СЏ СЃРјРµРЅС‹
 procedure TPlanFrame.UpdateShiftTimeLine(_TimeLine: TSingleTimeLine; w: TWorkload; FullRebuild: boolean);
 var
   TimeBlocks: TList;
@@ -2737,7 +2737,7 @@ begin
 
   if not w.IsEmpty then
   begin
-    // Находим, к какой смене относится текущая работа
+    // РќР°С…РѕРґРёРј, Рє РєР°РєРѕР№ СЃРјРµРЅРµ РѕС‚РЅРѕСЃРёС‚СЃСЏ С‚РµРєСѓС‰Р°СЏ СЂР°Р±РѕС‚Р°
     CurShift := GetCurrentShift;
     if CurShift = nil then
     begin
@@ -2747,7 +2747,7 @@ begin
 
     if not FullRebuild then
     begin
-      // Проверяем, если уже строили по этой смене то не надо
+      // РџСЂРѕРІРµСЂСЏРµРј, РµСЃР»Рё СѓР¶Рµ СЃС‚СЂРѕРёР»Рё РїРѕ СЌС‚РѕР№ СЃРјРµРЅРµ С‚Рѕ РЅРµ РЅР°РґРѕ
       if (FLastTimeLineWorkload = w) and (FLastTimeLineShift = CurShift.Start) then
       begin
         TimeBlocks.Free;
@@ -2757,7 +2757,7 @@ begin
     FLastTimeLineWorkload := w;
     FLastTimeLineShift := CurShift.Start;
 
-    if CurShift.JobList <> nil then  // такое может быть при сбоях в скриптах например
+    if CurShift.JobList <> nil then  // С‚Р°РєРѕРµ РјРѕР¶РµС‚ Р±С‹С‚СЊ РїСЂРё СЃР±РѕСЏС… РІ СЃРєСЂРёРїС‚Р°С… РЅР°РїСЂРёРјРµСЂ
     begin
       FillTimeBlocks(TimeBlocks, CurShift.JobList);
       if EntSettings.RedScheduleSpace and (TimeBlocks.Count > 0) then
@@ -2781,7 +2781,7 @@ begin
   _TimeLine.Refresh;
 end;
 
-// Обновляем диаграмму работ
+// РћР±РЅРѕРІР»СЏРµРј РґРёР°РіСЂР°РјРјСѓ СЂР°Р±РѕС‚
 procedure TPlanFrame.UpdateTimeLine(FullRebuild: boolean);
 begin
   if (DateCriteriaType = PlanRange_Continuous) or (DateCriteriaType = PlanRange_Week) then
@@ -2865,20 +2865,20 @@ begin
     if IsWork then
     begin
       AccessManager.ReadUserKindProcPermTo(KPRec, CurrentWorkload.KindID, AccessManager.CurUser.ID, CurrentWorkload.ProcessID);
-      // Если план заблокирован или нет прав на планирование и фактич. отметки, то выходим
+      // Р•СЃР»Рё РїР»Р°РЅ Р·Р°Р±Р»РѕРєРёСЂРѕРІР°РЅ РёР»Рё РЅРµС‚ РїСЂР°РІ РЅР° РїР»Р°РЅРёСЂРѕРІР°РЅРёРµ Рё С„Р°РєС‚РёС‡. РѕС‚РјРµС‚РєРё, С‚Рѕ РІС‹С…РѕРґРёРј
       plan := KPRec.PlanDate and KPRec.FactDate;
     end else
       plan := true;
 
-    // если специальная работа или есть фактические отметки,
-    // убираем из меню замену вида оборудования
+    // РµСЃР»Рё СЃРїРµС†РёР°Р»СЊРЅР°СЏ СЂР°Р±РѕС‚Р° РёР»Рё РµСЃС‚СЊ С„Р°РєС‚РёС‡РµСЃРєРёРµ РѕС‚РјРµС‚РєРё,
+    // СѓР±РёСЂР°РµРј РёР· РјРµРЅСЋ Р·Р°РјРµРЅСѓ РІРёРґР° РѕР±РѕСЂСѓРґРѕРІР°РЅРёСЏ
     if not IsWork or Started then
       miChangeEquip.Visible := false
     else
     begin
       miChangeEquip.Visible := true;
       miChangeEquip.Enabled := AccessManager.CurUser.ViewNotPlanned and plan;
-      // прячем пункт меню соотв. текущему оборудованию
+      // РїСЂСЏС‡РµРј РїСѓРЅРєС‚ РјРµРЅСЋ СЃРѕРѕС‚РІ. С‚РµРєСѓС‰РµРјСѓ РѕР±РѕСЂСѓРґРѕРІР°РЅРёСЋ
       for I := 0 to miChangeEquip.Count - 1 do
       begin
         mi := miChangeEquip.Items[i] as TMenuItem;
@@ -2955,9 +2955,9 @@ begin
       HideNotPlanned
     else
       if EntSettings.NewPlanInterface then
-        RollUpNotPlanned   // свернуть очередь заказов
+        RollUpNotPlanned   // СЃРІРµСЂРЅСѓС‚СЊ РѕС‡РµСЂРµРґСЊ Р·Р°РєР°Р·РѕРІ
       else
-        RollOutNotPlanned;  // развернуть очередь заказов
+        RollOutNotPlanned;  // СЂР°Р·РІРµСЂРЅСѓС‚СЊ РѕС‡РµСЂРµРґСЊ Р·Р°РєР°Р·РѕРІ
 
     OpenData;
 

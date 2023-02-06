@@ -8335,7 +8335,7 @@ object Splash: TSplash
       Top = 197
       Width = 207
       Height = 13
-      Caption = '('#1057') 1997-2022 PolyMix Development Group'
+      Caption = '('#1057') 1997-2023 PolyMix Development Group'
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clSilver
       Font.Height = -11
