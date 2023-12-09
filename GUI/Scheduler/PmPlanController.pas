@@ -137,6 +137,7 @@ type
     procedure UnlockAll;
     // проверяет, был ли изменен план с момента последней проверки
     function CheckModified(w: TWorkload): boolean;
+    procedure LaunchReportBall(Sender: TObject);
   protected
     FEnableUndo: boolean;
     // обновляет текущий план. остальные закрывает
@@ -195,7 +196,7 @@ uses Dialogs, DateUtils,
   fJobSplit, PmDatabase, fEditOrderState, fJobList, fOrderFiles,
   PmEntSettings, PmAppController, PmConfigManager, PmActions, PmOrder,
   MainFilter, fJobSplitShift,
-  fJobOverlap, PmAdvancedEdit, PmLockManager;
+  fJobOverlap, PmAdvancedEdit, PmLockManager, PmReportBall;
 
 constructor TPlanController.Create(_Entity: TEntity);
 begin
@@ -264,7 +265,7 @@ begin
   TPlanFrame(FFrame).OnMouseMoveJob := MouseMoveJob;
   TPlanFrame(FFrame).OnOpenOrder := DoOpenOrder;
   TPlanFrame(FFrame).OnLocateOrder := DoLocateOrder;
-  TPlanFrame(FFrame).OnLaunchReport := LaunchReport;
+  TPlanFrame(FFrame).OnLaunchReport := LaunchReportBall;
   TPlanFrame(FFrame).OnEditJob := HandleEditJob;
   TPlanFrame(FFrame).OnUndo := HandleUndo;
   TPlanFrame(FFrame).OnGetUndoEnabled := GetUndoEnabled;
@@ -2624,6 +2625,11 @@ end;
 function TPlanController.GetPlanFrame: TPlanFrame;
 begin
   Result := TPlanFrame(FFrame);
+end;
+
+procedure TPlanController.LaunchReportBall(Sender: TObject);
+begin
+  ShowReportBall;
 end;
 
 procedure TPlanController.LaunchReport(Sender: TObject);
